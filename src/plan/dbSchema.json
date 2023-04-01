@@ -1,0 +1,9 @@
+{
+    "tables": [
+        {
+            "name": "dbo.BUSINESS_REQUEST",
+            "funcao": "Não entendi",
+            "excluir": "não"
+        }
+    ]
+}
