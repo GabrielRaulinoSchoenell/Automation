@@ -1,0 +1,103 @@
+{
+    "project": "CRMIntegration",
+    "description": "Marcelão está adorando a nova automação de seu colega de trabalho/neto gabriel",
+    "groupId": "br.com.intelbras",
+    "encodePattern": "nameAfter",
+    "sequences": {
+        "type": "sequence",
+        "data": [
+            {"name":"EnvironmentVariables"}
+        ]
+    },
+    "endpoints": {
+        "type": "endpoint",
+        "data":[
+            {
+                "name": "jsonPlaceHolder",
+                "http": "http://jsonplaceholder.typicode.com/todos/{id}"
+            }
+        ]
+
+    },
+    "apis": {
+        "type": "api",
+        "data": [
+            {
+                "name": "users",
+                "context": "/users",
+                "resources": [
+                    {"get": "/"},
+                    {"get": "/getName"},
+                    {"post": "/changeName"}
+                ]
+            },
+            {
+                "name": "itens",
+                "context": "/cadastraItens",
+                "resources": [
+                    {"get": "/{item}"},
+                    {"post": "/{item}"}
+                ]
+            }
+        ]
+    },
+    "messageProcessorEStore": {
+        "type": "messageProcessor-messageStore",
+        "data": [
+            {
+                "processor": "messageProcessorTeste",
+                "store": "messageStoreTeste",
+                "queue": "messageQueueTeste",
+                "sequence": "exeQueue"
+            }
+        ]
+    },
+    "templates": [
+        "SVC-SalesForceBulkAPIV2JobSuccessfulTemplate"
+    ],
+    "resources": [
+        "TransformJsonObject.xslt",
+        "schemaValidation.json"
+    ],
+    "dataServices": {
+        "type": "dataService",
+        "data": [
+            {   
+                "name": "Quote",
+                "function": "quote_upsert",
+                "properties": [
+                    "id",
+                    "name",
+                    "other"
+                ]
+            }
+        ]
+    },
+    "env": [
+        {
+            "var": "Ambiente",
+            "values": ["HOMOLOG", "PRODUCAO"],
+            "name": "ambiente"
+        },
+        {
+            "var": "TZ",
+            "values": ["America/saoPaulo", "America/saoPaulo"],
+            "name": "timezone"
+        },
+        {
+            "var": "banco",
+            "values": ["sdbc://mysql:05", "sdbc://mysql:20"],
+            "name": "cadastraDB"
+        }
+    ],
+    "dependencias": [
+        {
+            "name": "zabbix",
+            "product": "url"
+        },
+        {
+            "name": "fileconnector",
+            "product": "FILE_CONNECT_1"
+        }
+    ]
+}
