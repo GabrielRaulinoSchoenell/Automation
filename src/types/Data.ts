@@ -1,3 +1,5 @@
+
+
 export type Sequences = {
     type: "sequence",
     data: {name: string}[]
@@ -5,21 +7,29 @@ export type Sequences = {
 
 export type Endpoints = {
     type: "endpoint",
-    data: {
-        name: string,
-        http: string
-    }[] 
+    data: EndpointData[] 
+    
 }
+export type EndpointData = {
+    name: string,
+    http: string
+}  
+
 export type Apis = {
     type: "api",
-    data: {
-        name: string,
-        context: string
-        resources: {
-            get: string
-        }[],
-    }[] 
+    data: [] 
 }
+export type ApiData = {
+    name: string,
+    context: string
+    resources: {
+        get?: string,
+        post?: string,
+        put?: string,
+        delete?: string
+    }[],
+}
+
 export type MessageProcessorEStore = {
     type: "essageProcessorEStore",
     data: {name: string}[] 

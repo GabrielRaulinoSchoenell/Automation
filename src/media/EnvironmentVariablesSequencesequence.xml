@@ -1,8 +1,0 @@
-
-<?xml version="1.0" encoding="UTF-8"?>
-<sequence name="EnvironmentVariablesSequencesequence" trace="disable" xmlns="http://ws.apache.org/ns/synapse">
-	<property expression="get-property('env', 'Ambiente')" name="ambiente" scope="default" type="STRING"/>
-	<property expression="get-property('env', 'TZ')" name="timezone" scope="default" type="STRING"/>
-	<property expression="get-property('env', 'banco')" name="cadastraDB" scope="default" type="STRING"/>
-</sequence>
-        

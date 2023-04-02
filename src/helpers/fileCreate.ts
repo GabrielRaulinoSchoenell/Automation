@@ -10,7 +10,7 @@ let dependencies: any = [];
 
 let path = './src/media/'
 
-export const PomEArtifact = (pomEArtifactData: any, generalData: any)=>{
+export const PomEArtifact = (pomEArtifactData: any, generalData: generalData)=>{
     let template = generalData.encodePattern == 'nameAfter' ? pomEArtifactData.type : '';
 
     console.log("Pom e artifact data:", pomEArtifactData.data)
@@ -42,14 +42,64 @@ export const WritePomEArtifact = ()=>{
     
 }
 
-export const apis = (apiData: Data.Apis, generalData: generalData)=>{
-    template = generalData.encodePattern == 'nameAfter' ? apiData.type: '';  
+export const Apis = (apiData: Data.Apis, generalData: generalData)=>{
+    template = generalData.encodePattern == 'nameAfter' ? apiData.type: ''; 
+    
+    fs.mkdirSync(`${path}/api`);
+
+    apiData.data.forEach((el: Data.ApiData)=>{
+        // {
+        //     "name": "users",
+        //     "context": "/users",
+        //     "resources": [
+        //         {"get": "/"},
+        //         {"get": "/getName"},
+        //         {"post": "/changeName"}
+        //     ]
+        // },
+
+
+        let fileContent = '';
+        el.resources.forEach((resource)=>{
+            console.log(resource.get);
+            fileContent += 
+`<resource methods="">
+    <inSequence>
+        <property name="HTTP_SC" scope="axis2" type="STRING" value="200"/>
+        <respond/>
+    </inSequence>
+    <outSequence/>
+    <faultSequence/>
+</resource>           
+`
+        });
+
+        fs.writeFileSync(`${path}/api/${el.name}${template}.xml`, `
+        <?xml version="1.0" encoding="UTF-8"?>
+        <api context="${el.context}" name="HealthCheckAPI" xmlns="http://ws.apache.org/ns/synapse">
+            <resource methods="GET">
+                <inSequence>
+                    <property name="HTTP_SC" scope="axis2" type="STRING" value="200"/>
+                    <respond/>
+                </inSequence>
+                <outSequence/>
+                <faultSequence/>
+            </resource>
+        </api>
+
+                            `)
+
+    });
+    
+    PomEArtifact(apiData, generalData)
 }
 
 export const Sequences = (sequenceData: Data.Sequences, generalData: generalData)=>{
     template = generalData.encodePattern == 'nameAfter' ? sequenceData.type: '';  
 
     PomEArtifact(sequenceData, generalData);
+
+    fs.mkdirSync(`${path}sequences`)
 
     let fileContent = '';
 
@@ -58,7 +108,7 @@ export const Sequences = (sequenceData: Data.Sequences, generalData: generalData
             case 'EnvironmentVariables': EnvironmentVariablesSequence(template, generalData);
                 break;
             default:  
-            fs.writeFileSync(`./src/media/${el.name}${template}.xml`, `
+            fs.writeFileSync(`./src/media/sequences${el.name}${template}.xml`, `
 <?xml version="1.0" encoding="UTF-8"?>
 <sequence name="${el.name}${template}" trace="disable" xmlns="http://ws.apache.org/ns/synapse">
     <log level="custom">
@@ -67,8 +117,6 @@ export const Sequences = (sequenceData: Data.Sequences, generalData: generalData
 </sequence>
                     `)
         }
-        (el.name ='EnvironmentVariables') ? EnvironmentVariablesSequence(template, generalData) : null;
-
 
        
     });
@@ -81,7 +129,7 @@ const EnvironmentVariablesSequence = (template: string, data: any)=>{
         properties += `\n\t<property expression="get-property('env', '${el.var}')" name="${el.name}" scope="default" type="STRING"/>` 
     });
 
-    fs.writeFileSync(`./src/media/EnvironmentVariablesSequence${template}.xml`, `
+    fs.writeFileSync(`./src/media/sequences/EnvironmentVariablesSequence${template}.xml`, `
 <?xml version="1.0" encoding="UTF-8"?>
 <sequence name="EnvironmentVariablesSequence${template}" trace="disable" xmlns="http://ws.apache.org/ns/synapse">${properties}
 </sequence>
@@ -92,6 +140,9 @@ const EnvironmentVariablesSequence = (template: string, data: any)=>{
 
 export const DataServices = (dataServiceData: any, generalData: any)=>{
     template = generalData.encodePattern == 'nameAfter' ? 'DSS' : '';
+
+    
+    fs.mkdirSync(`${path}dataServices`)
 
     PomEArtifact(dataServiceData, generalData);
 
