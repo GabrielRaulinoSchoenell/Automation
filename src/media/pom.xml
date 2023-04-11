@@ -1,0 +1,23 @@
+<br.com.intelbras.sequence_._EnvironmentVariablesSequence>capp/EnterpriseServiceBus</br.com.intelbras.sequence_._EnvironmentVariablesSequence>
+<br.com.intelbras.dataService_._QuoteDSS>capp/EnterpriseServiceBus</br.com.intelbras.dataService_._QuoteDSS>
+<br.com.intelbras.api_._usersAPI>capp/EnterpriseServiceBus</br.com.intelbras.api_._usersAPI>
+
+
+<dependency>
+    <groupId>br.com.intelbras.sequence</groupId>
+    <artifactId>EnvironmentVariablesSequence</artifactId>
+    <version>1.0.0</version>
+    <type>zip</type>
+</dependency>
+<dependency>
+    <groupId>br.com.intelbras.dataService</groupId>
+    <artifactId>QuoteDSS</artifactId>
+    <version>1.0.0</version>
+    <type>zip</type>
+</dependency>
+<dependency>
+    <groupId>br.com.intelbras.api</groupId>
+    <artifactId>usersAPI</artifactId>
+    <version>1.0.0</version>
+    <type>zip</type>
+</dependency>

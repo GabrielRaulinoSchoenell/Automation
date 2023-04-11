@@ -23,10 +23,8 @@ export type ApiData = {
     name: string,
     context: string
     resources: {
-        get?: string,
-        post?: string,
-        put?: string,
-        delete?: string
+        method: 'get' |'post'|'delete'|'update',
+        url: string
     }[],
 }
 

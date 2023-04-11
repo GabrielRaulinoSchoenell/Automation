@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<api context="/users" name="HealthCheckAPI" xmlns="http://ws.apache.org/ns/synapse">
+    <resource methods="GET POST UPDATE"    uri-template="/">
+    <inSequence>
+        <log level="custom">
+            <property name="Requisição recebido" value="/"/>
+        </log>
+        <property name="HTTP_SC" scope="axis2" type="STRING" value="200"/>
+        <respond/>
+    </inSequence>
+    <outSequence/>
+    <faultSequence/>
+</resource>           
+<resource methods="GET"    uri-template="/getName">
+    <inSequence>
+        <log level="custom">
+            <property name="Requisição recebido" value="/getName"/>
+        </log>
+        <property name="HTTP_SC" scope="axis2" type="STRING" value="200"/>
+        <respond/>
+    </inSequence>
+    <outSequence/>
+    <faultSequence/>
+</resource>           
+<resource methods="POST"    uri-template="/changeName">
+    <inSequence>
+        <log level="custom">
+            <property name="Requisição recebido" value="/changeName"/>
+        </log>
+        <property name="HTTP_SC" scope="axis2" type="STRING" value="200"/>
+        <respond/>
+    </inSequence>
+    <outSequence/>
+    <faultSequence/>
+</resource>           
+
+</api>

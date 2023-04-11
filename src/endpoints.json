@@ -3,6 +3,19 @@
     "description": "Marcelão está adorando a nova automação de seu colega de trabalho/neto gabriel",
     "groupId": "br.com.intelbras",
     "encodePattern": "nameAfter",
+    "projectUrl": "http://localhost:8290",
+    "version": "1.0",
+    "versionType": "url",
+    "extra": {
+        "setVars": true,
+        "drawio" : true,
+        "defining": true,
+        "postmanCollection": true,
+        "requestHelp": true,
+        "store": true,
+        "creation": true,
+        "postman": true
+    },
     "sequences": {
         "type": "sequence",
         "data": [
@@ -26,17 +39,19 @@
                 "name": "users",
                 "context": "/users",
                 "resources": [
-                    {"get": "/"},
-                    {"get": "/getName"},
-                    {"post": "/changeName"}
-                ]
-            },
-            {
-                "name": "itens",
-                "context": "/cadastraItens",
-                "resources": [
-                    {"get": "/{item}"},
-                    {"post": "/{item}"}
+                    {
+                        "method": "get post put",
+                        "url": "/"
+                    },
+                    {
+                        "method": "get",
+                        "url": "/getName"
+
+                    },
+                    {
+                        "method": "post",
+                        "url": "/changeName"
+                    }
                 ]
             }
         ]
@@ -55,10 +70,19 @@
     "templates": [
         "SVC-SalesForceBulkAPIV2JobSuccessfulTemplate"
     ],
-    "resources": [
-        "TransformJsonObject.xslt",
-        "schemaValidation.json"
-    ],
+    "resources": {
+        "type": "resources",
+        "data": [
+            {
+                "name":"TransformJsonObject.xslt",
+                "type": "transform"
+            },
+            {
+                "name": "schemaValidation.json",
+                "type": "schema" 
+            }
+        ]     
+    },
     "dataServices": {
         "type": "dataService",
         "data": [

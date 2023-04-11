@@ -1,0 +1,5 @@
+===== variaveis em HOMOLOG, se alguma var for secreta, pegue-a no openShift =====
+
+setX -m Ambiente HOMOLOG
+setX -m TZ America/saoPaulo
+setX -m banco sdbc://mysql:05

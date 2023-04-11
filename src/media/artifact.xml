@@ -1,0 +1,9 @@
+<artifact name="EnvironmentVariablesSequence" groupId="br.com.intelbras" version="1.0.0" type="synapse/sequence" serverRole="EnterpriseServiceBus">
+    <file>src/main/synapse-config/api/NotificacaoAPI.xml</file>
+</artifact>
+<artifact name="QuoteDSS" groupId="br.com.intelbras" version="1.0.0" type="synapse/dataService" serverRole="EnterpriseServiceBus">
+    <file>src/main/synapse-config/api/NotificacaoAPI.xml</file>
+</artifact>
+<artifact name="usersAPI" groupId="br.com.intelbras" version="1.0.0" type="synapse/api" serverRole="EnterpriseServiceBus">
+    <file>src/main/synapse-config/api/NotificacaoAPI.xml</file>
+</artifact>
