@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<api context="/nota-fiscal" name="HealthCheckAPI" xmlns="http://ws.apache.org/ns/synapse">
+    <resource methods="GET"    uri-template="/v1/devolucao/{cpfCnpj}/{serie}/{numero}">
+    <inSequence>
+        <log level="custom">
+            <property name="Requisição recebido" value="/v1/devolucao/{cpfCnpj}/{serie}/{numero}"/>
+        </log>
+        <property name="HTTP_SC" scope="axis2" type="STRING" value="200"/>
+        <respond/>
+    </inSequence>
+    <outSequence/>
+    <faultSequence/>
+</resource>           
+<resource methods="GET"    uri-template="/v1/nota/{externalIdConsumer}/{startDate}/{endDate}">
+    <inSequence>
+        <log level="custom">
+            <property name="Requisição recebido" value="/v1/nota/{externalIdConsumer}/{startDate}/{endDate}"/>
+        </log>
+        <property name="HTTP_SC" scope="axis2" type="STRING" value="200"/>
+        <respond/>
+    </inSequence>
+    <outSequence/>
+    <faultSequence/>
+</resource>           
+<resource methods="GET"    uri-template="/v1/nota/{externalIdConsumer}/{orderCode}">
+    <inSequence>
+        <log level="custom">
+            <property name="Requisição recebido" value="/v1/nota/{externalIdConsumer}/{orderCode}"/>
+        </log>
+        <property name="HTTP_SC" scope="axis2" type="STRING" value="200"/>
+        <respond/>
+    </inSequence>
+    <outSequence/>
+    <faultSequence/>
+</resource>           
+<resource methods="GET"    uri-template="/v1/nota-entrada/{numeroNota}/{numeroSerie}/{codEmitente}/{estabelecimento}">
+    <inSequence>
+        <log level="custom">
+            <property name="Requisição recebido" value="/v1/nota-entrada/{numeroNota}/{numeroSerie}/{codEmitente}/{estabelecimento}"/>
+        </log>
+        <property name="HTTP_SC" scope="axis2" type="STRING" value="200"/>
+        <respond/>
+    </inSequence>
+    <outSequence/>
+    <faultSequence/>
+</resource>           
+<resource methods="GET"    uri-template="/v1/notas-fiscais/{numeroNota}/{numeroSerie}/{cgc}">
+    <inSequence>
+        <log level="custom">
+            <property name="Requisição recebido" value="/v1/notas-fiscais/{numeroNota}/{numeroSerie}/{cgc}"/>
+        </log>
+        <property name="HTTP_SC" scope="axis2" type="STRING" value="200"/>
+        <respond/>
+    </inSequence>
+    <outSequence/>
+    <faultSequence/>
+</resource>           
+<resource methods="GET"    uri-template="/v1/nota/documentos/{numeroNota}/{numeroSerie}/{estabelecimento}/{cgc}">
+    <inSequence>
+        <log level="custom">
+            <property name="Requisição recebido" value="/v1/nota/documentos/{numeroNota}/{numeroSerie}/{estabelecimento}/{cgc}"/>
+        </log>
+        <property name="HTTP_SC" scope="axis2" type="STRING" value="200"/>
+        <respond/>
+    </inSequence>
+    <outSequence/>
+    <faultSequence/>
+</resource>           
+<resource methods="GET"    uri-template="/v1/notas-fiscais-estrangeira/{numeroNota}/{numeroSerie}/{codEmitente}">
+    <inSequence>
+        <log level="custom">
+            <property name="Requisição recebido" value="/v1/notas-fiscais-estrangeira/{numeroNota}/{numeroSerie}/{codEmitente}"/>
+        </log>
+        <property name="HTTP_SC" scope="axis2" type="STRING" value="200"/>
+        <respond/>
+    </inSequence>
+    <outSequence/>
+    <faultSequence/>
+</resource>           
+
+</api>

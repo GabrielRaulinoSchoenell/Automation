@@ -1,0 +1,12 @@
+{
+        "id": "1234",
+        "name": "PagamentoENV",
+        "values": [
+                {
+                    "key": "base_url",
+                    "value": "http://intelbras-pagamento.com",
+                    "enabled": true
+                }
+            ]
+        }
+    

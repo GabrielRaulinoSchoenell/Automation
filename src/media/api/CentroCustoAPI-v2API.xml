@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<api context="/centro-custo/v2" name="HealthCheckAPI" xmlns="http://ws.apache.org/ns/synapse">
+    <resource methods="GET"    uri-template="undefined">
+    <inSequence>
+        <log level="custom">
+            <property name="Requisição recebido" value="undefined"/>
+        </log>
+        <property name="HTTP_SC" scope="axis2" type="STRING" value="200"/>
+        <respond/>
+    </inSequence>
+    <outSequence/>
+    <faultSequence/>
+</resource>           
+
+</api>

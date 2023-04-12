@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<api context="/tabelaPreco/v1" name="TabelaPrecoAPI" xmlns="http://ws.apache.org/ns/synapse">
+    <resource faultSequence="APIFaultSequence" methods="POST" outSequence="APIOutSequence" uri-template="/consultaItem">
+        <inSequence>
+            <log description="consultaIn" level="full"/>
+            <property description="VALIDACAO_SCHEMA_ARQUIVO" name="VALIDACAO_SCHEMA_ARQUIVO" scope="default" type="STRING" value="conf:schema/TabelaPrecoItemConsultaIn.Schema.json"/>
+            <sequence key="ValidacaoSchemaFaultSequence"/>
+            <sequence key="TabelaPrecoItemConsultaSequence"/>
+            <loopback/>
+        </inSequence>
+    </resource>
+</api>

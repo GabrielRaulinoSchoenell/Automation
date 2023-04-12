@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<api context="/users" name="HealthCheckAPI" xmlns="http://ws.apache.org/ns/synapse">
-    <resource methods="GET POST UPDATE"    uri-template="/">
+<api context="/centro-custo" name="HealthCheckAPI" xmlns="http://ws.apache.org/ns/synapse">
+    <resource methods="GET"    uri-template="/v1/centro-custo">
     <inSequence>
         <log level="custom">
-            <property name="Requisição recebido" value="/"/>
+            <property name="Requisição recebido" value="/v1/centro-custo"/>
         </log>
         <property name="HTTP_SC" scope="axis2" type="STRING" value="200"/>
         <respond/>
@@ -11,10 +11,10 @@
     <outSequence/>
     <faultSequence/>
 </resource>           
-<resource methods="GET"    uri-template="/getName">
+<resource methods="GET"    uri-template="/v1/centro-custo/{estabelecimento}/{codigo}">
     <inSequence>
         <log level="custom">
-            <property name="Requisição recebido" value="/getName"/>
+            <property name="Requisição recebido" value="/v1/centro-custo/{estabelecimento}/{codigo}"/>
         </log>
         <property name="HTTP_SC" scope="axis2" type="STRING" value="200"/>
         <respond/>
@@ -22,10 +22,10 @@
     <outSequence/>
     <faultSequence/>
 </resource>           
-<resource methods="POST"    uri-template="/changeName">
+<resource methods="GET"    uri-template="/v1/centro-custo/{descricao}">
     <inSequence>
         <log level="custom">
-            <property name="Requisição recebido" value="/changeName"/>
+            <property name="Requisição recebido" value="/v1/centro-custo/{descricao}"/>
         </log>
         <property name="HTTP_SC" scope="axis2" type="STRING" value="200"/>
         <respond/>

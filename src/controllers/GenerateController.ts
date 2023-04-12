@@ -4,6 +4,8 @@ import * as create from '../helpers/fileCreate';
 import * as deleteAction from '../helpers/delete';
 import * as create_readme from '../helpers/createReadme';
 import * as ConsoleLog from '../helpers/consoleLog';
+import * as create_extraResources from '../helpers/createExtraResources'
+import { readDir, readFile } from '../helpers/readXml';
 
 export const generate = (req: Request, res: Response)=>{
     console.log('requisição recebida /generate\n');
@@ -28,14 +30,14 @@ export const generate = (req: Request, res: Response)=>{
         return;
     }
 
-    create.Sequences(data.sequences, data)
-    create.DataServices(data.dataServices, data);
-    create.ExtraResources(data.extra, data, 0)
+    data.sequences ? create.Sequences(data.sequences, data) : null;
+    data.dataServices ? create.DataServices(data.dataServices, data) : null;
     // createEndpoints(teste.endpoints);
-    create.Apis(data.apis, data);
+    data.apis ? create.Apis(data.apis, data) : null;
     // createMessagers(teste.messageProcessorEStore);
     // createTemplate(teste.templates);
     // createResources(teste.resources);
+    data.extra ? create_extraResources.ExtraResources(data.extra, data, 0) : null ;
     create_readme.ReadMe(data);
 
     create.finalize();
@@ -55,4 +57,11 @@ export const deleteAll = (req: Request, res: Response)=>{
 
     res.json({del: "success"})
     return;
+}
+
+export const readFiles = (req: Request, res: Response)=>{
+    let {dirPath} = req.body;
+
+    let generalData = fs.statSync(dirPath).isDirectory() ? readDir(dirPath) : readFile(dirPath);
+    return res.json({generalData});
 }

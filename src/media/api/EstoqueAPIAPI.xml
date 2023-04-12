@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<api context="/estoque/v1" name="HealthCheckAPI" xmlns="http://ws.apache.org/ns/synapse">
+    <resource methods="POST"    uri-template="/saldos">
+    <inSequence>
+        <log level="custom">
+            <property name="Requisição recebido" value="/saldos"/>
+        </log>
+        <property name="HTTP_SC" scope="axis2" type="STRING" value="200"/>
+        <respond/>
+    </inSequence>
+    <outSequence/>
+    <faultSequence/>
+</resource>           
+
+</api>

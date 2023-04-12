@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<api context="/contato/v2" name="HealthCheckAPI" xmlns="http://ws.apache.org/ns/synapse">
+    <resource methods="GET"    uri-template="/existe/cpfCnpj/{cpfCnpj}">
+    <inSequence>
+        <log level="custom">
+            <property name="Requisição recebido" value="/existe/cpfCnpj/{cpfCnpj}"/>
+        </log>
+        <property name="HTTP_SC" scope="axis2" type="STRING" value="200"/>
+        <respond/>
+    </inSequence>
+    <outSequence/>
+    <faultSequence/>
+</resource>           
+<resource methods="GET"    uri-template="/existe/email/{email}">
+    <inSequence>
+        <log level="custom">
+            <property name="Requisição recebido" value="/existe/email/{email}"/>
+        </log>
+        <property name="HTTP_SC" scope="axis2" type="STRING" value="200"/>
+        <respond/>
+    </inSequence>
+    <outSequence/>
+    <faultSequence/>
+</resource>           
+<resource methods="GET"    uri-template="/{cpfCnpj}">
+    <inSequence>
+        <log level="custom">
+            <property name="Requisição recebido" value="/{cpfCnpj}"/>
+        </log>
+        <property name="HTTP_SC" scope="axis2" type="STRING" value="200"/>
+        <respond/>
+    </inSequence>
+    <outSequence/>
+    <faultSequence/>
+</resource>           
+<resource methods="GET"    uri-template="/email/{email}">
+    <inSequence>
+        <log level="custom">
+            <property name="Requisição recebido" value="/email/{email}"/>
+        </log>
+        <property name="HTTP_SC" scope="axis2" type="STRING" value="200"/>
+        <respond/>
+    </inSequence>
+    <outSequence/>
+    <faultSequence/>
+</resource>           
+
+</api>

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<api context="/unidade/v1" name="UnidadeAPI" xmlns="http://ws.apache.org/ns/synapse">
+    <resource methods="GET" uri-template="/unidades">
+        <inSequence>
+            <log level="custom">
+                <property name="--> " value="Requisitando recebida! - /unidade/v1//unidades"/>
+            </log>
+            <sequence key="SetHeaders"/>
+            <log level="custom">
+                <property expression="get-property('uri.var.host.ERP')" name="--> "/>
+                <property expression="get-property('uri.var.host.APIPROGRESS')" name="--> "/>
+            </log>
+            <call>
+                <endpoint>
+                    <http method="get" uri-template="{uri.var.host.APIPROGRESS}/services/ProgressDSS/unidade">
+                        <suspendOnFailure>
+                            <initialDuration>-1</initialDuration>
+                            <progressionFactor>1</progressionFactor>
+                        </suspendOnFailure>
+                        <markForSuspension>
+                            <retriesBeforeSuspension>0</retriesBeforeSuspension>
+                        </markForSuspension>
+                    </http>
+                </endpoint>
+            </call>
+            <log level="custom">
+                <property name="--> " value="Requisicao finalizada ----"/>
+            </log>
+            <respond/>
+        </inSequence>
+        <outSequence/>
+        <faultSequence/>
+    </resource>
+</api>

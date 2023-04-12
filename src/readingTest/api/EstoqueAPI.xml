@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<api context="/estoque/v1" name="EstoqueAPI" xmlns="http://ws.apache.org/ns/synapse">
+    <resource faultSequence="APIFaultSequence" methods="POST" uri-template="/saldos">
+        <inSequence>
+            <log description="Entrada" level="full"/>
+            <property description="VALIDACAO_SCHEMA_ARQUIVO" name="VALIDACAO_SCHEMA_ARQUIVO" scope="default" type="STRING" value="conf:schema/SadoConsultaInSchema.json"/>
+            <sequence key="ValidacaoSchemaFaultSequence"/>
+            <sequence key="SaldoConsultaSequence"/>
+            <loopback/>
+        </inSequence>
+        <outSequence>
+            <property description="messageType" name="messageType" scope="axis2" type="STRING" value="application/json"/>
+            <payloadFactory description="resposta" media-type="json">
+                <format>{&#xd;
+	"data":  {&#xd;
+		"saldos": $1&#xd;
+	}&#xd;
+}</format>
+                <args>
+                    <arg evaluator="json" expression="$.data.saldos.saldos"/>
+                </args>
+            </payloadFactory>
+            <log description="Saida" level="full"/>
+            <respond/>
+        </outSequence>
+    </resource>
+</api>

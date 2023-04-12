@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<api context="/pessoa" name="HealthCheckAPI" xmlns="http://ws.apache.org/ns/synapse">
+    <resource methods="GET"    uri-template="/v1/juridica/{cnpj}">
+    <inSequence>
+        <log level="custom">
+            <property name="Requisição recebido" value="/v1/juridica/{cnpj}"/>
+        </log>
+        <property name="HTTP_SC" scope="axis2" type="STRING" value="200"/>
+        <respond/>
+    </inSequence>
+    <outSequence/>
+    <faultSequence/>
+</resource>           
+
+</api>

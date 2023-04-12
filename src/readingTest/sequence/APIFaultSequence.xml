@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sequence name="APIFaultSequence" trace="disable" xmlns="http://ws.apache.org/ns/synapse">
+    <sequence key="MensagemErroSequence"/>
+    <filter regex="^true$" source="$ctx:MONITORAMENTO_ATIVO">
+        <then>
+            <filter xpath="contains($ctx:MONITORAMENTO_HTTP_SC, concat('|', get-property('axis2', 'HTTP_SC'), '|'))">
+                <then>
+                    <log description="Inserindo na fila" level="custom">
+                        <property expression="get-property('MessageID')" name="MessageID"/>
+                        <property expression="$ctx:ZABBIX_MESSAGE_STORE" name="Inserindo na fila"/>
+                    </log>
+                    <filter xpath="$ctx:ZABBIX_MESSAGE_STORE != &quot;LOG&quot;">
+                        <then>
+                            <store description="ZABBIX" messageStore="{$ctx:ZABBIX_MESSAGE_STORE}"/>
+                        </then>
+                        <else/>
+                    </filter>
+                </then>
+                <else>
+                    <log description="Status nao monitorado" level="custom">
+                        <property expression="get-property('MessageID')" name="MessageID"/>
+                        <property expression="get-property('axis2', 'HTTP_SC')" name="Status nao monitorado"/>
+                    </log>
+                </else>
+            </filter>
+        </then>
+        <else/>
+    </filter>
+    <log category="ERROR" description="Resposta" level="full"/>
+    <respond/>
+</sequence>

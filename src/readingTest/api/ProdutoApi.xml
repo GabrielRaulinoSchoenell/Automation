@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<api context="/v1/produto" name="ProdutoApi" xmlns="http://ws.apache.org/ns/synapse">
+    <resource methods="GET" uri-template="/numero-serie/{ns}">
+        <inSequence>
+            <log level="custom">
+                <property name="--> " value="Requisitando recebida! - /v1/produto/numero-serie/{ns}"/>
+            </log>
+            <propertyGroup>
+                <property expression="$ctx:api.ut.application.name" name="ApplicationName" scope="transport" type="STRING"/>
+                <property expression="$ctx:api.ut.userName" name="UserName" scope="transport" type="STRING"/>
+                <property expression="$ctx:api.ut.hostName" name="HostName" scope="transport" type="STRING"/>
+                <property expression="$ctx:uri.var.ns" name="serial" scope="default" type="STRING"/>
+            </propertyGroup>
+            <sequence key="ObterGarantiaProdutoSequence"/>
+            <log level="custom">
+                <property name="--> " value="Requisicao finalizada ----"/>
+            </log>
+            <respond/>
+        </inSequence>
+        <outSequence/>
+        <faultSequence/>
+    </resource>
+    <resource methods="GET" uri-template="/produtos/{idProduto}/{dataInicio}/{dataFim}">
+        <inSequence>
+            <log level="custom">
+                <property name="--> " value="Requisitando recebida! - /v1/produto/produtos/{idProduto}/{dataInicio}/{dataFim}"/>
+            </log>
+            <propertyGroup>
+                <property expression="$ctx:api.ut.application.name" name="ApplicationName" scope="transport" type="STRING"/>
+                <property expression="$ctx:api.ut.userName" name="UserName" scope="transport" type="STRING"/>
+                <property expression="$ctx:api.ut.hostName" name="HostName" scope="transport" type="STRING"/>
+                <property expression="$ctx:uri.var.idProduto" name="produto" scope="default" type="STRING"/>
+                <property expression="$ctx:uri.var.dataInicio" name="dataInicio" scope="default" type="STRING"/>
+                <property expression="$ctx:uri.var.dataFim" name="dataFim" scope="default" type="STRING"/>
+            </propertyGroup>
+            <sequence key="ListarNumeroSerieGeradoSequence"/>
+            <log level="custom">
+                <property name="--> " value="Requisicao finalizada ----"/>
+            </log>
+            <respond/>
+        </inSequence>
+        <outSequence/>
+        <faultSequence/>
+    </resource>
+</api>

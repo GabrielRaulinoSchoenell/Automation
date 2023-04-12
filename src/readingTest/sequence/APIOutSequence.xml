@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sequence name="APIOutSequence" trace="disable" xmlns="http://ws.apache.org/ns/synapse">
+    <property description="messageType" name="messageType" scope="axis2" type="STRING" value="application/json"/>
+    <log description="Saida" level="custom">
+        <property expression="get-property('MessageID')" name="MessageID"/>
+        <property expression="json-eval($)" name="SAIDA"/>
+    </log>
+    <respond/>
+</sequence>

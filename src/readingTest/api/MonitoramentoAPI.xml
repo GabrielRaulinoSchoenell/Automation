@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<api context="/monitoramento/v1" name="MonitoramentoAPI" xmlns="http://ws.apache.org/ns/synapse">
+    <resource faultSequence="APIFaultSequence" methods="POST" uri-template="/zabbix?*">
+        <inSequence>
+            <log description="zabbixIn" level="full"/>
+            <sequence key="VariaveisAmbienteSequence"/>
+            <propertyGroup description="Zabbix">
+                <property expression="$url:item" name="ZABBIX_PARAM_ITEM" scope="default" type="STRING"/>
+                <property expression="$url:host" name="ZABBIX_PARAM_HOST" scope="default" type="STRING"/>
+            </propertyGroup>
+            <filter xpath="concat($ctx:ZABBIX_PARAM_HOST, &quot;&quot;) = &quot;&quot;">
+                <then>
+                    <propertyGroup description="Erro">
+                        <property name="ERROR_CODE" scope="default" type="STRING" value="412"/>
+                        <property name="ERROR_MESSAGE" scope="default" type="STRING" value="Parametro requerido: host"/>
+                    </propertyGroup>
+                    <sequence key="APIFaultSequence"/>
+                </then>
+                <else/>
+            </filter>
+            <filter xpath="concat($ctx:ZABBIX_PARAM_ITEM, &quot;&quot;) = &quot;&quot;">
+                <then>
+                    <propertyGroup description="Erro">
+                        <property name="ERROR_CODE" scope="default" type="STRING" value="412"/>
+                        <property name="ERROR_MESSAGE" scope="default" type="STRING" value="Parametro requerido: item"/>
+                    </propertyGroup>
+                    <sequence key="APIFaultSequence"/>
+                </then>
+                <else/>
+            </filter>
+            <filter xpath="$ctx:ZABBIX_MESSAGE_STORE != &quot;LOG&quot;">
+                <then>
+                    <property description="FORCE_SC_ACCEPTED" name="FORCE_SC_ACCEPTED" scope="axis2" type="STRING" value="true"/>
+                    <store description="ZABBIX" messageStore="{$ctx:ZABBIX_MESSAGE_STORE}"/>
+                </then>
+                <else>
+                    <log description="Inserindo na fila de log" level="custom">
+                        <property expression="get-property('MessageID')" name="MessageID"/>
+                        <property expression="$body/*" name="Inserindo na Fila LOG"/>
+                    </log>
+                </else>
+            </filter>
+            <loopback/>
+        </inSequence>
+        <outSequence>
+            <property description="202" name="HTTP_SC" scope="axis2" type="STRING" value="202"/>
+            <property description="NO_ENTITY_BODY" name="NO_ENTITY_BODY" scope="axis2" type="BOOLEAN" value="true"/>
+            <log description="Saida" level="custom">
+                <property expression="get-property('MessageID')" name="MessageID"/>
+                <property expression="get-property('axis2', 'HTTP_SC')" name="Saida"/>
+            </log>
+        </outSequence>
+    </resource>
+</api>
