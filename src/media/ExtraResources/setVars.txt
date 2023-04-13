@@ -1,4 +1,0 @@
-===== variaveis em HOMOLOG, se alguma var for secreta, pegue-a no openShift =====
-
-setX -m TZ "SAO_PAULO"
-setX -m EVENT "http://"
