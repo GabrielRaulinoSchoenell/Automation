@@ -9,7 +9,6 @@ export const ReadMe = (generalData: Project)=>{
   let dependenciesContent = '';
   generalData.dependencies.forEach((el: Dependency)=>{
     dependencias.forEach((data)=>{
-      console.log(data.name, el.name, 'and', data.type, el.product)
       if(data.name == el.name && data.type == el.product){
         dependenciesContent += `
 <font color="${data.color}" size="6">${data.name}</font>
@@ -80,7 +79,7 @@ ${generalData.description}
 # Terceiros 
 ${dependenciesContent}
 
-Para executar localmente em desenvolvimento sem acesso a banco de dados e sem alterar temporariamente o código, apenas remova a seleção de todos os "JDBC Message Store" e "JDBC Message Processor" no UtilitárioCompositeExporter.
-Com isso, apenas os recursos de processamento InMemory estarão executando.
+# Notas
+
 `
 )}

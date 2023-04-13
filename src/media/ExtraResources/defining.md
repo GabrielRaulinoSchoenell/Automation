@@ -336,8 +336,68 @@ ____
 ## Operações do projeto
 
 ### APIs: 
-Api AssistAPI tem o contexto /assist e tem recursos que servem para _________<br>Api ColaboradorAPI tem o contexto /colaborador e tem recursos que servem para _________<br>Api ConsultaDadosFiscaisAPI tem o contexto /pessoa e tem recursos que servem para _________<br>Api ContaAPI tem o contexto /conta/v1 e tem recursos que servem para _________<br>Api AssistAPI tem o contexto /assist e tem recursos que servem para _________<br>Api CentroCustoAPI-v2 tem o contexto /centro-custo/v2 e tem recursos que servem para _________<br>Api CentroCustoAPI-v3 tem o contexto /centro-custo/v3 e tem recursos que servem para _________<br>Api CentroCustoAPI tem o contexto /centro-custo e tem recursos que servem para _________<br>Api ColaboradorAPI tem o contexto /colaborador e tem recursos que servem para _________<br>Api ConsultaDadosFiscaisAPI tem o contexto /pessoa e tem recursos que servem para _________<br>Api ContaAPI tem o contexto /conta/v1 e tem recursos que servem para _________<br>Api ContatoAPI-v2 tem o contexto /contato/v2 e tem recursos que servem para _________<br>Api ContatoAPI tem o contexto /contato e tem recursos que servem para _________<br>Api CustomerManagementAPI tem o contexto /customerManagement e tem recursos que servem para _________<br>Api EstoqueAPI tem o contexto /estoque/v1 e tem recursos que servem para _________<br>Api HealthCheck tem o contexto /health-check e tem recursos que servem para _________<br>Api MonitoramentoAPI tem o contexto /monitoramento/v1 e tem recursos que servem para _________<br>Api NotaFiscalAPI tem o contexto /nota-fiscal e tem recursos que servem para _________<br>Api PagamentoAPI tem o contexto /pagamento e tem recursos que servem para _________<br>Api PedidoAPI tem o contexto /pedido e tem recursos que servem para _________<br>Api ProdutoApi-v2 tem o contexto /produto/v2 e tem recursos que servem para _________<br>Api ProdutoApi tem o contexto /v1/produto e tem recursos que servem para _________<br>Api ProgressAPI tem o contexto /progress e tem recursos que servem para _________<br>Api TabelaPrecoAPI tem o contexto /tabelaPreco/v1 e tem recursos que servem para _________<br>Api UnidadeAPI tem o contexto /unidade/v1 e tem recursos que servem para _________<br>
+Api AssistAPI tem o contexto /assist e tem recursos que servem para _________
+<br>
+Api ColaboradorAPI tem o contexto /colaborador e tem recursos que servem para _________
+<br>
+Api ConsultaDadosFiscaisAPI tem o contexto /pessoa e tem recursos que servem para _________
+<br>
+Api ContaAPI tem o contexto /conta/v1 e tem recursos que servem para _________
+<br>
+Api AssistAPI tem o contexto /assist e tem recursos que servem para _________
+<br>
+Api CentroCustoAPI-v2 tem o contexto /centro-custo/v2 e tem recursos que servem para _________
+<br>
+Api CentroCustoAPI-v3 tem o contexto /centro-custo/v3 e tem recursos que servem para _________
+<br>
+Api CentroCustoAPI tem o contexto /centro-custo e tem recursos que servem para _________
+<br>
+Api ColaboradorAPI tem o contexto /colaborador e tem recursos que servem para _________
+<br>
+Api ConsultaDadosFiscaisAPI tem o contexto /pessoa e tem recursos que servem para _________
+<br>
+Api ContaAPI tem o contexto /conta/v1 e tem recursos que servem para _________
+<br>
+Api ContatoAPI-v2 tem o contexto /contato/v2 e tem recursos que servem para _________
+<br>
+Api ContatoAPI tem o contexto /contato e tem recursos que servem para _________
+<br>
+Api CustomerManagementAPI tem o contexto /customerManagement e tem recursos que servem para _________
+<br>
+Api EstoqueAPI tem o contexto /estoque/v1 e tem recursos que servem para _________
+<br>
+Api HealthCheck tem o contexto /health-check e tem recursos que servem para _________
+<br>
+Api MonitoramentoAPI tem o contexto /monitoramento/v1 e tem recursos que servem para _________
+<br>
+Api NotaFiscalAPI tem o contexto /nota-fiscal e tem recursos que servem para _________
+<br>
+Api PagamentoAPI tem o contexto /pagamento e tem recursos que servem para _________
+<br>
+Api PedidoAPI tem o contexto /pedido e tem recursos que servem para _________
+<br>
+Api ProdutoApi-v2 tem o contexto /produto/v2 e tem recursos que servem para _________
+<br>
+Api ProdutoApi tem o contexto /v1/produto e tem recursos que servem para _________
+<br>
+Api ProgressAPI tem o contexto /progress e tem recursos que servem para _________
+<br>
+Api TabelaPrecoAPI tem o contexto /tabelaPreco/v1 e tem recursos que servem para _________
+<br>
+Api UnidadeAPI tem o contexto /unidade/v1 e tem recursos que servem para _________
+<br>
+
 ### Sequences: 
+A sequence EnvironmentVariables realiza ______.
+<br>
+A sequence Pagamento realiza ______.
+<br>
+A sequence Vendas realiza ______.
+<br>
+A sequence Validacao realiza ______.
+<br>
+A sequence ErroNoPagamento realiza ______.
+<br>
 
 ### Endpoints:
 ### DataServies:

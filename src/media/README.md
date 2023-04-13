@@ -68,5 +68,7 @@ Api da que realiza a conexão de terceiros permitindo o pagamento
 
 ----
 
+# Notas
+
 Para executar localmente em desenvolvimento sem acesso a banco de dados e sem alterar temporariamente o código, apenas remova a seleção de todos os "JDBC Message Store" e "JDBC Message Processor" no UtilitárioCompositeExporter.
 Com isso, apenas os recursos de processamento InMemory estarão executando.

@@ -5,11 +5,20 @@ import * as xmlReader from 'xml2js';
 let generalData: any = {
     project: "",
     description: "",
-    groupId: "",
-    encodePattern: "",
+    groupId: "br.com.intelbras",
+    encodePattern: "nameAfter",
     projectUrl: "",
-    version: "",
+    version: "1.0",
     versionType: "",
+    extra: {
+       setVars: true,
+       drawio: false,
+       defining: true,
+       requestHelp: true,
+       store: false,
+       creation: false,
+       postman: true
+    },
     apis: {
         type: 'api',
         data: []
@@ -61,7 +70,6 @@ export const readDir = (directory: any)=>{
     let dir = fs.readdirSync(directory);
 
     dir.forEach((file: any)=>{
-        console.log(directory+file)
         fs.statSync(directory+file).isDirectory() ? readDir(directory+file+'/') : readFile(directory+'/'+file);
     });
 

@@ -7,14 +7,16 @@ export const defining  = (extra: any, generalData: any)=>{
     let apiListingContent = '';
     
     let sequenceContent = '';
+
+    console.log(generalData.sequences.data)
     generalData.sequences.data.forEach((sequence: any)=>{
-        sequenceContent += `A sequence ${sequence.name} realiza ______.\n`;
+        sequenceContent += `A sequence ${sequence.name} realiza ______.\n<br>\n`;
     });
 
     generalData.apis.data.forEach((api: any)=>{
         let context = api.context;
         
-        apiListingContent += `Api ${api.name} tem o contexto ${api.context} e tem recursos que servem para _________<br>`
+        apiListingContent += `Api ${api.name} tem o contexto ${api.context} e tem recursos que servem para _________\n<br>\n`
         api.resources.forEach((resource: any, key: number) => {
             
 
@@ -144,10 +146,6 @@ export const ExtraResources = (extra: any, generalData: any, envType: number)=>{
     vars(extra, generalData, envType)
     defining(extra, generalData);  
 
-    let sequenceContent = '';
-    generalData.sequences.data.forEach((sequence: any)=>{
-        sequenceContent += `A sequence ${sequence.name} realiza ______.\n`;
-    });
    
     let postmanEnvContent = `{
         "id": "1234",
