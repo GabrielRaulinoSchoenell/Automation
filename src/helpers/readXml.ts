@@ -20,11 +20,11 @@ let generalData: any = {
        postman: true
     },
     apis: {
-        type: 'api',
+        type: 'create',
         data: []
     },
     sequences: {
-        type: 'sequence',
+        type: 'create',
         data: []
     }
 }
@@ -51,6 +51,7 @@ export const readAPIs = (data: any)=>{
     data =  {
         name: data.$.name,
         context: data.$.context,
+        versionType: data.$.versionType,
         resources
       }
 

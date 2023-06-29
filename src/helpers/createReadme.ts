@@ -7,7 +7,7 @@ import { dependencias } from './dependecias';
 
 export const ReadMe = (generalData: Project)=>{
   let dependenciesContent = '';
-  generalData.dependencies.forEach((el: Dependency)=>{
+  generalData.dependencies?.forEach((el: Dependency)=>{
     dependencias.forEach((data)=>{
       if(data.name == el.name && data.type == el.product){
         dependenciesContent += `

@@ -10,10 +10,10 @@
         "setVars": true,
         "drawio" : true,
         "defining": true,
-        "postmanCollection": true,
         "requestHelp": true,
         "store": true,
-        "creation": true
+        "creation": true,
+        "postman": true
     },
     "sequences": {
         "type": "sequence",
@@ -37,14 +37,59 @@
             {
                 "name": "users",
                 "context": "/users",
+                "explanation": "Esse endpoint faz isso isso e aquilo e isso e isso e aquilo",
                 "resources": [
                     {
                         "method": "get post put",
-                        "url": "/"
+                        "url": "/",
+                        "tests": {
+                            "status200": {
+                                "body": {
+                                    "nutshell": "shellnut"
+                                }
+                            },
+                            "status400": {
+                                "header": {
+                                    "authorization": null
+                                },
+                                "body": null
+                            },
+                            "correctPayload": {
+                                "body": true
+                            },
+                            "status404": {
+                                "header": null,
+                                "body": {
+                                    "not": null
+                                },
+                                "query": "teste",
+                                "param": "teste2"
+                            }
+                        }
                     },
                     {
                         "method": "get",
-                        "url": "/getName"
+                        "url": "/getName/{param}",
+                        "tests": {
+                            "status200": [
+                                {
+                                    "body": {
+                                        "not": null
+                                    },
+                                    "header": null
+                                },
+                                {
+                                    "body": {
+                                        "items": [
+                                            {
+                                                "name": "teste",
+                                                "arnold": "Schweizneger"
+                                            }
+                                        ]
+                                    }
+                                }
+                            ]
+                        }
 
                     },
                     {

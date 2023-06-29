@@ -5,6 +5,14 @@ export type Endpoint = {
   http: string;
 }
 
+export type Sequence = {
+  type?: 'create'|'read',
+  data: {
+    name: string
+    description?: string
+  }[]
+}
+
 export type Resource = {
   method: string;
   url: string;
@@ -47,6 +55,13 @@ export type Project = {
   projectUrl: string;
   version: string;
   versionType: "url";
+  usedBy: [
+    {
+        sector: string,
+        objective: string,
+        urlFront: string
+    }
+],
   extra: {
     setVars: boolean;
     drawio: boolean;
@@ -57,13 +72,13 @@ export type Project = {
     postman: boolean;
   };
   sequences: {
-    type: "sequence";
+    type: "create"|"read";
     data: {
       name: string;
     }[];
   };
   endpoints: {
-    type: "endpoint";
+    type: "create"|"read";
     data: Endpoint[];
   };
   apis: {
@@ -71,7 +86,7 @@ export type Project = {
     data: Api[];
   };
   messageProcessorEStore: {
-    type: "messageProcessor-messageStore";
+    type: "create"|"read";
     data: {
       processor: string;
       store: string;
@@ -81,14 +96,14 @@ export type Project = {
   };
   templates: string[];
   resources: {
-    type: "resources";
+    type:"create"|"read";
     data: {
       name: string;
       type: "transform" | "schema";
     }[];
   };
   dataServices: {
-    type: "dataService";
+    type: "create"|"read";
     data: DataService[];
   };
   env: EnvVariable[];

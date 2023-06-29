@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<api context="/gestor-credito" name="GestorCreditoAPI" version="/v1" version-type="context" xmlns="http://ws.apache.org/ns/synapse">
+    <resource methods="POST" uri-template="/titulos">
+        <inSequence>
+            <validate cache-schema="true">
+                <schema key="conf:/schema/SchemaValidationTitulo.json"/>
+                <on-fail>
+                    <propertyGroup description="Dados validacao">
+                        <property expression="substring-before(substring-after(get-property('ERROR_DETAIL'), 'instance: {&quot;pointer&quot;:&quot;'), '&quot;')" name="instance" scope="default" type="STRING"/>
+                    </propertyGroup>
+                    <payloadFactory media-type="json">
+                        <format>
+							{"Error":"$1"}
+						</format>
+                        <args>
+                            <arg evaluator="xml" expression="fn:concat($ctx:ERROR_MESSAGE,' attribute: ',$ctx:instance)"/>
+                        </args>
+                    </payloadFactory>
+                    <log level="full" separator="&#x9;&#xa;">
+                        <property expression="$ctx:ERROR_CODE" name="ERROR_CODE"/>
+                        <property expression="$ctx:ERROR_MESSAGE" name="ERROR_MESSAGE"/>
+                        <property expression="$ctx:ERROR_DETAIL" name="ERROR_DETAIL"/>
+                        <property expression="$ctx:ERROR_EXCEPTION" name="ERROR_EXCEPTION"/>
+                        <property expression="$ctx:instance" name="instance"/>
+                    </log>
+                    <property name="HTTP_SC" scope="axis2" type="STRING" value="400"/>
+                    <respond/>
+                </on-fail>
+            </validate>
+            <sequence key="VariaveisAmbienteSequence"/>
+            <xslt key="conf:sample/resources/TransformTitulo.xslt"/>
+            <call>
+                <endpoint key="EnviaTituloEndpoint"/>
+            </call>
+            <log level="custom" separator="&#x9;&#xa;">
+                <property name="--> " value="Response"/>
+                <property expression="get-property('axis2', 'HTTP_SC')" name="--> http_status_response"/>
+                <property expression="json-eval($)" name="--> Body"/>
+            </log>
+            <respond/>
+        </inSequence>
+        <outSequence/>
+        <faultSequence>
+            <log level="custom">
+                <property name="text" value="An unexpected error occured"/>
+                <property expression="get-property('ERROR_MESSAGE')" name="message"/>
+            </log>
+        </faultSequence>
+    </resource>
+    <resource methods="POST" uri-template="/titulos/complementar">
+        <inSequence>
+            <validate cache-schema="true">
+                <schema key="conf:/schema/SchemaValidationComplementar.json"/>
+                <on-fail>
+                    <propertyGroup description="Dados validacao">
+                        <property expression="substring-before(substring-after(get-property('ERROR_DETAIL'), 'instance: {&quot;pointer&quot;:&quot;'), '&quot;')" name="instance" scope="default" type="STRING"/>
+                    </propertyGroup>
+                    <payloadFactory media-type="json">
+                        <format>
+							{"Error":"$1"}
+						</format>
+                        <args>
+                            <arg evaluator="xml" expression="fn:concat($ctx:ERROR_MESSAGE,' attribute: ',$ctx:instance)"/>
+                        </args>
+                    </payloadFactory>
+                    <log level="full" separator="&#x9;&#xa;">
+                        <property expression="$ctx:ERROR_CODE" name="ERROR_CODE"/>
+                        <property expression="$ctx:ERROR_MESSAGE" name="ERROR_MESSAGE"/>
+                        <property expression="$ctx:ERROR_DETAIL" name="ERROR_DETAIL"/>
+                        <property expression="$ctx:ERROR_EXCEPTION" name="ERROR_EXCEPTION"/>
+                        <property expression="$ctx:instance" name="instance"/>
+                    </log>
+                    <property name="HTTP_SC" scope="axis2" type="STRING" value="400"/>
+                    <respond/>
+                </on-fail>
+            </validate>
+            <sequence key="VariaveisAmbienteSequence"/>
+            <xslt key="conf:sample/resources/TransformComplementar.xslt"/>
+            <call>
+                <endpoint key="EnviaTituloComplementaresEndpoint"/>
+            </call>
+            <log level="custom">
+                <property name="--> " value="Response"/>
+                <property expression="get-property('axis2', 'HTTP_SC')" name="--> http_status_response"/>
+                <property expression="json-eval($)" name="--> Body"/>
+            </log>
+            <respond/>
+        </inSequence>
+        <outSequence/>
+        <faultSequence>
+            <log level="custom">
+                <property name="text" value="An unexpected error occured"/>
+                <property expression="get-property('ERROR_MESSAGE')" name="message"/>
+            </log>
+        </faultSequence>
+    </resource>
+    <resource methods="POST" uri-template="/titulos/notascomplementares">
+        <inSequence>
+            <validate cache-schema="true">
+                <schema key="conf:/schema/SchemaValidationNotasComplementares.json"/>
+                <on-fail>
+                    <propertyGroup description="Dados validacao">
+                        <property expression="substring-before(substring-after(get-property('ERROR_DETAIL'), 'instance: {&quot;pointer&quot;:&quot;'), '&quot;')" name="instance" scope="default" type="STRING"/>
+                    </propertyGroup>
+                    <payloadFactory media-type="json">
+                        <format>
+							{"Error":"$1"}
+						</format>
+                        <args>
+                            <arg evaluator="xml" expression="fn:concat($ctx:ERROR_MESSAGE,' attribute: ',$ctx:instance)"/>
+                        </args>
+                    </payloadFactory>
+                    <log level="full" separator="&#x9;&#xa;">
+                        <property expression="$ctx:ERROR_CODE" name="ERROR_CODE"/>
+                        <property expression="$ctx:ERROR_MESSAGE" name="ERROR_MESSAGE"/>
+                        <property expression="$ctx:ERROR_DETAIL" name="ERROR_DETAIL"/>
+                        <property expression="$ctx:ERROR_EXCEPTION" name="ERROR_EXCEPTION"/>
+                        <property expression="$ctx:instance" name="instance"/>
+                    </log>
+                    <property name="HTTP_SC" scope="axis2" type="STRING" value="400"/>
+                    <respond/>
+                </on-fail>
+            </validate>
+            <sequence key="VariaveisAmbienteSequence"/>
+            <xslt key="conf:sample/resources/TransformNotasComplementares.xslt"/>
+            <call>
+                <endpoint key="EnviaTituloNotaComplementarEndpoint"/>
+            </call>
+            <log level="custom">
+                <property name="--> " value="Response"/>
+                <property expression="get-property('axis2', 'HTTP_SC')" name="--> http_status_response"/>
+                <property expression="json-eval($)" name="--> Body"/>
+            </log>
+            <respond/>
+        </inSequence>
+        <outSequence/>
+        <faultSequence>
+            <log level="custom">
+                <property name="text" value="An unexpected error occured"/>
+                <property expression="get-property('ERROR_MESSAGE')" name="message"/>
+            </log>
+        </faultSequence>
+    </resource>
+</api>

@@ -2,6 +2,7 @@ import fs from 'fs-extra';
 import { generalData } from '../types/generalData';
 import * as Data from '../types/Data';
 import * as ConsoleLog from '../helpers/consoleLog'
+import * as teste from '../types/test'
 
 let template: string;
 let started: boolean = false;
@@ -99,17 +100,18 @@ export const Apis = (apiData: Data.Apis, generalData: generalData)=>{
 
     });
     
+    console.log('creating pom and artifacts for the APIs')
     PomEArtifact(apiData, generalData, template);
     ConsoleLog.success("----------------- Apis have been created ---------------------");
 }
 
-export const Sequences = (sequenceData: Data.Sequences, generalData: generalData)=>{
+export const Sequences = (sequenceData: teste.Sequence, generalData: generalData)=>{
     console.log('----------------------------------------------------------------');
     console.log('================== creating sequences ==========================');
     template = generalData.encodePattern == 'nameAfter' ? 'Sequence': '';  
 
-    PomEArtifact(sequenceData, generalData, template);
-
+    if(sequenceData.type == 'create'){
+        PomEArtifact(sequenceData, generalData, template);
     fs.mkdirSync(`${path}sequences`)
 
     let fileContent = '';
@@ -130,6 +132,8 @@ export const Sequences = (sequenceData: Data.Sequences, generalData: generalData
 
        
     });
+    }
+    
 
     
     ConsoleLog.success("---------------- Sequences have been created-----------------");
