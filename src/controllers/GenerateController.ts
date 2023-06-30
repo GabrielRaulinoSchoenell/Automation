@@ -39,7 +39,6 @@ export const generate = (req: Request, res: Response)=>{
     // data.dataServices ? create.DataServices(data.dataServices, data) : console.log("No dataService... going to the next term.");
     // data.ednpoints ? create.endpoints(teste.endpoints): null;
     data.apis ? create.Apis(data.apis, data) : console.log("No Apis... going to the next term.");
-    data.apis ? create_extraResources.listing(data.extra, data) : null;
     // createMessagers(teste.messageProcessorEStore);
     // createTemplate(teste.templates);
     // createResources(teste.resources);
