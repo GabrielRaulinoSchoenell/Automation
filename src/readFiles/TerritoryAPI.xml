@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<api context="/territory" name="TerritoryAPI" xmlns="http://ws.apache.org/ns/synapse">
+<!-- depreciada -->    
+    <resource methods="GET" uri-template="/{param}">
+        <inSequence>
+            <!-- --><log level="custom">
+                <!-- --><property name="Endpoint foi depreciado." value="nova funcionalidade na API DataExportsAPI"/>
+            <!-- --></log>
+            <property name="query" scope="default" type="STRING" value="select Id, Name, DeveloperName,Territory2Type.Description, Territory2Type.DeveloperName, ParentTerritory2.Name, ParentTerritory2Id, ParentTerritory2.DeveloperName, BUSegmentCode__c, BUSegmentName__c, BusinessUnitCode__c, BusinessUnitName__c, ExternalId__c, SalesChannelName__c from Territory2 WHERE LastModifiedDate  = "/>
+            <property expression="fn:concat(get-property('query'),get-property('uri.var.param'))" name="salesforceQuery" scope="default" type="STRING"/>
+            <salesforcerest.query configKey="init-salesforce">
+                <queryString>{get-property("salesforceQuery")}</queryString>
+            </salesforcerest.query>
+            <filter regex="0" source="json-eval($.totalSize)">
+                <then>
+                    <log level="full">
+                        <property name="SemRegistros" value="a processar"/>
+                    </log>
+                </then>
+                <else>
+                    <property name="messageType" scope="axis2" type="STRING" value="application/xml"/>
+                    <payloadFactory media-type="xml">
+                        <format>
+                            <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/">
+                                <soapenv:Header/>
+                                <soapenv:Body>
+									$1
+								</soapenv:Body>
+                            </soapenv:Envelope>
+                        </format>
+                        <args>
+                            <arg evaluator="xml" expression="$body"/>
+                        </args>
+                    </payloadFactory>
+                    <xslt key="conf:transform/TransformJsonObjectTerritory.xslt"/>
+                    <header expression="fn:concat(get-property('env','URL_PLANEJAMENTO'), '/services/TerritoryDSS.SOAP12Endpoint')" name="To" scope="default"/>
+                    <call>
+                        <endpoint>
+                            <default format="soap12">
+                                <suspendOnFailure>
+                                    <initialDuration>-1</initialDuration>
+                                    <progressionFactor>-1</progressionFactor>
+                                    <maximumDuration>0</maximumDuration>
+                                </suspendOnFailure>
+                                <markForSuspension>
+                                    <retriesBeforeSuspension>0</retriesBeforeSuspension>
+                                </markForSuspension>
+                            </default>
+                        </endpoint>
+                    </call>
+                </else>
+            </filter>
+            <respond/>
+        </inSequence>
+        <outSequence/>
+        <faultSequence/>
+    </resource>
+    <resource methods="GET" uri-template="/accounts/{param}">
+        <inSequence>
+            <!-- --><log level="custom">
+                <!-- --><property name="Endpoint foi depreciado." value="nova funcionalidade na API DataExportsAPI"/>
+            <!-- --></log>
+            <property name="query" scope="default" type="STRING" value="Select id, Object.RecordType.Name, Object.RecordType.SobjectType, Object.Name, ObjectId, Territory2.Name, Territory2.Territory2Model.Name, Territory2.Territory2Model.DeveloperName from ObjectTerritory2Association WHERE LastModifiedDate = "/>
+            <property expression="fn:concat(get-property('query'),get-property('uri.var.param'))" name="salesforceQuery" scope="default" type="STRING"/>
+            <salesforcerest.query configKey="init-salesforce">
+                <queryString>{get-property("salesforceQuery")}</queryString>
+            </salesforcerest.query>
+            <filter regex="0" source="json-eval($.totalSize)">
+                <then>
+                    <log level="full">
+                        <property name="SemRegistros" value="a processar"/>
+                    </log>
+                </then>
+                <else>
+                    <property name="messageType" scope="axis2" type="STRING" value="application/xml"/>
+                    <payloadFactory media-type="xml">
+                        <format>
+                            <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/">
+                                <soapenv:Header/>
+                                <soapenv:Body>
+									$1
+								</soapenv:Body>
+                            </soapenv:Envelope>
+                        </format>
+                        <args>
+                            <arg evaluator="xml" expression="$body"/>
+                        </args>
+                    </payloadFactory>
+                    <xslt key="conf:transform/TransformJsonObjectTerritoryAccount.xslt"/>
+                    <header expression="fn:concat(get-property('env','URL_PLANEJAMENTO'), '/services/TerritoryDSS.SOAP12Endpoint')" name="To" scope="default"/>
+                    <call>
+                        <endpoint>
+                            <default format="soap12">
+                                <suspendOnFailure>
+                                    <initialDuration>-1</initialDuration>
+                                    <progressionFactor>-1</progressionFactor>
+                                    <maximumDuration>0</maximumDuration>
+                                </suspendOnFailure>
+                                <markForSuspension>
+                                    <retriesBeforeSuspension>0</retriesBeforeSuspension>
+                                </markForSuspension>
+                            </default>
+                        </endpoint>
+                    </call>
+                </else>
+            </filter>
+            <respond/>
+        </inSequence>
+        <outSequence/>
+        <faultSequence/>
+    </resource>
+    <resource methods="GET" uri-template="/users/{param}">
+        <inSequence>
+            <!-- --><log level="custom">
+                <!-- --><property name="Endpoint foi depreciado." value="nova funcionalidade na API DataExportsAPI"/>
+            <!-- --></log>
+            <property name="query" scope="default" type="STRING" value="Select Id, IsActive, RoleInTerritory2, User.FirstName, User.Email,User.FederationIdentifier, User.IsActive, User.UserRole.DeveloperName, User.Matricula__c, Territory2.Name from UserTerritory2Association WHERE LastModifiedDate = "/>
+            <property expression="fn:concat(get-property('query'),get-property('uri.var.param'))" name="salesforceQuery" scope="default" type="STRING"/>
+            <salesforcerest.query configKey="init-salesforce">
+                <queryString>{get-property("salesforceQuery")}</queryString>
+            </salesforcerest.query>
+            <filter regex="0" source="json-eval($.totalSize)">
+                <then>
+                    <log level="full">
+                        <property name="SemRegistros" value="a processar"/>
+                    </log>
+                </then>
+                <else>
+                    <property name="messageType" scope="axis2" type="STRING" value="application/xml"/>
+                    <payloadFactory media-type="xml">
+                        <format>
+                            <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/">
+                                <soapenv:Header/>
+                                <soapenv:Body>
+									$1
+								</soapenv:Body>
+                            </soapenv:Envelope>
+                        </format>
+                        <args>
+                            <arg evaluator="xml" expression="$body"/>
+                        </args>
+                    </payloadFactory>
+                    <xslt key="conf:transform/TransformJsonObjectTerritoryUserAccount.xslt"/>
+                    <header expression="fn:concat(get-property('env','URL_PLANEJAMENTO'), '/services/TerritoryDSS.SOAP12Endpoint')" name="To" scope="default"/>
+                    <call>
+                        <endpoint>
+                            <default format="soap12">
+                                <suspendOnFailure>
+                                    <initialDuration>-1</initialDuration>
+                                    <progressionFactor>-1</progressionFactor>
+                                    <maximumDuration>0</maximumDuration>
+                                </suspendOnFailure>
+                                <markForSuspension>
+                                    <retriesBeforeSuspension>0</retriesBeforeSuspension>
+                                </markForSuspension>
+                            </default>
+                        </endpoint>
+                    </call>
+                </else>
+            </filter>
+            <respond/>
+        </inSequence>
+        <outSequence/>
+        <faultSequence/>
+    </resource>
+</api>

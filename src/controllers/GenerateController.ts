@@ -8,6 +8,7 @@ import * as create_extraResources from '../helpers/createExtraResources'
 import { readDir, readFile } from '../helpers/readXml';
 import * as xmlReader from 'xml2js';
 import * as listFunctions from '../helpers/listFunctions';
+import axios from 'axios'
 
 export const generate = (req: Request, res: Response)=>{
     console.log('requisição recebida /generate\n');
@@ -31,6 +32,8 @@ export const generate = (req: Request, res: Response)=>{
         res.json({err: 'no data'});
         return;
     }
+
+    console.log(req.body)
 
     // data.sequences ? create.Sequences(data.sequences, data) : console.log("No sequences... going to the next term.");
     // data.dataServices ? create.DataServices(data.dataServices, data) : console.log("No dataService... going to the next term.");
@@ -162,4 +165,15 @@ export const listFunctionalities = (req: Request, res: Response)=>{
     let functionalities = listFunctions.listApis(file)
 
     res.json({functionalities})
+}
+
+export const readFilesAndGenerate = (req: Request, res: Response)=>{
+    let {dirPath} = req.body;
+    let data = fs.statSync(dirPath).isDirectory() ? readDir(dirPath) : readFile(dirPath);
+
+    console.log(data)
+
+    axios.post(`http://localhost:3000/generate?deleteFiles=deleteAll`, {data});
+
+    res.json({criado: "kk"})
 }

@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<api context="/bulkTestApi" name="BulkTestAPI" xmlns="http://ws.apache.org/ns/synapse">
+    <resource methods="GET">
+        <inSequence>
+            <payloadFactory media-type="json">
+                <format>
+					[&#xd;
+					{"Name":"Teste", "ExternalId__c":"Teste21"},&#xd;
+					{"Name":"Teste2", "ExternalId__c":"Teste22"}&#xd;
+					]
+				</format>
+                <args/>
+            </payloadFactory>
+            <enrich>
+                <source clone="true" type="body"/>
+                <target property="conteudo" type="property"/>
+            </enrich>
+            <salesforcebulk.createJob configKey="init-bulk">
+                <operation>upsert</operation>
+                <object>Account</object>
+                <contentType>JSON</contentType>
+                <externalIdFieldName>ExternalId__c</externalIdFieldName>
+            </salesforcebulk.createJob>
+            <property expression="//int:id" name="job_id" scope="default" type="STRING" xmlns:int="http://www.force.com/2009/06/asyncapi/dataload"/>
+            <salesforcebulk.addBatch configKey="init-bulk">
+                <objects>{get-property('conteudo')}</objects>
+                <jobId>{get-property('job_id')}</jobId>
+                <isQuery>false</isQuery>
+                <contentType>application/json</contentType>
+            </salesforcebulk.addBatch>
+            <respond/>
+        </inSequence>
+        <outSequence/>
+        <faultSequence/>
+    </resource>
+    <resource methods="GET" uri-template="/batchStatus/{jobID}/{batchId}">
+        <inSequence>
+            <salesforcebulk.getBatchResults configKey="init-bulk">
+                <jobId>{$ctx:uri.var.jobID}</jobId>
+                <batchId>{$ctx:uri.var.batchId}</batchId>
+            </salesforcebulk.getBatchResults>
+            <respond/>
+        </inSequence>
+        <outSequence/>
+        <faultSequence/>
+    </resource>
+    <resource methods="GET" uri-template="/jobStatus/{jobID}">
+        <inSequence>
+            <salesforcebulk.getJob configKey="init-bulk">
+                <jobId>{$ctx:uri.var.jobID}</jobId>
+            </salesforcebulk.getJob>
+            <respond/>
+        </inSequence>
+        <outSequence/>
+        <faultSequence/>
+    </resource>
+    <resource methods="GET" uri-template="/accessToken">
+        <inSequence>
+            <salesforcerest.init configKey="init-salesforce"/>
+            <log level="custom">
+                <property expression="$trp:Authorization" name="Authorization"/>
+                <property expression="get-property('SYSTEM_TIME')" name="systemTime"/>
+            </log>
+            <respond/>
+        </inSequence>
+        <outSequence/>
+        <faultSequence/>
+    </resource>
+</api>

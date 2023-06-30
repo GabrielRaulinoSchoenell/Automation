@@ -1,0 +1,1236 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<api context="/operacoes/v1" name="OperacoesAPI" xmlns="http://ws.apache.org/ns/synapse">
+    <resource methods="GET" uri-template="/licences">
+        <inSequence>
+            <property name="queryUsers" scope="default" type="STRING" value="SELECT CreatedDate,Id,MasterLabel,Name,Status,TotalLicenses,UsedLicenses,UsedLicensesLastUpdated FROM UserLicense"/>
+            <salesforcerest.query configKey="init-salesforce">
+                <queryString>{get-property("queryUsers")}</queryString>
+            </salesforcerest.query>
+            <respond/>
+        </inSequence>
+        <outSequence/>
+        <faultSequence/>
+    </resource>
+    <resource methods="GET" uri-template="/users">
+        <inSequence>
+            <property name="queryUsers" scope="default" type="STRING" value="SELECT AboutMe,AccountId,AccountManager__c,Address,Alias,BadgeText,BannerPhotoUrl,CallCenterId,City,CommunityNickname,CompanyName,ContactId,Country,CountryCode,CreatedById,CreatedDate,DefaultGroupNotificationFrequency,DelegatedApproverId,Department,dfsle__CanManageAccount__c,dfsle__Provisioned__c,dfsle__Status__c,dfsle__Username__c,DigestFrequency,Division,Email,EmailEncodingKey,EmailPreferencesAutoBcc,EmailPreferencesAutoBccStayInTouch,EmailPreferencesStayInTouchReminder,EmployeeNumber,et4ae5__Default_ET_Page__c,et4ae5__Default_MID__c,et4ae5__ExactTargetForAppExchangeAdmin__c,et4ae5__ExactTargetForAppExchangeUser__c,et4ae5__ExactTargetUsername__c,et4ae5__ExactTarget_OAuth_Token__c,et4ae5__ValidExactTargetAdmin__c,et4ae5__ValidExactTargetUser__c,Extension,Fax,FederationIdentifier,FirstName,ForecastEnabled,FullPhotoUrl,GeocodeAccuracy,Id,IndividualId,IntegratorUser__c,IsActive,IsExtIndicatorVisible,IsPortalEnabled,IsProfilePhotoActive,LanguageLocaleKey,LastLoginDate,LastModifiedById,LastModifiedDate,LastName,LastPasswordChangeDate,LastReferencedDate,LastViewedDate,Latitude,LocaleSidKey,Longitude,ManagerId,Matricula__c,MediumBannerPhotoUrl,MediumPhotoUrl,MobilePhone,Name,NumberOfFailedLogins,OfflinePdaTrialExpirationDate,OfflineTrialExpirationDate,OutOfOfficeMessage,Phone,PortalRole,PostalCode,ProfileId,ReceivesAdminInfoEmails,ReceivesInfoEmails,SenderEmail,SenderName,Signature,SmallBannerPhotoUrl,SmallPhotoUrl,State,StateCode,StayInTouchNote,StayInTouchSignature,StayInTouchSubject,Street,SystemModstamp,TimeZoneSidKey,Title,Username,UserPermissionsAvantgoUser,UserPermissionsCallCenterAutoLogin,UserPermissionsInteractionUser,UserPermissionsKnowledgeUser,UserPermissionsMarketingUser,UserPermissionsOfflineUser,UserPermissionsSFContentUser,UserPermissionsSupportUser,UserPreferencesActivityRemindersPopup,UserPreferencesApexPagesDeveloperMode,UserPreferencesCacheDiagnostics,UserPreferencesCreateLEXAppsWTShown,UserPreferencesDisableAllFeedsEmail,UserPreferencesDisableBookmarkEmail,UserPreferencesDisableChangeCommentEmail,UserPreferencesDisableEndorsementEmail,UserPreferencesDisableFileShareNotificationsForApi,UserPreferencesDisableFollowersEmail,UserPreferencesDisableLaterCommentEmail,UserPreferencesDisableLikeEmail,UserPreferencesDisableMentionsPostEmail,UserPreferencesDisableMessageEmail,UserPreferencesDisableProfilePostEmail,UserPreferencesDisableSharePostEmail,UserPreferencesDisCommentAfterLikeEmail,UserPreferencesDisMentionsCommentEmail,UserPreferencesDisProfPostCommentEmail,UserPreferencesEnableAutoSubForFeeds,UserPreferencesEventRemindersCheckboxDefault,UserPreferencesExcludeMailAppAttachments,UserPreferencesFavoritesShowTopFavorites,UserPreferencesFavoritesWTShown,UserPreferencesGlobalNavBarWTShown,UserPreferencesGlobalNavGridMenuWTShown,UserPreferencesHasCelebrationBadge,UserPreferencesHideBiggerPhotoCallout,UserPreferencesHideBrowseProductRedirectConfirmation,UserPreferencesHideChatterOnboardingSplash,UserPreferencesHideCSNDesktopTask,UserPreferencesHideCSNGetChatterMobileTask,UserPreferencesHideEndUserOnboardingAssistantModal,UserPreferencesHideInvoicesRedirectConfirmation,UserPreferencesHideLightningMigrationModal,UserPreferencesHideOnlineSalesAppWelcomeMat,UserPreferencesHideS1BrowserUI,UserPreferencesHideSecondChatterOnboardingSplash,UserPreferencesHideSfxWelcomeMat,UserPreferencesHideStatementsRedirectConfirmation,UserPreferencesLightningExperiencePreferred,UserPreferencesNativeEmailClient,UserPreferencesNewLightningReportRunPageEnabled,UserPreferencesPathAssistantCollapsed,UserPreferencesPreviewCustomTheme,UserPreferencesPreviewLightning,UserPreferencesReceiveNoNotificationsAsApprover,UserPreferencesReceiveNotificationsAsDelegatedApprover,UserPreferencesRecordHomeReservedWTShown,UserPreferencesRecordHomeSectionCollapseWTShown,UserPreferencesReminderSoundOff,UserPreferencesSendListEmailThroughExternalService,UserPreferencesShowCityToExternalUsers,UserPreferencesShowCityToGuestUsers,UserPreferencesShowCountryToExternalUsers,UserPreferencesShowCountryToGuestUsers,UserPreferencesShowEmailToExternalUsers,UserPreferencesShowEmailToGuestUsers,UserPreferencesShowFaxToExternalUsers,UserPreferencesShowFaxToGuestUsers,UserPreferencesShowManagerToExternalUsers,UserPreferencesShowManagerToGuestUsers,UserPreferencesShowMobilePhoneToExternalUsers,UserPreferencesShowMobilePhoneToGuestUsers,UserPreferencesShowPostalCodeToExternalUsers,UserPreferencesShowPostalCodeToGuestUsers,UserPreferencesShowProfilePicToGuestUsers,UserPreferencesShowStateToExternalUsers,UserPreferencesShowStateToGuestUsers,UserPreferencesShowStreetAddressToExternalUsers,UserPreferencesShowStreetAddressToGuestUsers,UserPreferencesShowTitleToExternalUsers,UserPreferencesShowTitleToGuestUsers,UserPreferencesShowWorkPhoneToExternalUsers,UserPreferencesShowWorkPhoneToGuestUsers,UserPreferencesSortFeedByComment,UserPreferencesSRHOverrideActivities,UserPreferencesSuppressEventSFXReminders,UserPreferencesSuppressTaskSFXReminders,UserPreferencesTaskRemindersCheckboxDefault,UserPreferencesUserDebugModePref,UserRoleId,UserType FROM User where isActive = true"/>
+            <salesforcerest.query configKey="init-salesforce">
+                <queryString>{get-property("queryUsers")}</queryString>
+            </salesforcerest.query>
+            <respond/>
+        </inSequence>
+        <outSequence/>
+        <faultSequence/>
+    </resource>
+    <resource methods="POST" uri-template="/users/cria-cadastro-crm">
+        <inSequence>
+            <property expression="get-property('query.param.matricula')" name="uri.var.matricula" scope="default" type="STRING"/>
+            <property expression="get-property('query.param.perfil')" name="uri.var.perfil" scope="default" type="STRING"/>
+            <property expression="get-property('query.param.papel')" name="uri.var.papel" scope="default" type="STRING"/>
+            <property expression="get-property('query.param.comSuperior')" name="uri.var.comSuperior" scope="default" type="STRING"/>
+            <property expression="get-property('query.param.codigoAtendente')" name="uri.var.codigoAtendente" scope="default" type="STRING"/>
+            <property expression="get-property('query.param.codigoRepresentante')" name="uri.var.codigoRepresentante" scope="default" type="STRING"/>
+            <sequence key="EnvironmentVariablesSequence"/>
+            <property action="remove" name="Content-Type" scope="transport"/>
+            <log level="full" separator="&#x9;&#xa;">
+                <property name="--> " value="Requisicao recebida! - cria-cadastro-crm"/>
+                <property expression="get-property('salesforceOrg')" name="--> "/>
+            </log>
+            <sequence key="SVC-EmployeeIntelbrasSequence"/>
+            <property expression="json-eval($.Colaboradores.Colaborador[0].nome)" name="nomeCompleto" scope="default" type="STRING"/>
+            <property expression="json-eval($.Colaboradores.Colaborador[0].nome)" group="1" name="firstName" pattern="([a-zA-Z]+)( .*)" scope="default" type="STRING"/>
+            <property expression="json-eval($.Colaboradores.Colaborador[0].nome)" group="2" name="lastName" pattern="([a-zA-Z]+ )(.*)" scope="default" type="STRING"/>
+            <property expression="json-eval($.Colaboradores.Colaborador[0].matriculaLideranca)" name="matriculaLideranca" scope="default" type="STRING"/>
+            <property expression="json-eval($.Colaboradores.Colaborador[0].area)" name="area" scope="default" type="STRING"/>
+            <property expression="json-eval($.Colaboradores.Colaborador[0].cargo)" name="cargo" scope="default" type="STRING"/>
+            <property expression="json-eval($.Colaboradores.Colaborador[0].filial)" name="filial" scope="default" type="STRING"/>
+            <property expression="get-property('uri.var.papel')" name="papel" scope="default" type="STRING"/>
+            <log level="custom" separator="&#x9;&#xa;">
+                <property expression="get-property('nomeCompleto')" name="--> "/>
+                <property expression="get-property('firstName')" name="--> "/>
+                <property expression="get-property('lastName')" name="--> "/>
+            </log>
+            <filter regex="true" source="$ctx:query.param.comSuperior">
+                <then>
+                    <payloadFactory media-type="json">
+                        <format>
+							{&#xd;
+							"Username": "$1-$7",&#xd;
+							"FirstName": "$8",
+							"LastName": "$2",&#xd;
+							"Country": "Brazil",&#xd;
+							"CountryCode": "BR",&#xd;
+							"Email": "$1",&#xd;
+							"MobilePhone": "$3",&#xd;
+							"Alias": "$6",&#xd;
+							"IsActive": true,&#xd;
+							"TimeZoneSidKey": "America/Sao_Paulo",&#xd;
+							"LocaleSidKey": "pt_BR",&#xd;
+							"EmailEncodingKey": "UTF-8",&#xd;
+							"FederationIdentifier": "$1",&#xd;
+							"UserRole":  {"Name":"$4"},&#xd;
+							"Profile": {"Name":"$5"},&#xd;
+							"Manager": {"Matricula__c": "$9"},&#xd;
+							"USERPERMISSIONSINTERACTIONUSER": true,
+							"LanguageLocaleKey": "pt_BR",&#xd;
+							"Department": "$10",&#xd;
+							"CompanyName": "$11",&#xd;
+							"Title": "$12"&#xd;
+							
+							&#xd;
+							}
+						</format>
+                        <args>
+                            <arg evaluator="json" expression="$.Colaboradores.Colaborador[0].email"/>
+                            <arg evaluator="xml" expression="get-property('lastName')"/>
+                            <arg evaluator="json" expression="$.Colaboradores.Colaborador[0].telefone"/>
+                            <arg evaluator="xml" expression="get-property('uri.var.papel')"/>
+                            <arg evaluator="xml" expression="get-property('uri.var.perfil')"/>
+                            <arg evaluator="json" expression="$.Colaboradores.Colaborador[0].matricula"/>
+                            <arg evaluator="xml" expression="get-property('salesforceOrg')"/>
+                            <arg evaluator="xml" expression="get-property('firstName')"/>
+                            <arg evaluator="xml" expression="get-property('matriculaLideranca')"/>
+                            <arg evaluator="xml" expression="get-property('area')"/>
+                            <arg evaluator="xml" expression="get-property('filial')"/>
+                            <arg evaluator="xml" expression="get-property('cargo')"/>
+                            
+                        </args>
+                    </payloadFactory>
+                </then>
+                <else>
+                    <payloadFactory media-type="json">
+                        <format>
+							{&#xd;
+							"Username": "$1-$7",&#xd;
+							"FirstName": "$8",
+							"LastName": "$2",&#xd;
+							"Country": "Brazil",&#xd;
+							"CountryCode": "BR",&#xd;
+							"Email": "$1",&#xd;
+							"MobilePhone": "$3",&#xd;
+							"Alias": "$6",&#xd;
+							"IsActive": true,&#xd;
+							"TimeZoneSidKey": "America/Sao_Paulo",&#xd;
+							"LocaleSidKey": "pt_BR",&#xd;
+							"EmailEncodingKey": "UTF-8",&#xd;
+							"FederationIdentifier": "$1",&#xd;
+							"UserRole":  {"Name":"$4"},&#xd;
+							"Profile": {"Name":"$5"},&#xd;
+							"USERPERMISSIONSINTERACTIONUSER": true,
+							"LanguageLocaleKey": "pt_BR",&#xd;
+							"Department": "$9",&#xd;
+							"CompanyName": "$10",&#xd;
+							"Title": "$11"&#xd;
+							&#xd;
+							}
+						</format>
+                        <args>
+                            <arg evaluator="json" expression="$.Colaboradores.Colaborador[0].email"/>
+                            <arg evaluator="xml" expression="get-property('lastName')"/>
+                            <arg evaluator="json" expression="$.Colaboradores.Colaborador[0].telefone"/>
+                            <arg evaluator="xml" expression="get-property('uri.var.papel')"/>
+                            <arg evaluator="xml" expression="get-property('uri.var.perfil')"/>
+                            <arg evaluator="json" expression="$.Colaboradores.Colaborador[0].matricula"/>
+                            <arg evaluator="xml" expression="get-property('salesforceOrg')"/>
+                            <arg evaluator="xml" expression="get-property('firstName')"/>
+                            <arg evaluator="xml" expression="get-property('area')"/>
+                            <arg evaluator="xml" expression="get-property('filial')"/>
+                            <arg evaluator="xml" expression="get-property('cargo')"/>
+                        </args>
+                    </payloadFactory>
+                </else>
+            </filter>
+            <enrich>
+                <source clone="true" type="body"/>
+                <target property="bodycrm" type="property"/>
+            </enrich>
+            <log level="custom" separator="&#x9;&#xa;">
+                <property expression="$ctx:bodycrm" name="envio ao salesforce"/>
+            </log>
+            <sequence key="SVC-UsersSequence"/>
+            <respond/>
+        </inSequence>
+        <outSequence/>
+        <faultSequence/>
+    </resource>
+    <resource methods="POST" uri-template="/users/cria-cadastro-crm/{perfil}/{papel}/{matricula}/com-supervisor">
+        <inSequence>
+            <sequence key="EnvironmentVariablesSequence"/>
+            <property action="remove" name="Content-Type" scope="transport"/>
+            <log level="full" separator="&#x9;&#xa;">
+                <property name="--> " value="Requisicao recebida! - cria-cadastro-crm"/>
+                <property expression="get-property('salesforceOrg')" name="--> "/>
+            </log>
+            <sequence key="SVC-EmployeeIntelbrasSequence"/>
+            <property expression="json-eval($.Colaboradores.Colaborador[0].nome)" name="nomeCompleto" scope="default" type="STRING"/>
+            <property expression="json-eval($.Colaboradores.Colaborador[0].nome)" group="1" name="firstName" pattern="([a-zA-Z]+)( .*)" scope="default" type="STRING"/>
+            <property expression="json-eval($.Colaboradores.Colaborador[0].nome)" group="2" name="lastName" pattern="([a-zA-Z]+ )(.*)" scope="default" type="STRING"/>
+            <property expression="json-eval($.Colaboradores.Colaborador[0].matriculaLideranca)" name="matriculaLideranca" scope="default" type="STRING"/>            
+            <property expression="json-eval($.Colaboradores.Colaborador[0].area)" name="area" scope="default" type="STRING"/>
+            <property expression="json-eval($.Colaboradores.Colaborador[0].cargo)" name="cargo" scope="default" type="STRING"/>
+            <property expression="json-eval($.Colaboradores.Colaborador[0].filial)" name="filial" scope="default" type="STRING"/>
+            <property expression="get-property('uri.var.papel')" name="papel" scope="default" type="STRING"/>
+            <log level="custom" separator="&#x9;&#xa;">
+                <property expression="get-property('nomeCompleto')" name="--> "/>
+                <property expression="get-property('firstName')" name="--> "/>
+                <property expression="get-property('lastName')" name="--> "/>
+            </log>
+            <payloadFactory media-type="json">
+                <format>
+					{&#xd;
+					"Username": "$1-$7",&#xd;
+					"FirstName": "$8",
+					"LastName": "$2",&#xd;
+					"Country": "Brazil",&#xd;
+					"CountryCode": "BR",&#xd;
+					"Email": "$1",&#xd;
+					"MobilePhone": "$3",&#xd;
+					"Alias": "$6",&#xd;
+					"IsActive": true,&#xd;
+					"TimeZoneSidKey": "America/Sao_Paulo",&#xd;
+					"LocaleSidKey": "pt_BR",&#xd;
+					"EmailEncodingKey": "UTF-8",&#xd;
+					"ProfileId": "$5",&#xd;
+					"FederationIdentifier": "$1",&#xd;
+					"UserRoleId": "$4",&#xd;
+					"Manager": {"Matricula__c": "$9"},&#xd;
+					"USERPERMISSIONSINTERACTIONUSER": true,
+					"LanguageLocaleKey": "pt_BR",&#xd;
+							"Department": "$10",&#xd;
+							"CompanyName": "$11",&#xd;
+							"Title": "$12"&#xd;
+					&#xd;
+					}
+				</format>
+                <args>
+                    <arg evaluator="json" expression="$.Colaboradores.Colaborador[0].email"/>
+                    <arg evaluator="xml" expression="get-property('lastName')"/>
+                    <arg evaluator="json" expression="$.Colaboradores.Colaborador[0].telefone"/>
+                    <arg evaluator="xml" expression="get-property('uri.var.papel')"/>
+                    <arg evaluator="xml" expression="get-property('uri.var.perfil')"/>
+                    <arg evaluator="json" expression="$.Colaboradores.Colaborador[0].matricula"/>
+                    <arg evaluator="xml" expression="get-property('salesforceOrg')"/>
+                    <arg evaluator="xml" expression="get-property('firstName')"/>
+                    <arg evaluator="xml" expression="get-property('matriculaLideranca')"/>
+                    <arg evaluator="xml" expression="get-property('area')"/>
+                    <arg evaluator="xml" expression="get-property('filial')"/>
+                    <arg evaluator="xml" expression="get-property('cargo')"/>
+                </args>
+            </payloadFactory>
+            <enrich>
+                <source clone="true" type="body"/>
+                <target property="bodycrm" type="property"/>
+            </enrich>
+            <log level="custom" separator="&#x9;&#xa;">
+                <property expression="$ctx:bodycrm" name="envio ao salesforce"/>
+            </log>
+            <sequence key="SVC-UsersSequence"/>
+            <respond/>
+        </inSequence>
+        <outSequence/>
+        <faultSequence/>
+    </resource>
+    <resource methods="POST" uri-template="/users/cria-cadastro-crm/{perfil}/{papel}/{matricula}/sem-supervisor">
+        <inSequence>
+            <sequence key="EnvironmentVariablesSequence"/>
+            <property action="remove" name="Content-Type" scope="transport"/>
+            <log level="full" separator="&#x9;&#xa;">
+                <property name="--> " value="Requisicao recebida! - cria-cadastro-crm"/>
+                <property expression="get-property('salesforceOrg')" name="--> "/>
+            </log>
+            <sequence key="SVC-EmployeeIntelbrasSequence"/>
+            <property expression="json-eval($.Colaboradores.Colaborador[0].nome)" name="nomeCompleto" scope="default" type="STRING"/>
+            <property expression="json-eval($.Colaboradores.Colaborador[0].nome)" group="1" name="firstName" pattern="([a-zA-Z]+)( .*)" scope="default" type="STRING"/>
+            <property expression="json-eval($.Colaboradores.Colaborador[0].nome)" group="2" name="lastName" pattern="([a-zA-Z]+ )(.*)" scope="default" type="STRING"/>
+            <property expression="json-eval($.Colaboradores.Colaborador[0].matriculaLideranca)" name="matriculaLideranca" scope="default" type="STRING"/>
+            <property expression="json-eval($.Colaboradores.Colaborador[0].area)" name="area" scope="default" type="STRING"/>
+            <property expression="json-eval($.Colaboradores.Colaborador[0].cargo)" name="cargo" scope="default" type="STRING"/>
+            <property expression="json-eval($.Colaboradores.Colaborador[0].filial)" name="filial" scope="default" type="STRING"/>
+            <property expression="get-property('uri.var.papel')" name="papel" scope="default" type="STRING"/>
+            <log level="custom" separator="&#x9;&#xa;">
+                <property expression="get-property('nomeCompleto')" name="--> "/>
+                <property expression="get-property('firstName')" name="--> "/>
+                <property expression="get-property('lastName')" name="--> "/>
+            </log>
+            <payloadFactory media-type="json">
+                <format>
+					{&#xd;
+					"Username": "$1-$7",&#xd;
+					"FirstName": "$8",
+					"LastName": "$2",&#xd;
+					"Country": "Brazil",&#xd;
+					"CountryCode": "BR",&#xd;
+					"Email": "$1",&#xd;
+					"MobilePhone": "$3",&#xd;
+					"Alias": "$6",&#xd;
+					"IsActive": true,&#xd;
+					"TimeZoneSidKey": "America/Sao_Paulo",&#xd;
+					"LocaleSidKey": "pt_BR",&#xd;
+					"EmailEncodingKey": "UTF-8",&#xd;
+					"ProfileId": "$5",&#xd;
+					"FederationIdentifier": "$1",&#xd;
+					"UserRoleId": "$4",&#xd;
+					"USERPERMISSIONSINTERACTIONUSER": true,
+					"LanguageLocaleKey": "pt_BR",&#xd;
+							"Department": "$9",&#xd;
+							"CompanyName": "$10",&#xd;
+							"Title": "$11"&#xd;
+					&#xd;
+					}
+				</format>
+                <args>
+                    <arg evaluator="json" expression="$.Colaboradores.Colaborador[0].email"/>
+                    <arg evaluator="xml" expression="get-property('lastName')"/>
+                    <arg evaluator="json" expression="$.Colaboradores.Colaborador[0].telefone"/>
+                    <arg evaluator="xml" expression="get-property('uri.var.papel')"/>
+                    <arg evaluator="xml" expression="get-property('uri.var.perfil')"/>
+                    <arg evaluator="json" expression="$.Colaboradores.Colaborador[0].matricula"/>
+                    <arg evaluator="xml" expression="get-property('salesforceOrg')"/>
+                    <arg evaluator="xml" expression="get-property('firstName')"/>
+                    <arg evaluator="xml" expression="get-property('area')"/>
+                    <arg evaluator="xml" expression="get-property('filial')"/>
+                    <arg evaluator="xml" expression="get-property('cargo')"/>
+                </args>
+            </payloadFactory>
+            <enrich>
+                <source clone="true" type="body"/>
+                <target property="bodycrm" type="property"/>
+            </enrich>
+            <log level="custom" separator="&#x9;&#xa;">
+                <property expression="$ctx:bodycrm" name="envio ao salesforce"/>
+            </log>
+            <sequence key="SVC-UsersSequence"/>
+            <respond/>
+        </inSequence>
+        <outSequence/>
+        <faultSequence/>
+    </resource>
+    <resource methods="POST" uri-template="/users/cria-cadastro-crm/{perfil}/{matricula}">
+        <inSequence>
+            <sequence key="EnvironmentVariablesSequence"/>
+            <property action="remove" name="Content-Type" scope="transport"/>
+            <log level="full" separator="&#x9;&#xa;">
+                <property name="--> " value="Requisicao recebida! - cria-cadastro-crm"/>
+                <property expression="get-property('salesforceOrg')" name="--> "/>
+            </log>
+            <sequence key="SVC-EmployeeIntelbrasSequence"/>
+            <property expression="json-eval($.Colaboradores.Colaborador[0].nome)" name="nomeCompleto" scope="default" type="STRING"/>
+            <property expression="json-eval($.Colaboradores.Colaborador[0].nome)" group="1" name="firstName" pattern="([a-zA-Z]+)( .*)" scope="default" type="STRING"/>
+            <property expression="json-eval($.Colaboradores.Colaborador[0].nome)" group="2" name="lastName" pattern="([a-zA-Z]+ )(.*)" scope="default" type="STRING"/>
+            <property expression="json-eval($.Colaboradores.Colaborador[0].matriculaLideranca)" name="matriculaLideranca" scope="default" type="STRING"/>
+            <property expression="json-eval($.Colaboradores.Colaborador[0].area)" name="area" scope="default" type="STRING"/>
+            <property expression="json-eval($.Colaboradores.Colaborador[0].cargo)" name="cargo" scope="default" type="STRING"/>
+            <property expression="json-eval($.Colaboradores.Colaborador[0].filial)" name="filial" scope="default" type="STRING"/>
+            <log level="custom" separator="&#x9;&#xa;">
+                <property expression="get-property('nomeCompleto')" name="--> "/>
+                <property expression="get-property('firstName')" name="--> "/>
+                <property expression="get-property('lastName')" name="--> "/>
+            </log>
+            <payloadFactory media-type="json">
+                <format>
+					{&#xd;
+					"Username": "$1-$7",&#xd;
+					"FirstName": "$8",
+					"LastName": "$2",&#xd;
+					"Country": "Brazil",&#xd;
+					"CountryCode": "BR",&#xd;
+					"Email": "$1",&#xd;
+					"MobilePhone": "$3",&#xd;
+					"Alias": "$6",&#xd;
+					"IsActive": true,&#xd;
+					"TimeZoneSidKey": "America/Sao_Paulo",&#xd;
+					"LocaleSidKey": "pt_BR",&#xd;
+					"EmailEncodingKey": "UTF-8",&#xd;
+					"ProfileId": "$5",&#xd;
+					"FederationIdentifier": "$1",&#xd;
+					"USERPERMISSIONSINTERACTIONUSER": true,
+					"LanguageLocaleKey": "pt_BR",&#xd;
+							"Department": "$10",&#xd;
+							"CompanyName": "$11",&#xd;
+							"Title": "$12"&#xd;
+					&#xd;
+					}
+			</format>
+                <args>
+                    <arg evaluator="json" expression="$.Colaboradores.Colaborador[0].email"/>
+                    <arg evaluator="xml" expression="get-property('lastName')"/>
+                    <arg evaluator="json" expression="$.Colaboradores.Colaborador[0].telefone"/>
+                    <arg evaluator="xml" expression="get-property('uri.var.papel')"/>
+                    <arg evaluator="xml" expression="get-property('uri.var.perfil')"/>
+                    <arg evaluator="json" expression="$.Colaboradores.Colaborador[0].matricula"/>
+                    <arg evaluator="xml" expression="get-property('salesforceOrg')"/>
+                    <arg evaluator="xml" expression="get-property('firstName')"/>
+                    <arg evaluator="xml" expression="get-property('matriculaLideranca')"/>
+                    <arg evaluator="xml" expression="get-property('area')"/>
+                    <arg evaluator="xml" expression="get-property('filial')"/>
+                    <arg evaluator="xml" expression="get-property('cargo')"/>
+                </args>
+            </payloadFactory>
+            <log level="custom" separator="&#x9;&#xa;"/>
+            <enrich>
+                <source clone="true" type="body"/>
+                <target property="bodycrm" type="property"/>
+            </enrich>
+            <sequence key="SVC-UsersSequence"/>
+            <respond/>
+        </inSequence>
+        <outSequence/>
+        <faultSequence/>
+    </resource>
+    <resource methods="GET" uri-template="/ro/{cnpj}">
+        <inSequence>
+            <property name="quote" scope="default" type="STRING" value="'"/>
+            <property name="convertido" scope="default" type="STRING" value=" and Status != 'Convertido'"/>
+            <property name="lead" scope="default" type="STRING" value="SELECT Id, LeadNumber__c, CreatedDate, EvaluationStatus__c, LastModifiedDate, Company, ExpectedRevenue__c, ExpectedCloseDate__c, Distributor__r.Name, Distributor__r.BillingCity, Reseller__r.Name, Status FROM Lead WHERE ResellerId__c = "/>
+            <property expression="fn:concat(get-property('lead'),get-property('quote'),get-property('uri.var.cnpj'),get-property('quote'),get-property('convertido'))" name="salesforceLeadQuery" scope="default" type="STRING"/>
+            <log level="custom">
+                <property expression="get-property('salesforceLeadQuery')" name="query"/>
+            </log>
+            <salesforcerest.query configKey="init-salesforce">
+                <queryString>{get-property("salesforceLeadQuery")}</queryString>
+            </salesforcerest.query>
+            <log level="full"/>
+            <enrich>
+                <source clone="true" type="body"/>
+                <target property="bodyLead" type="property"/>
+            </enrich>
+            <property name="opportunity" scope="default" type="STRING" value="Select Id, Amount , Name, Account.Name, Account.CNPJ__c, StageName, CreatedDate, LastModifiedDate, CloseDate, Owner.Name, Distributor__r.Name, Distributor__r.CNPJ__c, Distributor__r.BillingCity, Reseller__r.Name, Reseller__r.CNPJ__c, EvaluationStatus__c FROM Opportunity WHERE Reseller__r.CNPJ__c = "/>
+            <property expression="fn:concat(get-property('opportunity'),get-property('quote'),get-property('uri.var.cnpj'),get-property('quote'))" name="salesforceLeadQuery" scope="default" type="STRING"/>
+            <salesforcerest.query configKey="init-salesforce">
+                <queryString>{get-property("salesforceLeadQuery")}</queryString>
+            </salesforcerest.query>
+            <log level="full"/>
+            <enrich>
+                <source clone="true" type="body"/>
+                <target property="bodyOpportunity" type="property"/>
+            </enrich>
+            <payloadFactory media-type="json">
+                <format>{"lead": $1, "opportunity": $2}</format>
+                <args>
+                    <arg evaluator="xml" expression="get-property('bodyLead')"/>
+                    <arg evaluator="xml" expression="get-property('bodyOpportunity')"/>
+                </args>
+            </payloadFactory>
+            <log level="full"/>
+            <datamapper config="gov:datamapper/TransformRegistroOportunidadeSalesforce.dmc" inputSchema="gov:datamapper/TransformRegistroOportunidadeSalesforce_inputSchema.json" inputType="JSON" outputSchema="gov:datamapper/TransformRegistroOportunidadeSalesforce_outputSchema.json" outputType="JSON" xsltStyleSheet="gov:datamapper/TransformRegistroOportunidadeSalesforce_xsltStyleSheet.xml"/>
+            <respond/>
+        </inSequence>
+        <outSequence/>
+        <faultSequence/>
+    </resource>
+    <resource methods="GET" uri-template="/lead/{id}">
+        <inSequence>
+            <salesforcerest.sObjectRows configKey="init-salesforce">
+                <sObjectName>Lead</sObjectName>
+                <rowId>{get-property("uri.var.id")}</rowId>
+            </salesforcerest.sObjectRows>
+            <respond/>
+        </inSequence>
+        <outSequence/>
+        <faultSequence/>
+    </resource>
+    <resource methods="POST" uri-template="/lead">
+        <inSequence>
+            <enrich>
+                <source clone="true" type="body"/>
+                <target property="body_inicial" type="property"/>
+            </enrich>
+            <salesforcerest.create configKey="init-salesforce">
+                <sObjectName>Lead</sObjectName>
+                <fieldAndValue>{get-property("body_inicial")}</fieldAndValue>
+            </salesforcerest.create>
+            <respond/>
+        </inSequence>
+        <outSequence/>
+        <faultSequence/>
+    </resource>
+    <resource methods="PUT" uri-template="/lead/{id}">
+        <inSequence>
+            <enrich>
+                <source clone="true" type="body"/>
+                <target property="body_inicial" type="property"/>
+            </enrich>
+            <salesforcerest.update configKey="init-salesforce">
+                <sObjectName>Lead</sObjectName>
+                <Id>{get-property("uri.var.id")}</Id>
+                <fieldAndValue>{get-property("body_inicial")}</fieldAndValue>
+            </salesforcerest.update>
+            <respond/>
+        </inSequence>
+        <outSequence/>
+        <faultSequence/>
+    </resource>
+    <resource methods="GET" uri-template="/account/{id}">
+        <inSequence>
+            <salesforcerest.sObjectRowsByExternalId configKey="init-salesforce">
+                <customObject>Account</customObject>
+                <externalIdField>ExternalId__c</externalIdField>
+                <externalIdFieldValue>{get-property("uri.var.id")}</externalIdFieldValue>
+            </salesforcerest.sObjectRowsByExternalId>
+            <respond/>
+        </inSequence>
+        <outSequence/>
+        <faultSequence/>
+    </resource>
+    <resource methods="POST" uri-template="/account">
+        <inSequence>
+            <enrich>
+                <source clone="true" type="body"/>
+                <target property="body_inicial" type="property"/>
+            </enrich>
+            <salesforcerest.create configKey="init-salesforce">
+                <sObjectName>Account</sObjectName>
+                <fieldAndValue>{get-property("body_inicial")}</fieldAndValue>
+            </salesforcerest.create>
+            <respond/>
+        </inSequence>
+        <outSequence/>
+        <faultSequence/>
+    </resource>
+    <resource methods="PUT" uri-template="/account/{id}">
+        <inSequence>
+            <enrich>
+                <source clone="true" type="body"/>
+                <target property="body_inicial" type="property"/>
+            </enrich>
+            <salesforcerest.update configKey="init-salesforce">
+                <sObjectName>Account</sObjectName>
+                <Id>{get-property("uri.var.id")}</Id>
+                <fieldAndValue>{get-property("body_inicial")}</fieldAndValue>
+            </salesforcerest.update>
+            <respond/>
+        </inSequence>
+        <outSequence/>
+        <faultSequence/>
+    </resource>
+    <resource methods="GET" uri-template="/opportunity/{id}">
+        <inSequence>
+            <salesforcerest.sObjectRows configKey="init-salesforce">
+                <sObjectName>Opportunity</sObjectName>
+                <rowId>{get-property("uri.var.id")}</rowId>
+            </salesforcerest.sObjectRows>
+            <respond/>
+        </inSequence>
+        <outSequence/>
+        <faultSequence/>
+    </resource>
+    <resource methods="POST" uri-template="/opportunity">
+        <inSequence>
+            <enrich>
+                <source clone="true" type="body"/>
+                <target property="body_inicial" type="property"/>
+            </enrich>
+            <salesforcerest.create configKey="init-salesforce">
+                <sObjectName>Opportunity</sObjectName>
+                <fieldAndValue>{get-property("body_inicial")}</fieldAndValue>
+            </salesforcerest.create>
+            <respond/>
+        </inSequence>
+        <outSequence/>
+        <faultSequence/>
+    </resource>
+    <resource methods="PUT" uri-template="/opportunity/{id}">
+        <inSequence>
+            <enrich>
+                <source clone="true" type="body"/>
+                <target property="body_inicial" type="property"/>
+            </enrich>
+            <salesforcerest.update configKey="init-salesforce">
+                <sObjectName>Opportunity</sObjectName>
+                <Id>{get-property("uri.var.id")}</Id>
+                <fieldAndValue>{get-property("body_inicial")}</fieldAndValue>
+            </salesforcerest.update>
+            <respond/>
+        </inSequence>
+        <outSequence/>
+        <faultSequence/>
+    </resource>
+    <resource methods="POST" uri-template="/fileAttachment">
+        <inSequence>
+            <property expression="json-eval($.title)" name="title" scope="default" type="STRING"/>
+            <property expression="json-eval($.pathOnClient)" name="pathOnClient" scope="default" type="STRING"/>
+            <property expression="json-eval($.contentLocation)" name="contentLocation" scope="default" type="STRING"/>
+            <property expression="json-eval($.fileBase64Content)" name="fileBase64Content" scope="default" type="STRING"/>
+            <property expression="json-eval($.linkedSalesforceEntityId)" name="linkedSalesforceEntityId" scope="default" type="STRING"/>
+            <property expression="json-eval($.visibility)" name="visibility" scope="default" type="STRING"/>
+            <call-template target="SVC-SalesforceAttachDocumentAndLinkWithObjectTemplate">
+                <with-param name="Title" value="{get-property('title')}"/>
+                <with-param name="PathOnClient" value="{get-property('contentLocation')}"/>
+                <with-param name="ContentLocation" value="{get-property('contentLocation')}"/>
+                <with-param name="VersionData" value="{get-property('fileBase64Content')}"/>
+                <with-param name="LinkedEntityId" value="{get-property('linkedSalesforceEntityId')}"/>
+                <with-param name="visibility" value="{get-property('visibility')}"/>
+            </call-template>
+            <respond/>
+        </inSequence>
+        <outSequence/>
+        <faultSequence/>
+    </resource>
+    <resource methods="POST" uri-template="/feed_elements">
+        <inSequence>
+            <sequence key="SVC-SalesforceChatterFeedElementsAPISequence"/>
+            <respond/>
+        </inSequence>
+        <outSequence/>
+        <faultSequence/>
+    </resource>
+    <resource methods="GET" uri-template="/bulkV2/jobInfo/{job_id}">
+        <inSequence>
+            <call-template target="SVC-SalesforceBulkAPIV2JobInfoTemplate">
+                <with-param name="jobId" value="{get-property('uri.var.job_id')}"/>
+            </call-template>
+            <respond/>
+        </inSequence>
+        <outSequence/>
+        <faultSequence/>
+    </resource>
+    <resource methods="GET" uri-template="/bulkV2/successful/{job_id}">
+        <inSequence>
+            <call-template target="SVC-SalesforceBulkAPIV2JobSuccessfulTemplate">
+                <with-param name="jobId" value="{get-property('uri.var.job_id')}"/>
+            </call-template>
+            <respond/>
+        </inSequence>
+        <outSequence/>
+        <faultSequence/>
+    </resource>
+    <resource methods="GET" uri-template="/bulkV2/filed/{job_id}">
+        <inSequence>
+            <call-template target="SVC-SalesforceBulkAPIV2JobFiledTemplate">
+                <with-param name="jobId" value="{get-property('uri.var.job_id')}"/>
+            </call-template>
+            <respond/>
+        </inSequence>
+        <outSequence/>
+        <faultSequence/>
+    </resource>
+    <resource methods="GET" uri-template="/bulkV2/unprocessed/{job_id}">
+        <inSequence>
+            <call-template target="SVC-SalesforceBulkAPIV2JobUnprocessedTemplate">
+                <with-param name="jobId" value="{get-property('uri.var.job_id')}"/>
+            </call-template>
+            <respond/>
+        </inSequence>
+        <outSequence/>
+        <faultSequence/>
+    </resource>
+    <resource methods="GET" uri-template="/bulkV2/allJobs">
+        <inSequence>
+            <call-template target="SVC-SalesforceBulkAPIV2AllJobsTemplate">
+                <with-param name="jobId" value="{get-property('uri.var.job_id')}"/>
+            </call-template>
+            <respond/>
+        </inSequence>
+        <outSequence/>
+        <faultSequence/>
+    </resource>
+    <resource methods="GET" uri-template="/bulkV1/{jobId}/{batchId}">
+        <inSequence>
+            <salesforcebulk.getBatchStatus configKey="init-bulk">
+                <jobId>{get-property("uri.var.jobId")}</jobId>
+                <batchId>{get-property("uri.var.batchId")}</batchId>
+            </salesforcebulk.getBatchStatus>
+            <respond/>
+        </inSequence>
+        <outSequence/>
+        <faultSequence/>
+    </resource>
+    <resource methods="GET" uri-template="/price_list">
+        <inSequence>
+            <filter regex="^Salesforce.*" source="$trp:ApplicationName">
+                <then>
+                    <property action="remove" name="REST_URL_POSTFIX" scope="default"/>
+                    <property name="uri.var.MetadataContext" scope="default" type="STRING" value="price_list"/>
+                    <property name="Accept" scope="transport" type="STRING" value="application/json"/>
+                    <sequence key="SVC-PriceApiSequence"/>
+                    <datamapper config="gov:datamapper/TransformPriceListTotvsToSalesforceCSV.dmc" inputSchema="gov:datamapper/TransformPriceListTotvsToSalesforceCSV_inputSchema.json" inputType="JSON" outputSchema="gov:datamapper/TransformPriceListTotvsToSalesforceCSV_outputSchema.json" outputType="CSV" xsltStyleSheet="gov:datamapper/TransformPriceListTotvsToSalesforceCSV_xsltStyleSheet.xml"/>
+                    <enrich>
+                        <source clone="true" type="body"/>
+                        <target property="conteudo" type="property"/>
+                    </enrich>
+                    <payloadFactory media-type="text">
+                        <format>
+		                Description,ExternalId__c,IsActive,PriceGroupCode__c,PriceGroupName__c,UFDestination__c,ValidFrom,ValidTo,Name,TaxationType__c
+$1</format>
+                        <args>
+                            <arg evaluator="xml" expression="$ctx:conteudo"/>
+                        </args>
+                    </payloadFactory>
+                </then>
+                <else>
+                    <payloadFactory media-type="text">
+                        <format>$1</format>
+                        <args>
+                            <arg value="You do not access."/>
+                        </args>
+                    </payloadFactory>
+                </else>
+            </filter>
+            <respond/>
+        </inSequence>
+        <outSequence/>
+        <faultSequence>
+            <respond/>
+        </faultSequence>
+    </resource>
+    <resource methods="GET" uri-template="/price_itens_group_list">
+    <inSequence>
+            <filter regex="^Salesforce.*" source="$trp:ApplicationName">
+                <then>
+                	<sequence key="EnvironmentVariablesSequence"/>
+                	<property name="Accept" scope="transport" type="STRING" value="application/json"/>
+				    <call>
+				        <endpoint>
+				            <http method="get" uri-template="{uri.var.urlProgress}/services/PriceListDSS/price_group_list">
+				                <suspendOnFailure>
+				                    <initialDuration>-1</initialDuration>
+				                    <progressionFactor>-1</progressionFactor>
+				                    <maximumDuration>0</maximumDuration>
+				                </suspendOnFailure>
+				                <markForSuspension>
+				                    <retriesBeforeSuspension>0</retriesBeforeSuspension>
+				                </markForSuspension>
+				            </http>
+				        </endpoint>
+				    </call>
+                </then>
+                <else>
+                    <payloadFactory media-type="text">
+                        <format>$1</format>
+                        <args>
+                            <arg value="You do not access."/>
+                        </args>
+                    </payloadFactory>
+                </else>
+            </filter>
+            <log level="full"/>
+            <respond/>
+        </inSequence>
+        <outSequence/>
+        <faultSequence>
+            <respond/>
+        </faultSequence>
+    </resource>
+    <resource methods="GET" uri-template="/price_itens">
+    		<inSequence>
+            <filter regex="^Salesforce.*" source="$trp:ApplicationName">
+                <then>
+                    <property action="remove" name="REST_URL_POSTFIX" scope="default"/>
+                    <property name="uri.var.MetadataContext" scope="default" type="STRING" value="price_item_minimal"/>
+                    <property name="Accept" scope="transport" type="STRING" value="application/json"/>
+                    <sequence key="SVC-PriceApiSequence"/>
+                    <datamapper config="gov:datamapper/TransformPriceItemTotvsToSalesforceCSV.dmc" inputSchema="gov:datamapper/TransformPriceItemTotvsToSalesforceCSV_inputSchema.json" inputType="JSON" outputSchema="gov:datamapper/TransformPriceItemTotvsToSalesforceCSV_outputSchema.json" outputType="CSV" xsltStyleSheet="gov:datamapper/TransformPriceItemTotvsToSalesforceCSV_xsltStyleSheet.xml"/>
+                    <enrich>
+                        <source clone="true" type="body"/>
+                        <target property="conteudo" type="property"/>
+                    </enrich>
+                    <payloadFactory media-type="text">
+                        <format>
+		                IsActive,Pricebook2.ExternalId__c,Product2.ExternalCode__c,UnitPrice,ExternalId__c,MaxCommercialDiscount__c,minimumCommercialDiscountAmount__c,MultipleQuantity__c
+$1</format>
+                        <args>
+                            <arg evaluator="xml" expression="$ctx:conteudo"/>
+                        </args>
+                    </payloadFactory>
+                </then>
+                <else>
+                    <payloadFactory media-type="text">
+                        <format>$1</format>
+                        <args>
+                            <arg value="You do not access."/>
+                        </args>
+                    </payloadFactory>
+                </else>
+            </filter>
+
+            <respond/>
+        </inSequence>
+        <outSequence/>
+        <faultSequence>
+            <respond/>
+        </faultSequence>
+    </resource>
+    <resource methods="GET" uri-template="/price_itens/{priceListId}">
+        <inSequence>
+            <filter regex="^Salesforce.*" source="$trp:ApplicationName">
+                <then>
+                    <property name="REST_URL_POSTFIX" scope="default" type="STRING" value=""/>
+                    <property expression="fn:concat('price_list/',get-property('uri.var.priceListId'),'/itens_minimal')" name="uri.var.MetadataContext" scope="default" type="STRING"/>
+                    <property name="Accept" scope="transport" type="STRING" value="application/json"/>
+                    <sequence key="SVC-PriceApiSequence"/>
+                    <datamapper config="gov:datamapper/TransformPriceItemTotvsToSalesforceCSV.dmc" inputSchema="gov:datamapper/TransformPriceItemTotvsToSalesforceCSV_inputSchema.json" inputType="JSON" outputSchema="gov:datamapper/TransformPriceItemTotvsToSalesforceCSV_outputSchema.json" outputType="CSV" xsltStyleSheet="gov:datamapper/TransformPriceItemTotvsToSalesforceCSV_xsltStyleSheet.xml"/>
+                    <enrich>
+                        <source clone="true" type="body"/>
+                        <target property="conteudo" type="property"/>
+                    </enrich>
+                    <payloadFactory media-type="text">
+                        <format>
+		                IsActive,Pricebook2.ExternalId__c,Product2.ExternalCode__c,UnitPrice,ExternalId__c,MaxCommercialDiscount__c,minimumCommercialDiscountAmount__c,MultipleQuantity__c
+$1</format>
+                        <args>
+                            <arg evaluator="xml" expression="$ctx:conteudo"/>
+                        </args>
+                    </payloadFactory>
+                </then>
+                <else>
+                    <payloadFactory media-type="text">
+                        <format>$1</format>
+                        <args>
+                            <arg value="You do not access."/>
+                        </args>
+                    </payloadFactory>
+                </else>
+            </filter>
+            <respond/>
+        </inSequence>
+        <outSequence/>
+        <faultSequence>
+            <respond/>
+        </faultSequence>
+    </resource>
+    <resource methods="GET" uri-template="/price_itens/price_group/{priceGrpupId}">
+        <inSequence>
+            <filter regex="^Salesforce.*" source="$trp:ApplicationName">
+                <then>
+                    <property name="REST_URL_POSTFIX" scope="default" type="STRING" value=""/>
+                    <property expression="fn:concat('price_itens_minimal/price_group/',get-property('uri.var.priceGrpupId'))" name="uri.var.MetadataContext" scope="default" type="STRING"/>
+                    <property name="Accept" scope="transport" type="STRING" value="application/json"/>
+                    <sequence key="SVC-PriceApiSequence"/>
+                    <datamapper config="gov:datamapper/TransformPriceItemTotvsToSalesforceCSV.dmc" inputSchema="gov:datamapper/TransformPriceItemTotvsToSalesforceCSV_inputSchema.json" inputType="JSON" outputSchema="gov:datamapper/TransformPriceItemTotvsToSalesforceCSV_outputSchema.json" outputType="CSV" xsltStyleSheet="gov:datamapper/TransformPriceItemTotvsToSalesforceCSV_xsltStyleSheet.xml"/>
+                    <enrich>
+                        <source clone="true" type="body"/>
+                        <target property="conteudo" type="property"/>
+                    </enrich>
+<!--                     minimumCommercialDiscountAmount__c -->
+                    <payloadFactory media-type="text">
+                        <format>
+		                IsActive,Pricebook2.ExternalId__c,Product2.ExternalCode__c,UnitPrice,ExternalId__c,MaxCommercialDiscount__c,minimumCommercialDiscountAmount__c,MultipleQuantity__c
+$1</format>
+                        <args>
+                            <arg evaluator="xml" expression="$ctx:conteudo"/>
+                        </args>
+                    </payloadFactory>
+                </then>
+                <else>
+                    <payloadFactory media-type="text">
+                        <format>$1</format>
+                        <args>
+                            <arg value="You do not access."/>
+                        </args>
+                    </payloadFactory>
+                </else>
+            </filter>
+            <respond/>
+        </inSequence>
+        <outSequence/>
+        <faultSequence>
+            <respond/>
+        </faultSequence>
+    </resource>
+    <resource methods="GET" uri-template="/batch/price_list">
+        <inSequence>
+            <filter regex="^Salesforce.*" source="$trp:ApplicationName">
+                <then>
+                    <sequence key="EnvironmentVariablesSequence"/>
+                	<property name="Accept" scope="transport" type="STRING" value="application/json"/>
+				    <call>
+				        <endpoint>
+				            <http method="get" uri-template="{uri.var.dataLoaderURL}/batch/price_list">
+				                <suspendOnFailure>
+				                    <initialDuration>-1</initialDuration>
+				                    <progressionFactor>-1</progressionFactor>
+				                    <maximumDuration>0</maximumDuration>
+				                </suspendOnFailure>
+				                <markForSuspension>
+				                    <retriesBeforeSuspension>0</retriesBeforeSuspension>
+				                </markForSuspension>
+				            </http>
+				        </endpoint>
+				    </call>
+                </then>
+                <else>
+                    <payloadFactory media-type="text">
+                        <format>$1</format>
+                        <args>
+                            <arg value="You do not access."/>
+                        </args>
+                    </payloadFactory>
+                </else>
+            </filter>
+            <respond/>
+        </inSequence>
+        <outSequence/>
+        <faultSequence>
+            <respond/>
+        </faultSequence>
+    </resource>
+    <resource methods="GET" uri-template="/batch/price_itens">
+        <inSequence>
+            <filter regex="^Salesforce.*" source="$trp:ApplicationName">
+                <then>
+                    <sequence key="EnvironmentVariablesSequence"/>
+                	<property name="Accept" scope="transport" type="STRING" value="application/json"/>
+				    <call>
+				        <endpoint>
+				            <http method="get" uri-template="{uri.var.dataLoaderURL}/batch/price_itens">
+				                <suspendOnFailure>
+				                    <initialDuration>-1</initialDuration>
+				                    <progressionFactor>-1</progressionFactor>
+				                    <maximumDuration>0</maximumDuration>
+				                </suspendOnFailure>
+				                <markForSuspension>
+				                    <retriesBeforeSuspension>0</retriesBeforeSuspension>
+				                </markForSuspension>
+				            </http>
+				        </endpoint>
+				    </call>
+                </then>
+                <else>
+                    <payloadFactory media-type="text">
+                        <format>$1</format>
+                        <args>
+                            <arg value="You do not access."/>
+                        </args>
+                    </payloadFactory>
+                </else>
+            </filter>
+            <respond/>
+        </inSequence>
+        <outSequence/>
+        <faultSequence>
+            <respond/>
+        </faultSequence>
+    </resource>
+    <resource methods="GET" uri-template="/batch/price_itens/{priceListId}">
+        <inSequence>
+            <filter regex="^Salesforce.*" source="$trp:ApplicationName">
+                <then>
+                    <property name="REST_URL_POSTFIX" scope="default" type="STRING" value=""/>
+                    <property name="Accept" scope="transport" type="STRING" value="application/json"/>
+                    <property expression="fn:concat('price_list/',get-property('uri.var.priceListId'),'/itens_minimal')" name="uri.var.MetadataContext" scope="default" type="STRING"/>
+                    <sequence key="SVC-PriceApiSequence"/>
+                    <datamapper config="gov:datamapper/TransformPriceItemTotvsToSalesforceCSV.dmc" inputSchema="gov:datamapper/TransformPriceItemTotvsToSalesforceCSV_inputSchema.json" inputType="JSON" outputSchema="gov:datamapper/TransformPriceItemTotvsToSalesforceCSV_outputSchema.json" outputType="CSV" xsltStyleSheet="gov:datamapper/TransformPriceItemTotvsToSalesforceCSV_xsltStyleSheet.xml"/>
+                    <enrich>
+                        <source clone="true" type="body"/>
+                        <target property="conteudo" type="property"/>
+                    </enrich>
+                    <payloadFactory media-type="text">
+                        <format>
+		                IsActive,Pricebook2.ExternalId__c,Product2.ExternalCode__c,UnitPrice,ExternalId__c,MaxCommercialDiscount__c,minimumCommercialDiscountAmount__c,MultipleQuantity__c
+$1</format>
+                        <args>
+                            <arg evaluator="xml" expression="$ctx:conteudo"/>
+                        </args>
+                    </payloadFactory>
+                    <enrich>
+                        <source clone="true" type="body"/>
+                        <target property="conteudo1" type="property"/>
+                    </enrich>
+                    <property expression="get-property('conteudo1')" name="inputContent" scope="default" type="STRING"/>
+                    <call-template target="SVC-SalesforceBulkAPIV2Template">
+                        <with-param name="content" value="{get-property('inputContent')}"/>
+                        <with-param name="object" value="PricebookEntry"/>
+                        <with-param name="externalIdField" value="ExternalId__c"/>
+                        <with-param name="objectId" value="{get-property('uri.var.priceListId')}"/>
+                    </call-template>
+                </then>
+                <else>
+                    <payloadFactory media-type="text">
+                        <format>$1</format>
+                        <args>
+                            <arg value="You do not access."/>
+                        </args>
+                    </payloadFactory>
+                </else>
+            </filter>
+            <respond/>
+        </inSequence>
+        <outSequence/>
+        <faultSequence>
+            <respond/>
+        </faultSequence>
+    </resource>
+    <resource methods="GET" uri-template="/batch/price_itens/price_group/{priceGrpupId}">
+        <inSequence>
+            <filter regex="^Salesforce.*" source="$trp:ApplicationName">
+                <then>
+                	<payloadFactory media-type="json">
+                        <format>
+		                {
+        "priceGroupCode": "$1"
+      }</format>
+                        <args>
+                            <arg evaluator="xml" expression="get-property('uri.var.priceGrpupId')"/>
+                        </args>
+                    </payloadFactory>
+                    <log level="full"/>
+	                <store messageStore="PriceListAllItensMessageStore"/>
+                    <payloadFactory media-type="json">
+                        <format>{"message": "$1"}</format>
+                        <args>
+                            <arg value="The price list itens was enqueued  sussesfully."/>
+                        </args>
+                    </payloadFactory>
+                    <property name="HTTP_SC" value="201" scope="axis2"/>
+                </then>
+                <else>
+                    <payloadFactory media-type="text">
+                        <format>$1</format>
+                        <args>
+                            <arg value="You do not access."/>
+                        </args>
+                    </payloadFactory>
+                </else>
+            </filter>
+            <respond/>
+        </inSequence>
+        <outSequence/>
+        <faultSequence>
+            <respond/>
+        </faultSequence>
+    </resource>
+
+    <resource methods="POST" uri-template="/contaIntelbras">
+        <inSequence>
+            <property expression="json-eval($.lastName)" name="uri.var.lastName" scope="default" type="STRING"/>
+        	<property expression="json-eval($.firstName)" name="uri.var.firstName" scope="default" type="STRING"/>
+        	<property expression="json-eval($.email)" name="uri.var.email" scope="default" type="STRING"/>
+     		<property expression="substring(get-property('MessageID'), 10, 23) " name="message_id" scope="default" type="STRING"/>
+        	<property expression="fn:concat(get-property('message_id'),'A')" name="password"/>
+        	<enrich>
+                <source clone="true" type="body"/>
+                <target property="BODY_INICIAL" type="property"/>
+            </enrich>
+        	<call-template target="SVC-DBReportEventTemplate">
+                <with-param name="origin" value="{$trp:ApplicationName}"/>
+                <with-param name="message_id" value="{get-property('MessageID')}"/>
+                <with-param name="origin_id" value="{$ctx:uri.var.email}"/>
+                <with-param name="system_internal_id" value=""/>
+                <with-param name="event_name" value="ContaIntelbras"/>
+                <with-param name="event_description" value="Recebimento"/>
+                <with-param name="event_payload" value="{get-property('BODY_INICIAL')}"/>
+                <with-param name="event_payload_returned" value=""/>
+                <with-param name="http_status_code" value="0"/>
+            </call-template>
+            <log level="custom">
+                <property name="--" value="Entrando na criacao de conta"/>
+            </log>
+            <payloadFactory media-type="json">
+                <format>{
+				    "username": "$1",
+				    "email": "$1",
+				    "password": "$4",
+				    "givenName": "$2",
+				    "familyName": "$3",
+				    "locale": "pt_BR"
+				}</format>
+                <args>
+                    <arg evaluator="xml" expression="get-property('uri.var.email')"/>
+                    <arg evaluator="xml" expression="get-property('uri.var.firstName')"/>
+                    <arg evaluator="xml" expression="get-property('uri.var.lastName')"/>
+                    <arg evaluator="xml" expression="get-property('password')"/>
+                </args>
+            </payloadFactory>
+            <enrich>
+                <source clone="true" type="body"/>
+                <target property="BODY_TRANSFORMADO" type="property"/>
+            </enrich>
+        <sequence key="EnvironmentVariablesSequence"/>
+		<property expression="get-property('uri.var.intelbrasAccountToken')" name="Authorization" scope="transport" type="STRING"/>
+            <property action="set" value="application/json" name="Content-Type" scope="transport"/>
+		<log level="custom">
+			<property name="--" expression="$trp:Content-Type"/> 
+			<property name="--" expression="get-property('firstName')"/> 
+			<property name="--" expression="get-property('uri.var.intelbrasAccountURL')"/> 
+			<property name="--" expression="json-eval($.)"/> 
+		</log>
+		<property name="messageType" scope="axis2" type="STRING" value="application/json"/>
+		<property action="remove" name="REST_URL_POSTFIX" scope="axis2"/>
+        <call>
+		    <endpoint>
+		        <http method="post" uri-template="{+uri.var.intelbrasAccountURL}/me">
+		            <suspendOnFailure>
+		                <initialDuration>-1</initialDuration>
+		                <progressionFactor>-1</progressionFactor>
+		                <maximumDuration>0</maximumDuration>
+		            </suspendOnFailure>
+		            <markForSuspension>
+		                <retriesBeforeSuspension>0</retriesBeforeSuspension>
+		            </markForSuspension>
+		        </http>
+		    </endpoint>
+		</call>
+		    <enrich>
+                <source clone="true" type="body"/>
+                <target property="BODY_RETORNADO" type="property"/>
+            </enrich>
+        	<call-template target="SVC-DBReportEventTemplate">
+                <with-param name="origin" value="{$trp:ApplicationName}"/>
+                <with-param name="message_id" value="{get-property('MessageID')}"/>
+                <with-param name="origin_id" value="{$ctx:uri.var.email}"/>
+                <with-param name="system_internal_id" value=""/>
+                <with-param name="event_name" value="ContaIntelbras"/>
+                <with-param name="event_description" value="Criacao da conta"/>
+                <with-param name="event_payload" value="{get-property('BODY_TRANSFORMADO')}"/>
+                <with-param name="event_payload_returned" value="{get-property('BODY_RETORNADO')}"/>
+                <with-param name="http_status_code" value="{$axis2:HTTP_SC}"/>
+            </call-template>
+		<property name="messageType" scope="axis2" type="STRING" value="application/json"/>
+		
+		<log level="full">
+			<property name="--" value="apos criar usuario"/> 
+			<property name="--" expression="$axis2:HTTP_SC"/> 
+		</log>
+        <filter regex="201" source="$axis2:HTTP_SC">
+                <then>
+                    <property action="set" value="application/json" name="Content-Type" scope="transport"/>
+                    <property expression="get-property('uri.var.intelbrasAccountToken')" name="Authorization" scope="transport" type="STRING"/>
+	                <call>
+					    <endpoint>
+					        <http method="PATCH" uri-template="{+uri.var.intelbrasAccountURL}/admin/otp?username={uri.var.email}">
+					            <suspendOnFailure>
+					                <initialDuration>-1</initialDuration>
+					                <progressionFactor>-1</progressionFactor>
+					                <maximumDuration>0</maximumDuration>
+					            </suspendOnFailure>
+					            <markForSuspension>
+					                <retriesBeforeSuspension>0</retriesBeforeSuspension>
+					            </markForSuspension>
+					        </http>
+					    </endpoint>
+					</call>
+					<call-template target="SVC-DBReportEventTemplate">
+		                <with-param name="origin" value="{$trp:ApplicationName}"/>
+		                <with-param name="message_id" value="{get-property('MessageID')}"/>
+		                <with-param name="origin_id" value="{$ctx:uri.var.email}"/>
+		                <with-param name="system_internal_id" value=""/>
+		                <with-param name="event_name" value="ContaIntelbras"/>
+		                <with-param name="event_description" value="Envio de email"/>
+		                <with-param name="event_payload" value="-"/>
+		                <with-param name="event_payload_returned" value="-"/>
+		                <with-param name="http_status_code" value="{$axis2:HTTP_SC}"/>
+		            </call-template>
+					<log level="custom">
+						<property name="--" value="apos mandar email"/> 
+						<property name="--" expression="$axis2:HTTP_SC"/> 
+					</log>
+                </then>
+                <else>
+                    <payloadFactory media-type="text">
+                        <format>$1</format>
+                        <args>
+                            <arg value="The user already existis."/>
+                        </args>
+                    </payloadFactory>
+                </else>
+            </filter>
+            <log level="full"/>
+                    <payloadFactory media-type="json">
+                        <format>
+		                { "message":"created"}</format>
+                        <args>
+                        </args>
+                    </payloadFactory>
+            <respond/>
+        </inSequence>
+        <outSequence/>
+        <faultSequence>
+        <log level="full">
+        	
+        </log>
+        </faultSequence>
+    </resource>
+    <resource methods="POST" uri-template="/contaIntelbras/criaConta/{email}/{firstName}/{lastName}">
+        <inSequence>
+        	<property expression="substring(get-property('MessageID'), 10, 23) " name="message_id" scope="default" type="STRING"/>
+        	<property expression="fn:concat(get-property('message_id'),'A')" name="password"/>
+            <log level="custom">
+                <property name="--" value="Entrando na criacao de conta"/>
+            </log>
+            <payloadFactory media-type="json">
+                <format>{
+				    "username": "$1",
+				    "email": "$1",
+				    "password": "$4",
+				    "givenName": "$2",
+				    "familyName": "$3",
+				    "locale": "pt_BR"
+				}</format>
+                <args>
+                    <arg evaluator="xml" expression="get-property('uri.var.email')"/>
+                    <arg evaluator="xml" expression="get-property('uri.var.firstName')"/>
+                    <arg evaluator="xml" expression="get-property('uri.var.lastName')"/>
+                    <arg evaluator="xml" expression="get-property('password')"/>
+                </args>
+            </payloadFactory>
+            <sequence key="EnvironmentVariablesSequence"/>
+            <property expression="get-property('uri.var.intelbrasAccountToken')" name="Authorization" scope="transport" type="STRING"/>
+            <property name="Content-Type" scope="transport" type="STRING" value="application/json"/>
+            <log level="custom">
+                <property expression="$trp:Content-Type" name="--"/>
+                <property expression="get-property('firstName')" name="--"/>
+                <property expression="get-property('uri.var.intelbrasAccountURL')" name="--"/>
+                <property expression="json-eval($)" name="--"/>
+            </log>
+            <property name="messageType" scope="axis2" type="STRING" value="application/json"/>
+            <property action="remove" name="REST_URL_POSTFIX" scope="axis2"/>
+            <call>
+                <endpoint>
+                    <http method="post" uri-template="{+uri.var.intelbrasAccountURL}/me">
+                        <suspendOnFailure>
+                            <initialDuration>-1</initialDuration>
+                            <progressionFactor>-1</progressionFactor>
+                            <maximumDuration>0</maximumDuration>
+                        </suspendOnFailure>
+                        <markForSuspension>
+                            <retriesBeforeSuspension>0</retriesBeforeSuspension>
+                        </markForSuspension>
+                    </http>
+                </endpoint>
+            </call>
+            <log level="full"/>
+            <respond/>
+        </inSequence>
+        <outSequence/>
+        <faultSequence>
+            <log level="full"/>
+        </faultSequence>
+    </resource>
+    <resource methods="PATCH" uri-template="/contaIntelbras/resetSenhaContaIntelbras/{email}">
+        <inSequence>
+            <sequence key="EnvironmentVariablesSequence"/>
+            <property expression="get-property('uri.var.intelbrasAccountToken')" name="Authorization" scope="transport" type="STRING"/>
+            <log level="custom">
+                <property expression="$trp:Content-Type" name="--"/>
+                <property expression="get-property('uri.var.email')" name="--"/>
+            </log>
+            <property action="remove" name="REST_URL_POSTFIX" scope="axis2"/>
+            <call>
+                <endpoint>
+                    <http method="patch" uri-template="{+uri.var.intelbrasAccountURL}/admin/otp?username={uri.var.email}">
+                        <suspendOnFailure>
+                            <initialDuration>-1</initialDuration>
+                            <progressionFactor>-1</progressionFactor>
+                            <maximumDuration>0</maximumDuration>
+                        </suspendOnFailure>
+                        <markForSuspension>
+                            <retriesBeforeSuspension>0</retriesBeforeSuspension>
+                        </markForSuspension>
+                    </http>
+                </endpoint>
+            </call>
+	        <log level="custom">
+				<property name="--" value="apos mandar email"/> 
+				<property name="--" expression="$axis2:HTTP_SC"/> 
+			</log>
+            <respond/>
+        </inSequence>
+        <outSequence/>
+        <faultSequence>
+            <log level="custom">
+            	<property name="fault" value="fault sequence"/>
+            	<property name="fault" expression="get-property('ERROR_MESSAGE')"/>
+            </log>
+        </faultSequence>
+    </resource>
+</api>

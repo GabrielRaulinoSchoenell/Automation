@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<api context="/webhooks/v1" name="WebHooksSalesforceAPI" xmlns="http://ws.apache.org/ns/synapse">
+    <resource methods="GET" uri-template="/credit/{idExterno}/{billingGroup}">
+        <inSequence>
+            <log level="custom" separator="&#x9;&#xa;">
+                <property expression="fn:concat('Requisitando recebida! - ','/webhooks/v1/credit/',$ctx:uri.var.idExterno, '/',$ctx:uri.var.billingGroup)" name="-->"/>
+            </log>
+            <propertyGroup>
+                <property expression="substring(get-property('MessageID'), 10, 38) " name="message_id" scope="default" type="STRING"/>
+                <property expression="$ctx:uri.var.idExterno" name="external_id" scope="transport" type="STRING"/>
+                <property expression="$ctx:uri.var.billingGroup" name="billing_group" scope="transport" type="STRING"/>
+                <property expression="fn:concat(get-property('uri.var.idExterno'), '/',get-property('uri.var.billingGroup'))" name="external_id_billing_group" scope="transport" type="STRING"/>
+            </propertyGroup>
+            <store messageStore="GetClientDataFromDEPSMessageStore"/>
+            <property name="HTTP_SC" scope="axis2" type="STRING" value="201"/>
+            <call-template target="SVC-DBReportEventTemplate">
+                <with-param name="origin" value="{$trp:ApplicationName}"/>
+                <with-param name="message_id" value="{get-property('message_id')}"/>
+                <with-param name="origin_id" value="{$trp:external_id}"/>
+                <with-param name="system_internal_id" value="{$trp:external_id}"/>
+                <with-param name="event_name" value="contaDEPS"/>
+                <with-param name="event_description" value="Consulta enviada para fila de processamento"/>
+                <with-param name="event_payload" value="{$trp:external_id_billing_group}"/>
+                <with-param name="event_payload_returned" value="-"/>
+                <with-param name="http_status_code" value="201"/>
+            </call-template>
+            <respond/>
+        </inSequence>
+        <outSequence/>
+        <faultSequence/>
+    </resource>
+    <resource methods="POST" uri-template="/account">
+        <inSequence>
+            <propertyGroup>
+                <property expression="substring(get-property('MessageID'), 10, 38) " name="message_id" scope="default" type="STRING"/>
+                <property expression="json-eval($.ExternalId)" name="external_id" scope="transport" type="STRING"/>
+            </propertyGroup>
+            <log level="custom" separator="&#x9;&#xa;">
+                <property name="-->" value="Requisicao recebida! - /webhooks/v1/account"/>
+                <property expression="json-eval($.ExternalId)" name="--> external_id"/>
+                <property expression="get-property('message_id')" name="--> message_id"/>
+            </log>
+            <enrich>
+                <source clone="true" type="body"/>
+                <target property="PAYLOAD_ORIGINAL" type="property"/>
+            </enrich>
+            <validate cache-schema="true">
+                <schema key="conf:/schema/SchemaAccountSalesforce.json"/>
+                <on-fail>
+                    <propertyGroup description="Dados validacao">
+                        <property expression="substring-before(substring-after(get-property('ERROR_DETAIL'), 'instance: {&quot;pointer&quot;:&quot;'), '&quot;')" name="instance" scope="default" type="STRING"/>
+                    </propertyGroup>
+                    <payloadFactory media-type="json">
+                        <format>
+							{"Error":"$1"}
+						</format>
+                        <args>
+                            <arg evaluator="xml" expression="fn:concat($ctx:ERROR_MESSAGE,' attribute: ',$ctx:instance)"/>
+                        </args>
+                    </payloadFactory>
+                    <log level="custom" separator="&#x9;&#xa;">
+                        <property expression="$ctx:ERROR_CODE" name="ERROR_CODE"/>
+                        <property expression="$ctx:ERROR_MESSAGE" name="ERROR_MESSAGE"/>
+                        <property expression="$ctx:ERROR_DETAIL" name="ERROR_DETAIL"/>
+                        <property expression="$ctx:ERROR_EXCEPTION" name="ERROR_EXCEPTION"/>
+                        <property expression="$ctx:instance" name="instance"/>
+                    </log>
+                    <call-template target="SVC-DBReportEventTemplate">
+                        <with-param name="origin" value="{$trp:ApplicationName}"/>
+                        <with-param name="message_id" value="{get-property('message_id')}"/>
+                        <with-param name="origin_id" value="{$trp:external_id}"/>
+                        <with-param name="system_internal_id" value="{$trp:external_id}"/>
+                        <with-param name="event_name" value="Conta"/>
+                        <with-param name="event_description" value="Falha ao validar o schema"/>
+                        <with-param name="event_payload" value="{get-property('PAYLOAD_ORIGINAL')}"/>
+                        <with-param name="event_payload_returned" value="{$ctx:ERROR_DETAIL}"/>
+                        <with-param name="http_status_code" value="500"/>
+                    </call-template>
+                    <property name="HTTP_SC" scope="axis2" type="STRING" value="500"/>
+                    <respond/>
+                </on-fail>
+            </validate>
+            <store messageStore="AccountTotvsMessageStore"/>
+            <property name="HTTP_SC" scope="axis2" type="STRING" value="201"/>
+            <payloadFactory media-type="json">
+                <format>
+					{&#xd;
+					"message": "Message enqueued successfully"&#xd;
+					}
+				</format>
+                <args/>
+            </payloadFactory>
+            <property expression="json-eval($)" name="BODY_SUCESS" scope="default" type="STRING"/>
+            <call-template target="SVC-DBReportEventTemplate">
+                <with-param name="origin" value="{$trp:ApplicationName}"/>
+                <with-param name="message_id" value="{get-property('message_id')}"/>
+                <with-param name="origin_id" value="{$trp:external_id}"/>
+                <with-param name="system_internal_id" value="{$trp:external_id}"/>
+                <with-param name="event_name" value="Conta"/>
+                <with-param name="event_description" value="Conta recebida via webhook SF e enviada para fila"/>
+                <with-param name="event_payload" value="{get-property('PAYLOAD_ORIGINAL')}"/>
+                <with-param name="event_payload_returned" value="{get-property('BODY_SUCESS')}"/>
+                <with-param name="http_status_code" value="201"/>
+            </call-template>
+            <respond/>
+        </inSequence>
+        <outSequence/>
+        <faultSequence/>
+    </resource>
+</api>

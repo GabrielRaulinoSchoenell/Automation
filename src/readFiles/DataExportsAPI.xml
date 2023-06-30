@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<api context="/dataExports" name="DataExportsAPI" version="v1" version-type="url" xmlns="http://ws.apache.org/ns/synapse">
+    <resource methods="GET" uri-template="/{dataExportsObject}/{lastModifiedDate}">
+        <inSequence>
+            <log level="custom">
+                <property expression="$ctx:uri.var.dataExportsObject" name="Entrando no upsert do dataExports"/>
+            </log>
+            <sequence key="EnvironmentVariablesSequence"/>
+            <switch source="$ctx:uri.var.dataExportsObject">
+                <case regex="QuoteLineItem">
+                    <property name="query" scope="default" type="STRING" value="SELECT Id, IsDeleted, LineNumber, QuoteId, ProductCode__c, Quantity, UnitPrice, Discount, Description, ServiceDate, SortOrder, ListPrice, Subtotal, TotalPrice, COFINSPercent__c, COFINSValue__c, ICMSPercent__c, ICMSSTValue__c, ICMSValue__c, IPIPercent__c, IPIValue__c, ISSPercent__c, ISSValue__c, PISPercent__c, PISValue__c, AllowComercialDiscountAtKit__c, CodeEstOut__c, TransactionNature__c, CommercialDiscount__c, ConsultedUnitPrice__c, OutputEstablishmentCode__c, PDFQuoteTaxISIC__c, QuantityDiscount__c, TotalPriceWithTaxes__c, NetUnitPrice__c, ProductPDFName__c, UnitPriceWithTaxes__c, IsKit__c, KitItemDiscountPercent__c, LastQuantity__c, ParentKitName__c, ParentKit__c, MultipleQuantity__c, ApprovalDiscount__c, ItemFactor__c, MaxCommercialDiscount__c, FirstConsultedPrice__c, NCMCode__c, ItemFactorAdjustmentRate__c, OriginalPricebookEntryExternalId__c, OriginalPricebookEntryId__c, OriginalPricebookExternalId__c, OriginalPricebookId__c, OriginalPricebookName__c, PCIDiscountDistributorTwoZeroPercent__c, PCIDiscountDistributorTwoZeroValue__c, PCIDiscountGreenerPercent__c, PCIDiscountGreenerValue__c, PCIDiscountTopMillionPercent__c, PCIDiscountTopMillionValue__c, PCIDiscountUnitFocusedPercent__c, PCIDiscountUnitFocusedValue__c, PCIDiscountWideCloudPercent__c, PCIDiscountWideCloudValue__c, PaymentConditionAdjustmentRate__c, PaymentConditionFactor__c, PortfolioSegmentation__c  FROM QuoteLineItem WHERE LastModifiedDate  = "/>
+                    <property expression="fn:concat(get-property('env','URL_PLANEJAMENTO'), '/services/QuoteDSS.SOAP12Endpoint')" name="soapEndpoint" scope="default" type="STRING"/>
+                </case>
+                <case regex="Quote">
+                    <property name="query" scope="default" type="STRING" value="SELECT Id, RelatedAccount__c, CreatedById, OpportunityAccountId__c, OpportunityId, QuoteNumber, OrderComments__c, FiscalObservation__c, PDFComments__c, TotalPriceWithTaxes__c, Status, ApprovalStatus__c, CustomerType__c, RecordType.Name, TotalPrice, LastModifiedById FROM Quote WHERE LastModifiedDate  ="/>
+                    <property expression="fn:concat(get-property('env','URL_PLANEJAMENTO'), '/services/QuoteDSS.SOAP12Endpoint')" name="soapEndpoint" scope="default" type="STRING"/>
+                </case>
+                <case regex="Expense">
+                    <property name="query" scope="default" type="STRING" value="SELECT Id, OwnerId, IsDeleted, ExpenseNumber, RecordTypeId, CreatedDate, CreatedById, LastModifiedDate, LastModifiedById, SystemModstamp, LastViewedDate, LastReferencedDate, ExpenseType, Amount, TransactionDate, Description, ExpenseStartDate, ExpenseEndDate, WorkOrderId, AccountId, Title, Quantity, UnitPrice, Discount, Subtotal, TotalPrice, Additive__c, CommissionPercentage__c, Commission__c, CustomerNoteNumber__c, DefaultValues__c, DistributorResale__c, ExpectedQuantity__c, ExpenseCategory__c, ExpenseStatus__c, InstallmentSequence__c, InvoiceNumber__c, MonthOfFirstPayment__c, NumberOfInstallments__c, Observation__c, Opportunity__c, PaymentReleaseDate__c, ProductValueWithoutTax__c, PurposeOfExpenditure__c, QuoteAmount__c, Request__c, ResaleNoteIssueDate__c, ResaleNoteNumber__c, ServiceContract__c, TaxPercentage__c, TotalContractAmount__c, TypeOfCommission__c, YearOfFirstPayment__c, ExpectedUnitPrice__c FROM Expense WHERE LastModifiedDate =  "/>
+                    <property expression="fn:concat(get-property('env','URL_PLANEJAMENTO'), '/services/ExpenseDSS.SOAP12Endpoint')" name="soapEndpoint" scope="default" type="STRING"/>
+                </case>
+                <case regex="Opportunity">
+                    <property name="query" scope="default" type="STRING" value="SELECT id, OwnerSalesAttendant__c, PartnerAccountId, CreatedById, CloseDate, Distributor__c, SalesExecutive__c, StageName, CustomerGroup__c, AccountId, Name, OpportunityNumber__c, ItemCount__c, EvaluationStatus__c, ApprovalStatus__c, SalesSupervisor__c, OwnerSalesSupervisor__c, TypeOfTrading__c, ProjectType__c, RecordTypeId,  Amount, DistributorFeeAmount__c, ResellerFeeAmount__c, ContactInternalSeller__c, InternalSeller__c, LastModifiedById FROM Opportunity  WHERE LastModifiedDate  = "/>
+                    <property expression="fn:concat(get-property('env','URL_PLANEJAMENTO'), '/services/OpportunityDSS.SOAP12Endpoint')" name="soapEndpoint" scope="default" type="STRING"/>
+                </case>
+                <case regex="Order">
+                    <property name="query" scope="default" type="STRING" value="select Id, AccountId, OpportunityId, QuoteId from order WHERE OpportunityId != null and LastModifiedDate = "/>
+                    <property expression="fn:concat(get-property('env','URL_PLANEJAMENTO'), '/services/OrderDSS.SOAP12Endpoint')" name="soapEndpoint" scope="default" type="STRING"/>
+                </case>
+                <case regex="Territory">
+                    <property name="query" scope="default" type="STRING" value="select Id, Name, DeveloperName,Territory2Type.Description, Territory2Type.DeveloperName, ParentTerritory2.Name, ParentTerritory2Id, ParentTerritory2.DeveloperName, BUSegmentCode__c, BUSegmentName__c, BusinessUnitCode__c, BusinessUnitName__c, ExternalId__c, SalesChannelName__c from Territory2 WHERE LastModifiedDate  = "/>
+                    <property expression="fn:concat(get-property('env','URL_PLANEJAMENTO'), '/services/TerritoryDSS.SOAP12Endpoint')" name="soapEndpoint" scope="default" type="STRING"/>
+                </case>
+                <case regex="TerritoryAccounts">
+                    <property name="query" scope="default" type="STRING" value="Select id, Object.RecordType.Name, Object.RecordType.SobjectType, Object.Name, ObjectId, Territory2.Name, Territory2.Territory2Model.Name, Territory2.Territory2Model.DeveloperName from ObjectTerritory2Association WHERE LastModifiedDate = "/>
+                    <property expression="fn:concat(get-property('env','URL_PLANEJAMENTO'), '/services/TerritoryDSS.SOAP12Endpoint')" name="soapEndpoint" scope="default" type="STRING"/>
+                </case>
+                <case regex="TerritoryUsers">
+                    <property name="query" scope="default" type="STRING" value="Select Id, IsActive, RoleInTerritory2, User.FirstName, User.Email,User.FederationIdentifier, User.IsActive, User.UserRole.DeveloperName, User.Matricula__c, Territory2.Name from UserTerritory2Association WHERE LastModifiedDate = "/>
+                    <property expression="fn:concat(get-property('env','URL_PLANEJAMENTO'), '/services/TerritoryDSS.SOAP12Endpoint')" name="soapEndpoint" scope="default" type="STRING"/>
+                </case>
+                <case regex="User">
+                    <property name="query" scope="default" type="STRING" value="select Id, Username, LastName, FirstName, Name, Alias, CommunityNickname,  IsActive, Userrole.name, profile.name, Profile.UserLicense.name, UserType,  EmployeeNumber, ContactId, AccountId, IsPortalEnabled, FederationIdentifier, Matricula__c, AccountManager__c, IntegratorUser__c, AttendantCode__c, RepresentativeCode__c, Channel__c, Group__c, SupervisorEnrollment__c from User  WHERE LastModifiedDate  = "/>
+                    <property expression="fn:concat(get-property('env','URL_PLANEJAMENTO'), '/services/UserDSS.SOAP12Endpoint')" name="soapEndpoint" scope="default" type="STRING"/>
+                </case>
+                <case regex="ServiceContractLineItem">
+                    <property name="query" scope="default" type="STRING" value="select Id, IsDeleted, LineItemNumber, CreatedDate, CreatedById, LastModifiedDate, LastModifiedById, SystemModstamp, LastViewedDate, LastReferencedDate, ServiceContractId, Product2Id, AssetId, StartDate, EndDate, Description, PricebookEntryId, Quantity, UnitPrice, Discount, ListPrice, Subtotal, TotalPrice, Status, ParentContractLineItemId, RootContractLineItemId, LocationId, BillingStartDate__c, CancellationDate__c, Contract_Additive__c, Enlargement__c, InstalationDate__c, IsServiceProduct__c, ProductName__c, RentalPurpose__c, Status__c from ContractLineItem WHERE LastModifiedDate = "/>
+                    <property expression="fn:concat(get-property('env','URL_PLANEJAMENTO'), '/services/ServiceContractDSS.SOAP12Endpoint')" name="soapEndpoint" scope="default" type="STRING"/>
+                </case>
+                <case regex="ServiceContract">
+                    <property name="query" scope="default" type="STRING" value="select Id, OwnerId, IsDeleted, Name, RecordTypeId, CreatedDate, CreatedById, LastModifiedDate, LastModifiedById, SystemModstamp, LastViewedDate, LastReferencedDate, AccountId, ContactId, Term, StartDate, EndDate, ActivationDate, ApprovalStatus, Description, BillingStreet, BillingCity, BillingState, BillingPostalCode, BillingCountry, BillingStateCode, BillingCountryCode, BillingLatitude, BillingLongitude, BillingGeocodeAccuracy, BillingAddress, ShippingStreet, ShippingCity, ShippingState, ShippingPostalCode, ShippingCountry, ShippingStateCode, ShippingCountryCode, ShippingLatitude, ShippingLongitude, ShippingGeocodeAccuracy, ShippingAddress, Pricebook2Id, ShippingHandling, Tax, Subtotal, TotalPrice, LineItemCount, ContractNumber, SpecialTerms, Discount, GrandTotal, Status, ParentServiceContractId, RootServiceContractId, OpportunityOrigin__c, PaymentCondition__c, MinimumStay__c, TermType__c, WorkOrderComments__c, AutomaticRenovation__c, BudgetLimit__c, BusinessHours__c, CNPJ__c, CancellationDate__c, ContractEntitlements__c, ContractModel__c, ContractMonthlyAmount__c, ContractStatus__c, ContractTerm__c, CreateCaseFilter__c, DaysHoursSLA__c, DaysSLAOnSite1DH__c, DaysSLAOnSite2DH__c, DaysSLAOnSite3DH__c, DaysSLAOnSite4DH__c, DaysSLAOnSite5DH__c, DaysSLARemote1DH__c, DaysSLARemote2DH__c, DaysSLARemote3DH__c, DaysSLARemote4DH__c, DaysSLARemote5DH__c, Description__c, DetailCancellation__c, DistributorFeeAmount__c, DistributorFee__c, DistributorRecurrenceInstallments__c, Distributor__c, DocusignEnvelopeCompleted__c, DocusignEnvelopeCreated__c, ExternalId__c, FidelityTerm__c, FrequencyOfBilling__c,GracePeriod__c, InternalSalesExecutive__c, LesserDisplacementChargedValue__c, LesserDisplacementCharged__c, ListHoursSLAOnSite1DH__c, ListHoursSLAOnSite2DH__c, ListHoursSLAOnSite3DH__c, ListHoursSLAOnSite4DH__c, ListHoursSLAOnSite5DH__c, ListHoursSLARemote1DH__c, ListHoursSLARemote2DH__c, ListHoursSLARemote3DH__c, ListHoursSLARemote4DH__c, ListHoursSLARemote5DH__c, MarcosFinishingType__c, NegotiationStatus__c, ReasonForCancellation__c, RecurrenceResaleInstallmentsIntegrad__c, ResellerFeeAmount__c, ResellerFee__c, Reseller__c, SLAOnSite1__c, SLAOnSite2__c, SLAOnSite3__c, SLAOnSite4__c, SLAOnSite5__c, SLARemote1__c, SLARemote2__c, SLARemote3__c, SLARemote4__c, SLARemote5__c, SLAResponseTime__c, SalesExecutive__c, Server__c, ServiceContractAccountType__c, ServiceStatus__c, TotalContractAmount__c, UseParentEntitlement__c, WhichPartCanceled__c, AdditionalTime__c, ContractEntitlementsParents__c, RenewalDate__c, BillingCityStateCodeFormula__c, BillingStreetFormula__c  from ServiceContract WHERE LastModifiedDate =  "/>
+                    <property expression="fn:concat(get-property('env','URL_PLANEJAMENTO'), '/services/ServiceContractDSS.SOAP12Endpoint')" name="soapEndpoint" scope="default" type="STRING"/>
+                </case>
+                <case regex="CustomerGroup">
+                    <property name="query" scope="default" type="STRING" value="select Id, Name, Channel__c, CustomerGroupCode__c, Description__c, SubGroup__c, SubGroupText__c, IsDeleted, IsDistributor__c, IsReseller__c, IDCustomerGroupDynamics__c, IDSubGroupDynamics__c from customergroup__c  WHERE LastModifiedDate = "/>
+                    <property expression="fn:concat(get-property('env','URL_PLANEJAMENTO'), '/services/SalesforceAccountDSS.SOAP12Endpoint')" name="soapEndpoint" scope="default" type="STRING"/>
+                </case>
+                <case regex="AccountCustomerGroup">
+                    <property name="query" scope="default" type="STRING" value="select Id, Name, Account__c, CustomerGroup__c, IsDeleted, pcimember__c, pcimemberlevel__c, pcimembersince__c, pcimembersuspended__c, pcimembertype__c, principal__c from AccountCustomerGroup__c WHERE LastModifiedDate =  "/>
+                    <property expression="fn:concat(get-property('env','URL_PLANEJAMENTO'), '/services/SalesforceAccountDSS.SOAP12Endpoint')" name="soapEndpoint" scope="default" type="STRING"/>
+                </case>
+                <default/>
+            </switch>
+
+            <property expression="$ctx:uri.var.dataExportsObject" name="dataExportsObject" scope="default" type="STRING"/>
+            <property expression="fn:concat(get-property('query'), get-property('uri.var.lastModifiedDate'))" name="salesforceQuery" scope="default" type="STRING"/>
+            <sequence key="SalesforceQueryAllSequence"/>
+            <sequence key="DataExportsUpsertSequence"/>
+            <respond/>
+        </inSequence>
+        <outSequence/>
+        <faultSequence/>
+    </resource>
+</api>

@@ -17,7 +17,8 @@ let generalData: any = {
        requestHelp: true,
        store: false,
        creation: false,
-       postman: true
+       postman: true,
+       swagger: true
     },
     apis: {
         type: 'create',
@@ -41,10 +42,12 @@ export const readFile = (file: any)=>{
 
 export const readAPIs = (data: any)=>{
     let resources: any = []
+
     data.resource.forEach((el: any)=>{
+        let url = el.$['uri-template'] ? el.$['uri-template'] : el.$['url-mapping'] 
         resources.push({
             method: el.$.methods,
-            url: el.$['uri-template']
+            url
           },)
     })
 

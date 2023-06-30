@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<api context="/health-check" name="HealthCheck" xmlns="http://ws.apache.org/ns/synapse">
+<api context="/limits" name="LimitsAPI" statistics="enable" trace="enable" xmlns="http://ws.apache.org/ns/synapse">
     <resource methods="GET">
         <inSequence>
-            <property name="HTTP_SC" scope="axis2" type="STRING" value="200"/>
+            <salesforcerest.listOrganizationLimits configKey="init-salesforce"/>
             <respond/>
         </inSequence>
         <outSequence/>
         <faultSequence/>
     </resource>
+    
 </api>

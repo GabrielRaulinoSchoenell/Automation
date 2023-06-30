@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<api context="/lead" name="LeadAPI" version="v1" version-type="url" xmlns="http://ws.apache.org/ns/synapse">
+    <resource methods="POST" uri-template="/lead">
+        <inSequence>
+            <propertyGroup>
+                <property expression="substring(get-property('MessageID'), 10, 38) " name="message_id" scope="default" type="STRING"/>
+                <property expression="json-eval($.email)" name="email" scope="default" type="STRING"/>
+                <property expression="json-eval($.mobilePhone)" name="mobilePhone" scope="default" type="STRING"/>
+                <property expression="json-eval($.mainPhone)" name="mainPhone" scope="default" type="STRING"/>
+                <property expression="json-eval($.nature)" name="nature" scope="default" type="STRING"/>
+                <property expression="json-eval($.documentNumber)" name="documentNumber" scope="default" type="STRING"/>
+                <property expression="json-eval($.documentType)" name="documentType" scope="default" type="STRING"/>
+                <property expression="json-eval($.addressStreet)" name="addressStreet" scope="default" type="STRING"/>
+                <property expression="json-eval($.addressCity)" name="addressCity" scope="default" type="STRING"/>
+                <property expression="json-eval($.addressState)" name="addressState" scope="default" type="STRING"/>
+                <property expression="json-eval($.addressPostalCode)" name="addressPostalCode" scope="default" type="STRING"/>
+                <property expression="json-eval($.addressNumber)" name="addressNumber" scope="default" type="STRING"/>
+                <property expression="json-eval($.addressComplement)" name="addressComplement" scope="default" type="STRING"/>
+                <property expression="json-eval($.addressCountry)" name="addressCountry" scope="default" type="STRING"/>
+                <property expression="json-eval($.addressDistrict)" name="addressDistrict" scope="default" type="STRING"/>
+            </propertyGroup>
+            <enrich>
+                <source clone="true" type="body"/>
+                <target property="PAYLOAD_ORIGINAL" type="property"/>
+            </enrich>
+            <validate cache-schema="true">
+                <schema key="conf:/schema/SchemaValidationLead.json"/>
+                <on-fail>
+                    <propertyGroup description="Dados validacao">
+                        <property expression="substring-before(substring-after(get-property('ERROR_DETAIL'), 'instance: {&quot;pointer&quot;:&quot;'), '&quot;')" name="instance" scope="default" type="STRING"/>
+                    </propertyGroup>
+                    <payloadFactory media-type="json">
+                        <format>
+							{"Error":"$1"}
+						</format>
+                        <args>
+                            <arg evaluator="xml" expression="fn:concat($ctx:ERROR_MESSAGE,' attribute: ',$ctx:instance)"/>
+                        </args>
+                    </payloadFactory>
+                    <log level="full" separator="&#x9;&#xa;">
+                        <property expression="$ctx:ERROR_CODE" name="ERROR_CODE"/>
+                        <property expression="$ctx:ERROR_MESSAGE" name="ERROR_MESSAGE"/>
+                        <property expression="$ctx:ERROR_DETAIL" name="ERROR_DETAIL"/>
+                        <property expression="$ctx:ERROR_EXCEPTION" name="ERROR_EXCEPTION"/>
+                        <property expression="$ctx:instance" name="instance"/>
+                    </log>
+                    <property name="HTTP_SC" scope="axis2" type="STRING" value="400"/>
+                    <respond/>
+                </on-fail>
+            </validate>
+            <filter regex="true" source="boolean(get-property('email') or get-property('mobilePhone') or get-property('mainPhone'))">
+                <then>
+                    <filter regex="true" source="boolean(get-property('addressStreet') or get-property('addressCity') or get-property('addressState') or get-property('addressPostalCode') or get-property('addressNumber') or get-property('addressComplement') or get-property('addressDistrict'))">
+                        <then>
+                            <filter regex="true" source="boolean(get-property('addressStreet') and get-property('addressCity') and get-property('addressState') and get-property('addressPostalCode') and get-property('addressNumber') and get-property('addressDistrict'))">
+                                <then/>
+                                <else>
+                                    <payloadFactory media-type="json">
+                                        <format>
+											{&#xd;
+											"message": "It is necessary to fill in the address fields (addressStreet, addressCity, addressState, addressPostalCode, addressNumber, addressComplement and addressDistrict)."&#xd;
+											}
+										</format>
+                                        <args/>
+                                    </payloadFactory>
+                                    <property name="HTTP_SC" scope="axis2" type="STRING" value="400"/>
+                                    <respond/>
+                                </else>
+                            </filter>
+                        </then>
+                        <else/>
+                    </filter>
+                    <filter regex="true" source="boolean(get-property('nature') or get-property('documentNumber') or get-property('documentType'))">
+                        <then>
+                            <filter regex="true" source="boolean(get-property('nature') and get-property('documentNumber'))">
+                                <then/>
+                                <else>
+                                    <payloadFactory media-type="json">
+                                        <format>
+											{&#xd;
+											"message": "It is necessary to fill in the fields 'nature' and 'documentNumber'. If you are a foreigner, you must fill in the 'documentType' field."&#xd;
+											}
+										</format>
+                                        <args/>
+                                    </payloadFactory>
+                                    <property name="HTTP_SC" scope="axis2" type="STRING" value="400"/>
+                                    <respond/>
+                                </else>
+                            </filter>
+                        </then>
+                        <else/>
+                    </filter>
+                    <store messageStore="LeadSalesforceMessageStore"/>
+                    <property name="HTTP_SC" scope="axis2" type="STRING" value="201"/>
+                    <payloadFactory media-type="json">
+                        <format>
+							{&#xd;
+							"message": "Message enqueued successfully"&#xd;
+							}
+						</format>
+                        <args/>
+                    </payloadFactory>
+                    <property expression="json-eval($)" name="BODY_SUCESS" scope="default" type="STRING"/>
+                    <call-template target="SVC-DBReportEventTemplate">
+                        <with-param name="origin" value="{$trp:ApplicationName}"/>
+                        <with-param name="message_id" value="{get-property('message_id')}"/>
+                        <with-param name="origin_id" value="-"/>
+                        <with-param name="system_internal_id" value="-"/>
+                        <with-param name="event_name" value="Lead"/>
+                        <with-param name="event_description" value="Lead recebida e enviada para fila"/>
+                        <with-param name="event_payload" value="{get-property('PAYLOAD_ORIGINAL')}"/>
+                        <with-param name="event_payload_returned" value="{get-property('BODY_SUCESS')}"/>
+                        <with-param name="http_status_code" value="201"/>
+                    </call-template>
+                </then>
+                <else>
+                    <payloadFactory media-type="json">
+                        <format>
+							{&#xd;
+							"message": "It is necessary to fill in at least one of the contact fields (email, mainPhone or mobilePhone)."&#xd;
+							}
+						</format>
+                        <args/>
+                    </payloadFactory>
+                    <property name="HTTP_SC" scope="axis2" type="STRING" value="400"/>
+                </else>
+            </filter>
+            <respond/>
+        </inSequence>
+        <outSequence/>
+        <faultSequence>
+            <log level="full">
+                <property name="--> " value="/lead/v1/lead"/>
+            </log>
+        </faultSequence>
+    </resource>
+</api>
