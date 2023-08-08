@@ -44,7 +44,8 @@ export const readAPIs = (data: any)=>{
     let resources: any = []
 
     data.resource.forEach((el: any)=>{
-        let url = el.$['uri-template'] ? el.$['uri-template'] : el.$['url-mapping'] 
+        let url = el.$['uri-template'] ? el.$['uri-template'] : el.$['url-mapping'];
+        url = url ? url : ''
         resources.push({
             method: el.$.methods,
             url

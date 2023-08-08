@@ -36,7 +36,11 @@ export const defining = (extra: any, generalData: any) => {
         postmanEndpointsContent += aggregatePostmanContent(isLastIteration, generalData, api, method, resource, context)
       });
     });
+
+    postmanCollectionFolder += aggregatePostmannCollectionFolder(api, postmanEndpointsContent)
+
     postmanEndpointsContent = '';
+
   });
 
   let definingContent = generateDefining(generalData, endpointListingContent, sequenceContent, apiListingContent)
@@ -68,6 +72,7 @@ export const ExtraResources = (extra: any, generalData: any, envType: number) =>
   vars(extra, generalData, envType)
   defining(extra, generalData);
 
+
   let postmanEnvContent = generatePostmanEnvContent(generalData)
 
   extra.creation ? fs.writeFileSync(`./src/media/ExtraResources/creation.json`, JSON.stringify(generalData)) : null;
@@ -92,65 +97,90 @@ function aggregatePostmanContent(isLastIteration: any, generalData: any, api: an
                   }
               }
           },
-          "url": "{{base_url}}${context}/${api.versionType == 'url' ? generalData.version : generalData.version} ${resource.url ? resource.url : ''}"
+          "url": "{{base_url}}${context}${resource.url ? resource.url : ''}"
       },
       "response": []
   }${isLastIteration ? '' : ','}`
 }
 
 function generateDefining(generalData: any, endpointListingContent: any, sequenceContent: any, apiListingContent: any) {
-  return `# ${generalData.project}
+  console.log('generateDefinign = ', generalData, endpointListingContent, sequenceContent, apiListingContent)
+  return `# Intelbras ChatBot API
 
-Este arquivo é uma documentação completa do projeto. Vamos passar por todos os pontos que sejam necessarios para o entendimento do projeto:
+- Documento de documentação
+    - Integração
+    - Interfaces envolvidas
+    - Definição do serviço
+    - Classificação processo de negocio
+    - Contrato
+    - recursos
+        - 1 - POST /chatbot/sendMessage/{namespace}
+            - Diagrama de Sequencia
+    - Recursos a nivel de aplicação
 
-## Listagem de endpoints
+## Integração
 
-*Os endpoints podem ser baixados como Collection no POSTMAN em ExtraResources/postmanCollection.json*
+Esse documento tem o detalhamento técnico da API chatbot, mantido pelo time de automações para envios automáticos de mensagens pelo Whatsapp
 
-### A seguir a listagem rápida dos endpoints:
+## Iterfaces envolvidas
 
-<table border=1>
-    <tr>
-        <td>METHOD</td>
-        <td>ENDPOINT</td>
-        <td>DESCRIÇÃO</td>
-    </tr>
-    ${endpointListingContent}
-</table>
+|Sistema            |Entidades                              |Tipo           |Direção
+|-------------------|---------------------------------------|---------------|------------------------|
+|Blip               |Envio de mensagem                      |API            |WSO2 -> Blip
+|Integra Sistemas   |Logs de integração                     |Banco de dados |WSO2->Integra Sistemas
+|??????????         |Plataforma para envio de requisições   |Frontend       |Frontend -> WSO2
+|??????????         |Registro de mensagens e clientes       |Banco de dados |Excel -> WSO2
 
-____
-____
+## areas envolvidas
 
-## Informações para GMUD
-
-<font color='#fb2' size='4'>Os servidores afetados pelo código são:</font>
-
-* sjo-____ 
-*  http:____
-
-1. TOTVs, afetados pelos endpoints ou recursos: 
-    * /___
-    * /___ (GET e POST)
-    * /___ (apenas POST)
-2. SalesForce, afetados pelos endpoints ou recursos:
-    * /___
-    * ___Sequence
-<br>
-<br>
-
-### As areas afetados pelo código são:
-
-1. TI, _______
+|Area               |Lider              |Relação
+|-------------------|-------------------|-------------|
+|Arquitetura TI     |Maiko Flores Dalri |Criação
+|Squad Automatização|Mailin Barcelos    |Sustentação
+|E-commerce         |?????              |Consumo
+|Solar              |??????             |Consumo
 
 
-## Operações do projeto
+## classificação Processo de negócios
+Área de negócio: E-commerce, vendas Solar
+Capacidade expansão para outras áreas: A verificar
+Nome do serviço: ChatBotAPI
+contexto: /chatbot
+versão: 1.0.0
+Responsável Intelbras: Danilo Rodrigues
+Impacto: Alto impacto interno e externo
+Objetivo da integração: A integração foi criada para manter registro de consumo da API blip pelos setores comerciais, além do reenvio de mensagense e tratativa de erros. 
 
-### APIs: 
-${apiListingContent}
-### Sequences: 
-${sequenceContent}
-### Endpoints:
-### DataServies:`;
+## Contrato
+BlipSwagger.yaml
+
+## Recursos
+---
+
+## 1 - POST /chatbot/sendMessage/{namespace}
+
+Essa operação realiza (Respectivamente) 
+- A verificação de segurança da mensagem
+- O envio da requisição para a API da Blip
+- Salva o log do envio 
+- Salva o log do retorno
+
+### diagrama de sequencia
+SEQUENCIA
+
+---
+---
+
+## Recursos a nivel de aplicação
+
+Message Broker (active MQ)
+
+### Sequences
+|Nome                               | Função
+|-----------------------------------|-----------------------|
+|EnviaDadosLegaisSequence           | Envia dados legais para a api da Blip
+|ProcessaMenssagemProcessorSequence | Lida com o envio e retorno da Blip
+`;
 }
 
 function generateSwaggerContent(generalData: any, swaggerTags: any, swaggerUrl: any) {
@@ -247,43 +277,22 @@ function aggreagateSwaggerTags(api: any) {
 }
 
 function aggreagateSwaggerUrl(context: any, resource: any, api: any, swaggerParameter: any) {
-  return `  '${context + (resource.url ? resource.url : '/')}':
-${resource.method.toLowerCase()}:
-  tags:
-    - ${api.name}
-  summary: explicacao
-  ${resource.method.toLowerCase() != 'get'
-      ? `requestBody:
-    description: Descrição
-    content:
-      application/json:
-        schema:
-          properties:
-            sample:
-              type: string
-              description: desc
-              example: exemplo
-    required: true\n`
-      : ''} 
-  description: Descrição
-  ${!swaggerParameter ? '' : 'parameters:'}
-${swaggerParameter}
-  responses:
-    '200':
-      description: Sucesso
-      content: 
-        application/json:
-          schema:
-            type: object
-            properties:
-              gereEmGenerateSwaggerPropertiesTODO: 
-                type: string
-    '500':
-      description: Erro
-      content: 
-        application/json:
-          schema:
-            type: string`;
+  console.log("aaaaaaaaaaaaa", resource.url.indexOf('{'))
+  console.log(resource.url.substring(resource.url.indexOf('{') +1, resource.url.indexOf('}')))
+  return `
+  '${context + (resource.url ? resource.url : '/')}':
+    ${resource.method.toLowerCase()}:
+      summary: explicacao
+      ${(resource.url.indexOf('{') > 0) ? 
+      `parameters:
+        - name: ${resource.url.substring(resource.url.indexOf('{') +1, resource.url.indexOf('}'))}
+          in: path
+          description: Identificador unico do registro
+          required: true
+          type: string` : ''}
+      responses:
+        200:
+          description: descrição`;
 }
 
 function aggregatePostmannCollectionFolder(api: any, postmanEndpointsContent: any) {

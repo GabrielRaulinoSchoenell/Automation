@@ -9,6 +9,6 @@ router.delete('/deleteAll', GenerateController.deleteAll);
 router.post('/createLogFiles', GenerateController.createLogFiles);
 router.post('/createLogForXML', GenerateController.createLogForXML);
 router.post('/listFunctionalities', GenerateController.listFunctionalities);
-router.post('/readFilesAndGenerate', GenerateController.readFilesAndGenerate)
+router.post('/readFilesAndGenerate', GenerateController.readFilesAndGenerate);
 
-export default router;
+export default router

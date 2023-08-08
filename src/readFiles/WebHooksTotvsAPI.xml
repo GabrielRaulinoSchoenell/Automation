@@ -3,244 +3,246 @@
     <resource methods="POST" url-mapping="/product">
         <inSequence>
             <propertyGroup>
-                <property expression="json-eval($.product)" name="ExternalIdProduct" scope="default" type="STRING"/>
-                <property name="sObjectName" scope="default" type="STRING" value="Product2"/>
-                <property name="externalIDField" scope="default" type="STRING" value="ExternalCode__c"/>
-                <property expression="substring(get-property('MessageID'), 10, 38) " name="message_id" scope="default" type="STRING"/>
+                <property expression="json-eval($.product)" name="ExternalIdProduct" scope="default" type="STRING" />
+                <property expression="json-eval($.product)" name="uri.var.product" scope="default" type="STRING" />
+                <property expression="json-eval($.description)" name="Description" scope="default" type="STRING" />
+                <property name="sObjectName" scope="default" type="STRING" value="Product2" />
+                <property name="externalIDField" scope="default" type="STRING" value="ExternalCode__c" />
+                <property expression="substring(get-property('MessageID'), 10, 38) " name="message_id" scope="default" type="STRING" />
             </propertyGroup>
             <enrich>
-                <source clone="true" type="body"/>
-                <target property="body_inicial" type="property"/>
+                <source clone="true" type="body" />
+                <target property="body_inicial" type="property" />
             </enrich>
-            <log level="custom">
-                <property name="Log -- >" value="produto"/>
-                <property expression="$ctx:body_inicial" name="Log -- >"/>
-            </log>
+            <enrich>
+                <source clone="false" xpath="json-eval($.description)" />
+                <target type="body" action="remove" />
+            </enrich>
             <call-template target="SVC-DBReportEventTemplate">
-                <with-param name="origin" value="ERP"/>
-                <with-param name="message_id" value="{get-property('message_id')}"/>
-                <with-param name="origin_id" value="{$ctx:ExternalIdProduct}"/>
-                <with-param name="system_internal_id" value="{$ctx:ExternalIdProduct}"/>
-                <with-param name="event_name" value="Produto"/>
-                <with-param name="event_description" value="Produto recebido via webhook ERP e enviada pra fila"/>
-                <with-param name="event_payload" value="{get-property('body_inicial')}"/>
-                <with-param name="event_payload_returned" value="-"/>
-                <with-param name="http_status_code" value="200"/>
-            </call-template>
+                <with-param name="origin" value="ERP" />
+                <with-param name="message_id" value="{get-property('message_id')}" />
+                <with-param name="origin_id" value="{$ctx:ExternalIdProduct}" />
+                <with-param name="system_internal_id" value="{$ctx:ExternalIdProduct}" />
+                <with-param name="event_name" value="Produto" />
+                <with-param name="event_description" value="Produto recebido via webhook ERP e enviada pra fila" />
+                <with-param name="event_payload" value="{get-property('body_inicial')}" />
+                <with-param name="event_payload_returned" value="-" />
+                <with-param name="http_status_code" value="200" />
+            </call-template>            
             <filter xpath="//productKit/product">
                 <then>
                     <log level="custom">
-                        <property name="Log -- >" value="tem kit"/>
-                        <property expression="$ctx:ExternalIdProduct" name="Log -- >"/>
+                        <property name="Log -- >" value="tem kit" />
+                        <property expression="$ctx:ExternalIdProduct" name="Log -- >" />
                     </log>
-                    <sequence key="TransformProductTotvsToSalesforceSequence"/>
+                    <sequence key="TransformProductTotvsToSalesforceSequence" />
                     <enrich>
-                        <source clone="true" type="body"/>
-                        <target property="fieldAndValue" type="property"/>
+                        <source clone="true" type="body" />
+                        <target property="fieldAndValue" type="property" />
                     </enrich>
                     <log level="custom">
-                        <property name="Log -- >" value="Envinado para salesforce"/>
-                        <property expression="get-property('fieldAndValue')" name="Log -- >"/>
+                        <property name="Log -- >" value="Envinado para salesforce" />
+                        <property expression="get-property('fieldAndValue')" name="Log -- >" />
                     </log>
-                    <sequence key="UpsertSequence"/>
+                    <sequence key="UpsertSequence" />
                     <enrich>
-                        <source clone="true" type="body"/>
-                        <target property="body_retornado_salesforce" type="property"/>
+                        <source clone="true" type="body" />
+                        <target property="body_retornado_salesforce" type="property" />
                     </enrich>
                     <enrich>
-                        <source clone="true" property="body_inicial" type="property"/>
-                        <target type="body"/>
+                        <source clone="true" property="body_inicial" type="property" />
+                        <target type="body" />
                     </enrich>
-                    <sequence key="TransformProductKitTotvsToSalesforceSequence"/>
+                    <sequence key="TransformProductKitTotvsToSalesforceSequence" />
                     <enrich>
-                        <source clone="true" type="body"/>
-                        <target property="conteudo" type="property"/>
+                        <source clone="true" type="body" />
+                        <target property="conteudo" type="property" />
                     </enrich>
-                    <property name="operation" scope="default" type="STRING" value="upsert"/>
-                    <property name="object" scope="default" type="STRING" value="ProductKitItem__c"/>
-                    <property name="externalIdFieldName" scope="default" type="STRING" value="ExternalId__c"/>
-                    <property expression="get-property('ExternalIdProduct')" name="objectId" scope="default" type="STRING"/>
+                    <property name="operation" scope="default" type="STRING" value="upsert" />
+                    <property name="object" scope="default" type="STRING" value="ProductKitItem__c" />
+                    <property name="externalIdFieldName" scope="default" type="STRING" value="ExternalId__c" />
+                    <property expression="get-property('ExternalIdProduct')" name="objectId" scope="default" type="STRING" />
                     <log level="custom">
-                        <property name="Log -- >" value="Envinado para salesforce"/>
-                        <property expression="get-property('conteudo')" name="Log -- >"/>
+                        <property name="Log -- >" value="Envinado para salesforce" />
+                        <property expression="get-property('conteudo')" name="Log -- >" />
                     </log>
-                    <sequence key="SVC-SalesforceBulkSequence"/>
+                    <sequence key="SVC-SalesforceBulkSequence" />
                 </then>
                 <else>
                     <log level="custom">
-                        <property name="Log -- >" value="nao tem kit"/>
-                        <property expression="$ctx:ExternalIdProduct" name="Log -- >"/>
+                        <property name="Log -- >" value="nao tem kit" />
+                        <property expression="$ctx:ExternalIdProduct" name="Log -- >" />
                     </log>
-                    <sequence key="TransformProductTotvsToSalesforceSequence"/>
+                    <sequence key="TransformProductTotvsToSalesforceSequence" />
                     <enrich>
-                        <source clone="true" type="body"/>
-                        <target property="fieldAndValue" type="property"/>
+                        <source clone="true" type="body" />
+                        <target property="fieldAndValue" type="property" />
                     </enrich>
                     <log level="custom">
-                        <property name="Log -- >" value="Envinado para salesforce"/>
-                        <property expression="get-property('fieldAndValue')" name="Log -- >"/>
+                        <property name="Log -- >" value="Envinado para salesforce" />
+                        <property expression="get-property('fieldAndValue')" name="Log -- >" />
                     </log>
-                    <sequence key="UpsertSequence"/>
+                    <sequence key="UpsertSequence" />
                     <enrich>
-                        <source clone="true" type="body"/>
-                        <target property="body_retornado_salesforce" type="property"/>
+                        <source clone="true" type="body" />
+                        <target property="body_retornado_salesforce" type="property" />
                     </enrich>
                 </else>
             </filter>
             <call-template target="SVC-DBReportEventTemplate">
-                <with-param name="origin" value="ERP"/>
-                <with-param name="message_id" value="{get-property('message_id')}"/>
-                <with-param name="origin_id" value="{$ctx:ExternalIdProduct}"/>
-                <with-param name="system_internal_id" value="{$ctx:ExternalIdProduct}"/>
-                <with-param name="event_name" value="Produto"/>
-                <with-param name="event_description" value="Produto transformado e enviado para o Salesforce"/>
-                <with-param name="event_payload" value="{get-property('fieldAndValue')}"/>
-                <with-param name="event_payload_returned" value="{get-property('body_retornado_salesforce')}"/>
-                <with-param name="http_status_code" value="200"/>
+                <with-param name="origin" value="ERP" />
+                <with-param name="message_id" value="{get-property('message_id')}" />
+                <with-param name="origin_id" value="{$ctx:ExternalIdProduct}" />
+                <with-param name="system_internal_id" value="{$ctx:ExternalIdProduct}" />
+                <with-param name="event_name" value="Produto" />
+                <with-param name="event_description" value="Produto transformado e enviado para o Salesforce" />
+                <with-param name="event_payload" value="{get-property('fieldAndValue')}" />
+                <with-param name="event_payload_returned" value="{get-property('body_retornado_salesforce')}" />
+                <with-param name="http_status_code" value="200" />
             </call-template>
-            <respond/>
+            <respond />
         </inSequence>
-        <outSequence/>
+        <outSequence />
         <faultSequence>
             <log level="full">
-                <property name="teste" value="teste"/>
+                <property name="teste" value="teste" />
             </log>
         </faultSequence>
     </resource>
     <resource methods="POST" url-mapping="/account">
         <inSequence>
             <log level="full">
-                <property name="entrada" value="conta"/>
+                <property name="entrada" value="conta" />
             </log>
             <propertyGroup>
-                <property expression="substring(get-property('MessageID'), 10, 38) " name="message_id" scope="default" type="STRING"/>
-                <property expression="json-eval($.externalId)" name="external_id" scope="transport" type="STRING"/>
-                <property expression="json-eval($.clientSubgroup)" name="clientSubgroup" scope="transport" type="STRING"/>
-                <property expression="json-eval($.documentNumber)" name="uri.var.documentNumber" scope="transport" type="STRING"/>
+                <property expression="substring(get-property('MessageID'), 10, 38) " name="message_id" scope="default" type="STRING" />
+                <property expression="json-eval($.externalId)" name="external_id" scope="transport" type="STRING" />
+                <property expression="json-eval($.clientSubgroup)" name="clientSubgroup" scope="transport" type="STRING" />
+                <property expression="json-eval($.documentNumber)" name="uri.var.documentNumber" scope="transport" type="STRING" />
             </propertyGroup>
             <enrich>
-                <source clone="true" type="body"/>
-                <target property="PAYLOAD_ORIGINAL" type="property"/>
+                <source clone="true" type="body" />
+                <target property="PAYLOAD_ORIGINAL" type="property" />
             </enrich>
-            <store messageStore="AccountSalesforceMessageStore"/>
-            <property name="HTTP_SC" scope="axis2" type="STRING" value="201"/>
+            <store messageStore="AccountSalesforceMessageStore" />
+            <property name="HTTP_SC" scope="axis2" type="STRING" value="201" />
             <payloadFactory media-type="json">
                 <format>
 					{&#xd;
 					"message": "Message enqueued successfully"&#xd;
 					}
 				</format>
-                <args/>
+                <args />
             </payloadFactory>
-            <property expression="json-eval($)" name="BODY_SUCESS" scope="default" type="STRING"/>
+            <property expression="json-eval($)" name="BODY_SUCESS" scope="default" type="STRING" />
             <call-template target="SVC-DBReportEventTemplate">
-                <with-param name="origin" value="ERP"/>
-                <with-param name="message_id" value="{get-property('message_id')}"/>
-                <with-param name="origin_id" value="{$trp:external_id}"/>
-                <with-param name="system_internal_id" value="{$trp:external_id}"/>
-                <with-param name="event_name" value="Conta"/>
-                <with-param name="event_description" value="Conta recebida via webhook ERP e enviada para fila"/>
-                <with-param name="event_payload" value="{get-property('PAYLOAD_ORIGINAL')}"/>
-                <with-param name="event_payload_returned" value="{get-property('BODY_SUCESS')}"/>
-                <with-param name="http_status_code" value="201"/>
+                <with-param name="origin" value="ERP" />
+                <with-param name="message_id" value="{get-property('message_id')}" />
+                <with-param name="origin_id" value="{$trp:external_id}" />
+                <with-param name="system_internal_id" value="{$trp:external_id}" />
+                <with-param name="event_name" value="Conta" />
+                <with-param name="event_description" value="Conta recebida via webhook ERP e enviada para fila" />
+                <with-param name="event_payload" value="{get-property('PAYLOAD_ORIGINAL')}" />
+                <with-param name="event_payload_returned" value="{get-property('BODY_SUCESS')}" />
+                <with-param name="http_status_code" value="201" />
             </call-template>
-            <respond/>
+            <respond />
         </inSequence>
-        <outSequence/>
+        <outSequence />
         <faultSequence>
             <log level="full">
-                <property name="falha" value="conta"/>
+                <property name="falha" value="conta" />
             </log>
         </faultSequence>
     </resource>
     <resource methods="POST" url-mapping="/orderReturn">
         <inSequence>
-            <property expression="$trp:orderId" name="orderId" scope="default" type="STRING"/>
-            <property expression="$trp:httpstatuscode" name="httpstatuscode" scope="default" type="STRING"/>
-            <property expression="json-eval($.SaleOrder[0].erpOrderId)" name="ERPOrderId" scope="transport" type="STRING"/>
-            <property expression="json-eval($.SaleOrder[0].originalOrderId)" name="SalesforceOrderId" scope="transport" type="STRING"/>
-            <property expression="$ctx:orderId" name="orderId" scope="transport" type="STRING"/>
+            <property expression="$trp:orderId" name="orderId" scope="default" type="STRING" />
+            <property expression="$trp:httpstatuscode" name="httpstatuscode" scope="default" type="STRING" />
+            <property expression="json-eval($.SaleOrder[0].erpOrderId)" name="ERPOrderId" scope="transport" type="STRING" />
+            <property expression="json-eval($.SaleOrder[0].originalOrderId)" name="SalesforceOrderId" scope="transport" type="STRING" />
+            <property expression="$ctx:orderId" name="orderId" scope="transport" type="STRING" />
             <log level="custom" separator="&#x9;&#xa;">
-                <property name="-->" value="Requisicao recebida! - /webhooks-totvs/v1/orderReturn"/>
-                <property expression="json-eval($)" name="--> JSON_ORDER_RETURN_TOTVS"/>
-                <property expression="$trp:orderId" name="--> Order ID"/>
-                <property expression="$trp:origin" name="--> Origin"/>
-                <property expression="$trp:SalesforceOrderId" name="--> SalesforceOrderId"/>
-                <property expression="$trp:httpstatuscode" name="--> httpstatuscode"/>
+                <property name="-->" value="Requisicao recebida! - /webhooks-totvs/v1/orderReturn" />
+                <property expression="json-eval($)" name="--> JSON_ORDER_RETURN_TOTVS" />
+                <property expression="$trp:orderId" name="--> Order ID" />
+                <property expression="$trp:origin" name="--> Origin" />
+                <property expression="$trp:SalesforceOrderId" name="--> SalesforceOrderId" />
+                <property expression="$trp:httpstatuscode" name="--> httpstatuscode" />
             </log>
             <!--             <store messageStore="OrderSalesforceReturnMessageStore"/> -->
-            <sequence key="OrderSalesforceReturnMessageProcessorSequence"/>
+            <sequence key="OrderSalesforceReturnMessageProcessorSequence" />
             <log level="custom" separator="&#x9;&#xa;">
-                <property name="depoisMessageStore" value="depois do messageStore"/>
+                <property name="depoisMessageStore" value="depois do messageStore" />
             </log>
-            <property name="HTTP_SC" scope="axis2" type="STRING" value="201"/>
+            <property name="HTTP_SC" scope="axis2" type="STRING" value="201" />
             <payloadFactory media-type="json">
                 <format>
 					{&#xd;
 					"message": "Message enqueued successfully"&#xd;
 					}
 				</format>
-                <args/>
+                <args />
             </payloadFactory>
-            <respond/>
+            <respond />
         </inSequence>
-        <outSequence/>
-        <faultSequence/>
+        <outSequence />
+        <faultSequence />
     </resource>
     <resource methods="PUT" url-mapping="/orderUpdate">
         <inSequence>
             <log level="custom" separator="&#x9;&#xa;">
-                <property name="-->" value="Requisicao recebida! - /webhooks-totvs/v1/orderUpdate"/>
-                <property expression="json-eval($)" name="--> JSON_ORDER_UPDATE_TOTVS"/>
+                <property name="-->" value="Requisicao recebida! - /webhooks-totvs/v1/orderUpdate" />
+                <property expression="json-eval($)" name="--> JSON_ORDER_UPDATE_TOTVS" />
             </log>
             <propertyGroup>
-                <property expression="$trp:message_id" name="message_id" scope="default" type="STRING"/>
-                <property expression="json-eval($.erpOrderId)" name="erpOrderId" scope="transport" type="STRING"/>
-                <property name="CHARACTER_SET_ENCODING" scope="axis2" type="STRING" value="UTF-8"/>
+                <property expression="$trp:message_id" name="message_id" scope="default" type="STRING" />
+                <property expression="json-eval($.erpOrderId)" name="erpOrderId" scope="transport" type="STRING" />
+                <property name="CHARACTER_SET_ENCODING" scope="axis2" type="STRING" value="UTF-8" />
             </propertyGroup>
             <enrich>
-                <source clone="true" type="body"/>
-                <target property="PAYLOAD_ORIGINAL" type="property"/>
+                <source clone="true" type="body" />
+                <target property="PAYLOAD_ORIGINAL" type="property" />
             </enrich>
-            <store messageStore="OrderSalesforceUpdateMessageStore"/>
-            <property name="HTTP_SC" scope="axis2" type="STRING" value="201"/>
+            <store messageStore="OrderSalesforceUpdateMessageStore" />
+            <property name="HTTP_SC" scope="axis2" type="STRING" value="201" />
             <payloadFactory media-type="json">
                 <format>
 					{&#xd;
 					"message": "Message enqueued successfully"&#xd;
 					}
 				</format>
-                <args/>
+                <args />
             </payloadFactory>
-            <property expression="json-eval($)" name="BODY_SUCESS" scope="default" type="STRING"/>
+            <property expression="json-eval($)" name="BODY_SUCESS" scope="default" type="STRING" />
             <call-template target="SVC-DBReportEventTemplate">
-                <with-param name="origin" value="ERP"/>
-                <with-param name="message_id" value="{get-property('message_id')}"/>
-                <with-param name="origin_id" value="{$trp:erpOrderId}"/>
-                <with-param name="system_internal_id" value="{$trp:erpOrderId}"/>
-                <with-param name="event_name" value="Pedido"/>
-                <with-param name="event_description" value="Pedido recebido via webhook ERP e enviada pra fila"/>
-                <with-param name="event_payload" value="{get-property('PAYLOAD_ORIGINAL')}"/>
-                <with-param name="event_payload_returned" value="{get-property('BODY_SUCESS')}"/>
-                <with-param name="httpstatuscode" value="201"/>
+                <with-param name="origin" value="ERP" />
+                <with-param name="message_id" value="{get-property('message_id')}" />
+                <with-param name="origin_id" value="{$trp:erpOrderId}" />
+                <with-param name="system_internal_id" value="{$trp:erpOrderId}" />
+                <with-param name="event_name" value="Pedido" />
+                <with-param name="event_description" value="Pedido recebido via webhook ERP e enviada pra fila" />
+                <with-param name="event_payload" value="{get-property('PAYLOAD_ORIGINAL')}" />
+                <with-param name="event_payload_returned" value="{get-property('BODY_SUCESS')}" />
+                <with-param name="httpstatuscode" value="201" />
             </call-template>
-            <respond/>
+            <respond />
         </inSequence>
-        <outSequence/>
-        <faultSequence/>
+        <outSequence />
+        <faultSequence />
     </resource>
     <resource methods="POST DELETE" url-mapping="/portfolio">
         <inSequence>
-            <property expression="$axis2:HTTP_METHOD" name="HTTPMETHOD" scope="default" type="STRING"/>
-            <property description="UTF-8" name="CHARACTER_SET_ENCODING" scope="axis2" type="STRING" value="UTF-8"/>
+            <property expression="$axis2:HTTP_METHOD" name="HTTPMETHOD" scope="default" type="STRING" />
+            <property description="UTF-8" name="CHARACTER_SET_ENCODING" scope="axis2" type="STRING" value="UTF-8" />
             <log level="custom">
-                <property expression="json-eval($)" name="BODY"/>
-                <property expression="$ctx:HTTPMETHOD" name="HTTP_METHOD"/>
+                <property expression="json-eval($)" name="BODY" />
+                <property expression="$ctx:HTTPMETHOD" name="HTTP_METHOD" />
             </log>
-            <property expression="json-eval($.rowId)" name="rowId" scope="default" type="STRING"/>
+            <property expression="json-eval($.rowId)" name="rowId" scope="default" type="STRING" />
             <enrich>
-                <source clone="true" type="body"/>
-                <target property="BODY_INICIAL" type="property"/>
+                <source clone="true" type="body" />
+                <target property="BODY_INICIAL" type="property" />
             </enrich>
             <payloadFactory media-type="json">
                 <format>
@@ -248,74 +250,74 @@
 					"message": "Message enqueued successfully"&#xd;
 					}
 				</format>
-                <args/>
+                <args />
             </payloadFactory>
             <enrich>
-                <source clone="true" type="body"/>
-                <target property="BODY_ENQUEUED" type="property"/>
+                <source clone="true" type="body" />
+                <target property="BODY_ENQUEUED" type="property" />
             </enrich>
             <switch source="get-property('HTTPMETHOD')">
                 <case regex="POST">
                     <call-template target="SVC-DBReportEventTemplate">
-                        <with-param name="origin" value="{get-property('origin')}"/>
-                        <with-param name="message_id" value="{get-property('message_id')}"/>
-                        <with-param name="origin_id" value="{$ctx:rowId}"/>
-                        <with-param name="system_internal_id" value="-"/>
-                        <with-param name="event_name" value="Portfolio"/>
-                        <with-param name="event_description" value="Inclusao de item do portfolio recebido e encaminhado para fila"/>
-                        <with-param name="event_payload" value="{get-property('BODY_INICIAL')}"/>
-                        <with-param name="event_payload_returned" value="{get-property('BODY_RETURNED')}"/>
-                        <with-param name="http_status_code" value="200"/>
+                        <with-param name="origin" value="{get-property('origin')}" />
+                        <with-param name="message_id" value="{get-property('message_id')}" />
+                        <with-param name="origin_id" value="{$ctx:rowId}" />
+                        <with-param name="system_internal_id" value="-" />
+                        <with-param name="event_name" value="Portfolio" />
+                        <with-param name="event_description" value="Inclusao de item do portfolio recebido e encaminhado para fila" />
+                        <with-param name="event_payload" value="{get-property('BODY_INICIAL')}" />
+                        <with-param name="event_payload_returned" value="{get-property('BODY_RETURNED')}" />
+                        <with-param name="http_status_code" value="200" />
                     </call-template>
                 </case>
                 <case regex="DELETE">
                     <call-template target="SVC-DBReportEventTemplate">
-                        <with-param name="origin" value="ERP"/>
-                        <with-param name="message_id" value="{$trp:message_id}"/>
-                        <with-param name="origin_id" value="{$ctx:rowId}"/>
-                        <with-param name="system_internal_id" value="{$trp:external_id}"/>
-                        <with-param name="event_name" value="Portfolio"/>
-                        <with-param name="event_description" value="Exclusao de item do portfolio recebido e encaminhado para fila"/>
-                        <with-param name="event_payload" value="{get-property('BODY_INICIAL')}"/>
-                        <with-param name="event_payload_returned" value="{get-property('BODY_ENQUEUED')}"/>
-                        <with-param name="http_status_code" value="201"/>
+                        <with-param name="origin" value="ERP" />
+                        <with-param name="message_id" value="{$trp:message_id}" />
+                        <with-param name="origin_id" value="{$ctx:rowId}" />
+                        <with-param name="system_internal_id" value="{$trp:external_id}" />
+                        <with-param name="event_name" value="Portfolio" />
+                        <with-param name="event_description" value="Exclusao de item do portfolio recebido e encaminhado para fila" />
+                        <with-param name="event_payload" value="{get-property('BODY_INICIAL')}" />
+                        <with-param name="event_payload_returned" value="{get-property('BODY_ENQUEUED')}" />
+                        <with-param name="http_status_code" value="201" />
                     </call-template>
                 </case>
-                <default/>
+                <default />
             </switch>
             <enrich>
-                <source clone="true" property="BODY_INICIAL" type="property"/>
-                <target type="body"/>
+                <source clone="true" property="BODY_INICIAL" type="property" />
+                <target type="body" />
             </enrich>
-            <sequence key="SVC-ProductPortfolioSalesforceSequence"/>
+            <sequence key="SVC-ProductPortfolioSalesforceSequence" />
             <enrich>
-                <source clone="false" property="BODY_ENQUEUED" type="property"/>
-                <target type="body"/>
+                <source clone="false" property="BODY_ENQUEUED" type="property" />
+                <target type="body" />
             </enrich>
-            <respond/>
+            <respond />
         </inSequence>
-        <outSequence/>
+        <outSequence />
         <faultSequence>
             <log level="full">
-                <property name="faultSequence" value="faultSequence"/>
+                <property name="faultSequence" value="faultSequence" />
             </log>
-            <send/>
+            <send />
         </faultSequence>
     </resource>
     <resource methods="PUT DELETE" url-mapping="/accountPaymentCondition">
         <inSequence>
-            <property expression="$axis2:HTTP_METHOD" name="HTTPMETHOD" scope="default" type="STRING"/>
-            <property description="UTF-8" name="CHARACTER_SET_ENCODING" scope="axis2" type="STRING" value="UTF-8"/>
+            <property expression="$axis2:HTTP_METHOD" name="HTTPMETHOD" scope="default" type="STRING" />
+            <property description="UTF-8" name="CHARACTER_SET_ENCODING" scope="axis2" type="STRING" value="UTF-8" />
             <log level="custom">
-                <property expression="json-eval($)" name="BODY"/>
-                <property expression="$ctx:HTTPMETHOD" name="HTTP_METHOD"/>
+                <property expression="json-eval($)" name="BODY" />
+                <property expression="$ctx:HTTPMETHOD" name="HTTP_METHOD" />
             </log>
             <enrich>
-                <source clone="true" type="body"/>
-                <target property="BODY_INICIAL" type="property"/>
+                <source clone="true" type="body" />
+                <target property="BODY_INICIAL" type="property" />
             </enrich>
             <log level="custom">
-                <property expression="json-eval($)" name="accountPaymentCondition"/>
+                <property expression="json-eval($)" name="accountPaymentCondition" />
             </log>
             <payloadFactory media-type="json">
                 <format>
@@ -323,92 +325,92 @@
 					"message": "Message enqueued successfully"&#xd;
 					}
 				</format>
-                <args/>
+                <args />
             </payloadFactory>
             <enrich>
-                <source clone="true" type="body"/>
-                <target property="BODY_ENQUEUED" type="property"/>
+                <source clone="true" type="body" />
+                <target property="BODY_ENQUEUED" type="property" />
             </enrich>
             <switch source="get-property('HTTPMETHOD')">
                 <case regex="PUT">
                     <log level="custom">
-                        <property name="PUT" value="PUT"/>
+                        <property name="PUT" value="PUT" />
                     </log>
                     <call-template target="SVC-DBReportEventTemplate">
-                        <with-param name="origin" value="{get-property('origin')}"/>
-                        <with-param name="message_id" value="{get-property('message_id')}"/>
-                        <with-param name="origin_id" value="{$trp:OrderId}"/>
-                        <with-param name="system_internal_id" value="-"/>
-                        <with-param name="event_name" value="CondicaoPagamentoConta"/>
-                        <with-param name="event_description" value="Inclusao de condicao de pagamento para conta recebido e encaminhado para fila"/>
-                        <with-param name="event_payload" value="{get-property('BODY_INICIAL')}"/>
-                        <with-param name="event_payload_returned" value="{get-property('BODY_RETURNED')}"/>
-                        <with-param name="http_status_code" value="200"/>
+                        <with-param name="origin" value="{get-property('origin')}" />
+                        <with-param name="message_id" value="{get-property('message_id')}" />
+                        <with-param name="origin_id" value="{$trp:OrderId}" />
+                        <with-param name="system_internal_id" value="-" />
+                        <with-param name="event_name" value="CondicaoPagamentoConta" />
+                        <with-param name="event_description" value="Inclusao de condicao de pagamento para conta recebido e encaminhado para fila" />
+                        <with-param name="event_payload" value="{get-property('BODY_INICIAL')}" />
+                        <with-param name="event_payload_returned" value="{get-property('BODY_RETURNED')}" />
+                        <with-param name="http_status_code" value="200" />
                     </call-template>
                 </case>
                 <case regex="DELETE">
                     <call-template target="SVC-DBReportEventTemplate">
-                        <with-param name="origin" value="ERP"/>
-                        <with-param name="message_id" value="{$trp:message_id}"/>
-                        <with-param name="origin_id" value="{$trp:external_id}"/>
-                        <with-param name="system_internal_id" value="{$trp:external_id}"/>
-                        <with-param name="event_name" value="CondicaoPagamentoConta"/>
-                        <with-param name="event_description" value="Exclusao de condicao de pagamento para conta recebido e encaminhado para fila"/>
-                        <with-param name="event_payload" value="{get-property('BODY_INICIAL')}"/>
-                        <with-param name="event_payload_returned" value="{get-property('BODY_ENQUEUED')}"/>
-                        <with-param name="http_status_code" value="201"/>
+                        <with-param name="origin" value="ERP" />
+                        <with-param name="message_id" value="{$trp:message_id}" />
+                        <with-param name="origin_id" value="{$trp:external_id}" />
+                        <with-param name="system_internal_id" value="{$trp:external_id}" />
+                        <with-param name="event_name" value="CondicaoPagamentoConta" />
+                        <with-param name="event_description" value="Exclusao de condicao de pagamento para conta recebido e encaminhado para fila" />
+                        <with-param name="event_payload" value="{get-property('BODY_INICIAL')}" />
+                        <with-param name="event_payload_returned" value="{get-property('BODY_ENQUEUED')}" />
+                        <with-param name="http_status_code" value="201" />
                     </call-template>
                 </case>
-                <default/>
+                <default />
             </switch>
             <enrich>
-                <source clone="true" property="BODY_INICIAL" type="property"/>
-                <target type="body"/>
+                <source clone="true" property="BODY_INICIAL" type="property" />
+                <target type="body" />
             </enrich>
-            <sequence key="SVC-AccountPaymentConditionSalesforceSequence"/>
+            <sequence key="SVC-AccountPaymentConditionSalesforceSequence" />
             <enrich>
-                <source clone="false" property="BODY_ENQUEUED" type="property"/>
-                <target type="body"/>
+                <source clone="false" property="BODY_ENQUEUED" type="property" />
+                <target type="body" />
             </enrich>
-            <respond/>
+            <respond />
         </inSequence>
-        <outSequence/>
+        <outSequence />
         <faultSequence>
             <log level="full">
-                <property name="faultSequence" value="faultSequence"/>
+                <property name="faultSequence" value="faultSequence" />
             </log>
-            <send/>
+            <send />
         </faultSequence>
     </resource>
     <resource methods="PUT" url-mapping="/vmcBalance">
         <inSequence>
-            <property expression="$axis2:HTTP_METHOD" name="HTTPMETHOD" scope="default" type="STRING"/>
-            <property description="UTF-8" name="CHARACTER_SET_ENCODING" scope="axis2" type="STRING" value="UTF-8"/>
-            <property expression="json-eval($.accountExternalId)" name="accountExternalId" scope="default" type="STRING"/>
-            <property expression="json-eval($.requestLimit)" name="requestLimit" scope="default" type="STRING"/>
-            <property expression="json-eval($.reservedValue)" name="reservedValue" scope="default" type="STRING"/>
-            <property expression="json-eval($.totalRequested)" name="totalRequested" scope="default" type="STRING"/>
-            <property expression="json-eval($.startDate)" name="startDate" scope="default" type="STRING"/>
-            <property expression="json-eval($.endDate)" name="endDate" scope="default" type="STRING"/>
-            <property expression="json-eval($.description)" name="description" scope="default" type="STRING"/>
-            <property expression="json-eval($.type)" name="type" scope="default" type="STRING"/>
-            <property expression="json-eval($.allowLateRequest)" name="allowLateRequest" scope="default" type="STRING"/>
-            <property expression="json-eval($.porfolioSegment)" name="porfolioSegment" scope="default" type="STRING"/>
-            <property expression="json-eval($.audience)" name="audience" scope="default" type="STRING"/>
-            <property expression="json-eval($.vmcName)" name="vmcName" scope="default" type="STRING"/>
-            <property expression="json-eval($.quarter)" name="quarter" scope="default" type="STRING"/>
-            <property expression="json-eval($.rowId)" name="uri.var.ExternalId__c" scope="default" type="STRING"/>
-            <property expression="json-eval($.rowId)" name="externalId" scope="transport" type="STRING"/>
+            <property expression="$axis2:HTTP_METHOD" name="HTTPMETHOD" scope="default" type="STRING" />
+            <property description="UTF-8" name="CHARACTER_SET_ENCODING" scope="axis2" type="STRING" value="UTF-8" />
+            <property expression="json-eval($.accountExternalId)" name="accountExternalId" scope="default" type="STRING" />
+            <property expression="json-eval($.requestLimit)" name="requestLimit" scope="default" type="STRING" />
+            <property expression="json-eval($.reservedValue)" name="reservedValue" scope="default" type="STRING" />
+            <property expression="json-eval($.totalRequested)" name="totalRequested" scope="default" type="STRING" />
+            <property expression="json-eval($.startDate)" name="startDate" scope="default" type="STRING" />
+            <property expression="json-eval($.endDate)" name="endDate" scope="default" type="STRING" />
+            <property expression="json-eval($.description)" name="description" scope="default" type="STRING" />
+            <property expression="json-eval($.type)" name="type" scope="default" type="STRING" />
+            <property expression="json-eval($.allowLateRequest)" name="allowLateRequest" scope="default" type="STRING" />
+            <property expression="json-eval($.porfolioSegment)" name="porfolioSegment" scope="default" type="STRING" />
+            <property expression="json-eval($.audience)" name="audience" scope="default" type="STRING" />
+            <property expression="json-eval($.vmcName)" name="vmcName" scope="default" type="STRING" />
+            <property expression="json-eval($.quarter)" name="quarter" scope="default" type="STRING" />
+            <property expression="json-eval($.rowId)" name="uri.var.ExternalId__c" scope="default" type="STRING" />
+            <property expression="json-eval($.rowId)" name="externalId" scope="transport" type="STRING" />
             <log level="custom">
-                <property expression="json-eval($)" name="BODY"/>
-                <property expression="$ctx:HTTPMETHOD" name="HTTP_METHOD"/>
+                <property expression="json-eval($)" name="BODY" />
+                <property expression="$ctx:HTTPMETHOD" name="HTTP_METHOD" />
             </log>
             <enrich>
-                <source clone="true" type="body"/>
-                <target property="BODY_INICIAL" type="property"/>
+                <source clone="true" type="body" />
+                <target property="BODY_INICIAL" type="property" />
             </enrich>
             <log level="custom">
-                <property expression="json-eval($)" name="accountPaymentCondition"/>
+                <property expression="json-eval($)" name="accountPaymentCondition" />
             </log>
             <payloadFactory media-type="json">
                 <format>
@@ -416,81 +418,81 @@
 					"message": "Message enqueued successfully"&#xd;
 					}
 				</format>
-                <args/>
+                <args />
             </payloadFactory>
             <enrich>
-                <source clone="true" type="body"/>
-                <target property="BODY_ENQUEUED" type="property"/>
+                <source clone="true" type="body" />
+                <target property="BODY_ENQUEUED" type="property" />
             </enrich>
             <switch source="get-property('HTTPMETHOD')">
                 <case regex="PUT">
                     <log level="custom">
-                        <property name="PUT" value="PUT"/>
+                        <property name="PUT" value="PUT" />
                     </log>
                     <call-template target="SVC-DBReportEventTemplate">
-                        <with-param name="origin" value="ERP"/>
-                        <with-param name="message_id" value="{get-property('message_id')}"/>
-                        <with-param name="origin_id" value="{$trp:externalId}"/>
-                        <with-param name="system_internal_id" value="-"/>
-                        <with-param name="event_name" value="SaldosVMC"/>
-                        <with-param name="event_description" value="Inclusao de saldo de VMC recebido e encaminhado para fila"/>
-                        <with-param name="event_payload" value="{get-property('BODY_INICIAL')}"/>
-                        <with-param name="event_payload_returned" value="{get-property('BODY_RETURNED')}"/>
-                        <with-param name="http_status_code" value="200"/>
+                        <with-param name="origin" value="ERP" />
+                        <with-param name="message_id" value="{get-property('message_id')}" />
+                        <with-param name="origin_id" value="{$trp:externalId}" />
+                        <with-param name="system_internal_id" value="-" />
+                        <with-param name="event_name" value="SaldosVMC" />
+                        <with-param name="event_description" value="Inclusao de saldo de VMC recebido e encaminhado para fila" />
+                        <with-param name="event_payload" value="{get-property('BODY_INICIAL')}" />
+                        <with-param name="event_payload_returned" value="{get-property('BODY_RETURNED')}" />
+                        <with-param name="http_status_code" value="200" />
                     </call-template>
                 </case>
                 <case regex="DELETE">
                     <call-template target="SVC-DBReportEventTemplate">
-                        <with-param name="origin" value="ERP"/>
-                        <with-param name="message_id" value="{$trp:message_id}"/>
-                        <with-param name="origin_id" value="{$trp:externalId}"/>
-                        <with-param name="system_internal_id" value="{$trp:externalId}"/>
-                        <with-param name="event_name" value="SaldosVMC"/>
-                        <with-param name="event_description" value="Exclusao de saldo de VMC  recebido e encaminhado para fila"/>
-                        <with-param name="event_payload" value="{get-property('BODY_INICIAL')}"/>
-                        <with-param name="event_payload_returned" value="{get-property('BODY_ENQUEUED')}"/>
-                        <with-param name="http_status_code" value="201"/>
+                        <with-param name="origin" value="ERP" />
+                        <with-param name="message_id" value="{$trp:message_id}" />
+                        <with-param name="origin_id" value="{$trp:externalId}" />
+                        <with-param name="system_internal_id" value="{$trp:externalId}" />
+                        <with-param name="event_name" value="SaldosVMC" />
+                        <with-param name="event_description" value="Exclusao de saldo de VMC  recebido e encaminhado para fila" />
+                        <with-param name="event_payload" value="{get-property('BODY_INICIAL')}" />
+                        <with-param name="event_payload_returned" value="{get-property('BODY_ENQUEUED')}" />
+                        <with-param name="http_status_code" value="201" />
                     </call-template>
                 </case>
-                <default/>
+                <default />
             </switch>
             <enrich>
-                <source clone="true" property="BODY_INICIAL" type="property"/>
-                <target type="body"/>
+                <source clone="true" property="BODY_INICIAL" type="property" />
+                <target type="body" />
             </enrich>
             <!--             <sequence key="SVC-PCIBenefitsSalesforceSequence"/> -->
-            <store messageStore="PCIBenefitsSalesforceMessageStore"/>
+            <store messageStore="PCIBenefitsSalesforceMessageStore" />
             <enrich>
-                <source clone="false" property="BODY_ENQUEUED" type="property"/>
-                <target type="body"/>
+                <source clone="false" property="BODY_ENQUEUED" type="property" />
+                <target type="body" />
             </enrich>
-            <respond/>
+            <respond />
         </inSequence>
-        <outSequence/>
+        <outSequence />
         <faultSequence>
             <log level="full">
-                <property name="faultSequence" value="faultSequence"/>
+                <property name="faultSequence" value="faultSequence" />
             </log>
-            <send/>
+            <send />
         </faultSequence>
     </resource>
     <resource methods="PUT DELETE" url-mapping="/campaignPaymentCondition">
         <inSequence>
-            <property expression="$axis2:HTTP_METHOD" name="HTTPMETHOD" scope="default" type="STRING"/>
-            <property description="UTF-8" name="CHARACTER_SET_ENCODING" scope="axis2" type="STRING" value="UTF-8"/>
-            <property expression="//externalId" name="uri.var.ExternalId__c" scope="default" type="STRING"/>
-            <property expression="substring(get-property('MessageID'), 10, 38) " name="message_id" scope="default" type="STRING"/>
-            <property name="origin" scope="default" type="STRING" value="ERP "/>
+            <property expression="$axis2:HTTP_METHOD" name="HTTPMETHOD" scope="default" type="STRING" />
+            <property description="UTF-8" name="CHARACTER_SET_ENCODING" scope="axis2" type="STRING" value="UTF-8" />
+            <property expression="//externalId" name="uri.var.ExternalId__c" scope="default" type="STRING" />
+            <property expression="substring(get-property('MessageID'), 10, 38) " name="message_id" scope="default" type="STRING" />
+            <property name="origin" scope="default" type="STRING" value="ERP " />
             <log level="custom">
-                <property expression="json-eval($)" name="BODY"/>
-                <property expression="$ctx:HTTPMETHOD" name="HTTP_METHOD"/>
+                <property expression="json-eval($)" name="BODY" />
+                <property expression="$ctx:HTTPMETHOD" name="HTTP_METHOD" />
             </log>
             <enrich>
-                <source clone="true" type="body"/>
-                <target property="BODY_INICIAL" type="property"/>
+                <source clone="true" type="body" />
+                <target property="BODY_INICIAL" type="property" />
             </enrich>
             <log level="custom">
-                <property expression="json-eval($)" name="accountPaymentCondition"/>
+                <property expression="json-eval($)" name="accountPaymentCondition" />
             </log>
             <payloadFactory media-type="json">
                 <format>
@@ -498,80 +500,80 @@
 					"message": "Message enqueued successfully"&#xd;
 					}
 				</format>
-                <args/>
+                <args />
             </payloadFactory>
             <enrich>
-                <source clone="true" type="body"/>
-                <target property="BODY_ENQUEUED" type="property"/>
+                <source clone="true" type="body" />
+                <target property="BODY_ENQUEUED" type="property" />
             </enrich>
             <switch source="get-property('HTTPMETHOD')">
                 <case regex="PUT">
                     <log level="custom">
-                        <property name="PUT" value="PUT"/>
+                        <property name="PUT" value="PUT" />
                     </log>
                     <call-template target="SVC-DBReportEventTemplate">
-                        <with-param name="origin" value="{get-property('origin')}"/>
-                        <with-param name="message_id" value="{get-property('message_id')}"/>
-                        <with-param name="origin_id" value="{$ctx:uri.var.ExternalId__c}"/>
-                        <with-param name="system_internal_id" value="-"/>
-                        <with-param name="event_name" value="CondicaoPagamentoCampanha"/>
-                        <with-param name="event_description" value="Inclusao de condicao de pagamento para campanha recebido e encaminhado para fila"/>
-                        <with-param name="event_payload" value="{get-property('BODY_INICIAL')}"/>
-                        <with-param name="event_payload_returned" value="{get-property('BODY_ENQUEUED')}"/>
-                        <with-param name="http_status_code" value="200"/>
+                        <with-param name="origin" value="{get-property('origin')}" />
+                        <with-param name="message_id" value="{get-property('message_id')}" />
+                        <with-param name="origin_id" value="{$ctx:uri.var.ExternalId__c}" />
+                        <with-param name="system_internal_id" value="-" />
+                        <with-param name="event_name" value="CondicaoPagamentoCampanha" />
+                        <with-param name="event_description" value="Inclusao de condicao de pagamento para campanha recebido e encaminhado para fila" />
+                        <with-param name="event_payload" value="{get-property('BODY_INICIAL')}" />
+                        <with-param name="event_payload_returned" value="{get-property('BODY_ENQUEUED')}" />
+                        <with-param name="http_status_code" value="200" />
                     </call-template>
                 </case>
                 <case regex="DELETE">
                     <call-template target="SVC-DBReportEventTemplate">
-                        <with-param name="origin" value="ERP"/>
-                        <with-param name="message_id" value="{get-property('message_id')}"/>
-                        <with-param name="origin_id" value="{$ctx:uri.var.ExternalId__c}"/>
-                        <with-param name="system_internal_id" value="{$trp:external_id}"/>
-                        <with-param name="event_name" value="CondicaoPagamentoCampanha"/>
-                        <with-param name="event_description" value="Exclusao de condicao de pagamento para campanha recebido e encaminhado para fila"/>
-                        <with-param name="event_payload" value="{get-property('BODY_INICIAL')}"/>
-                        <with-param name="event_payload_returned" value="{get-property('BODY_ENQUEUED')}"/>
-                        <with-param name="http_status_code" value="201"/>
+                        <with-param name="origin" value="ERP" />
+                        <with-param name="message_id" value="{get-property('message_id')}" />
+                        <with-param name="origin_id" value="{$ctx:uri.var.ExternalId__c}" />
+                        <with-param name="system_internal_id" value="{$trp:external_id}" />
+                        <with-param name="event_name" value="CondicaoPagamentoCampanha" />
+                        <with-param name="event_description" value="Exclusao de condicao de pagamento para campanha recebido e encaminhado para fila" />
+                        <with-param name="event_payload" value="{get-property('BODY_INICIAL')}" />
+                        <with-param name="event_payload_returned" value="{get-property('BODY_ENQUEUED')}" />
+                        <with-param name="http_status_code" value="201" />
                     </call-template>
                 </case>
-                <default/>
+                <default />
             </switch>
             <enrich>
-                <source clone="true" property="BODY_INICIAL" type="property"/>
-                <target type="body"/>
+                <source clone="true" property="BODY_INICIAL" type="property" />
+                <target type="body" />
             </enrich>
-            <sequence key="SVC-CampaignPaymentConditionSalesforceSequence"/>
+            <sequence key="SVC-CampaignPaymentConditionSalesforceSequence" />
             <enrich>
-                <source clone="false" property="BODY_ENQUEUED" type="property"/>
-                <target type="body"/>
+                <source clone="false" property="BODY_ENQUEUED" type="property" />
+                <target type="body" />
             </enrich>
-            <respond/>
+            <respond />
         </inSequence>
-        <outSequence/>
+        <outSequence />
         <faultSequence>
             <log level="full">
-                <property name="faultSequence" value="faultSequence"/>
+                <property name="faultSequence" value="faultSequence" />
             </log>
-            <send/>
+            <send />
         </faultSequence>
     </resource>
     <resource methods="PUT DELETE" url-mapping="/asset">
         <inSequence>
-            <property expression="$axis2:HTTP_METHOD" name="HTTPMETHOD" scope="default" type="STRING"/>
-            <property description="UTF-8" name="CHARACTER_SET_ENCODING" scope="axis2" type="STRING" value="UTF-8"/>
-            <property expression="//serialNumber" name="uri.var.ExternalId__c" scope="default" type="STRING"/>
-            <property expression="substring(get-property('MessageID'), 10, 38) " name="message_id" scope="default" type="STRING"/>
-            <property name="origin" scope="default" type="STRING" value="ERP "/>
+            <property expression="$axis2:HTTP_METHOD" name="HTTPMETHOD" scope="default" type="STRING" />
+            <property description="UTF-8" name="CHARACTER_SET_ENCODING" scope="axis2" type="STRING" value="UTF-8" />
+            <property expression="//serialNumber" name="uri.var.ExternalId__c" scope="default" type="STRING" />
+            <property expression="substring(get-property('MessageID'), 10, 38) " name="message_id" scope="default" type="STRING" />
+            <property name="origin" scope="default" type="STRING" value="ERP " />
             <log level="custom">
-                <property expression="json-eval($)" name="BODY"/>
-                <property expression="$ctx:HTTPMETHOD" name="HTTP_METHOD"/>
+                <property expression="json-eval($)" name="BODY" />
+                <property expression="$ctx:HTTPMETHOD" name="HTTP_METHOD" />
             </log>
             <enrich>
-                <source clone="true" type="body"/>
-                <target property="BODY_INICIAL" type="property"/>
+                <source clone="true" type="body" />
+                <target property="BODY_INICIAL" type="property" />
             </enrich>
             <log level="custom">
-                <property expression="json-eval($)" name="asset"/>
+                <property expression="json-eval($)" name="asset" />
             </log>
             <payloadFactory media-type="json">
                 <format>
@@ -579,48 +581,48 @@
 					"message": "Message enqueued successfully"&#xd;
 					}
 				</format>
-                <args/>
+                <args />
             </payloadFactory>
             <enrich>
-                <source clone="true" type="body"/>
-                <target property="BODY_ENQUEUED" type="property"/>
+                <source clone="true" type="body" />
+                <target property="BODY_ENQUEUED" type="property" />
             </enrich>
             <switch source="get-property('HTTPMETHOD')">
                 <case regex="PUT">
                     <log level="custom">
-                        <property name="PUT" value="PUT"/>
+                        <property name="PUT" value="PUT" />
                     </log>
                     <call-template target="SVC-DBReportEventTemplate">
-                        <with-param name="origin" value="{get-property('origin')}"/>
-                        <with-param name="message_id" value="{get-property('message_id')}"/>
-                        <with-param name="origin_id" value="{$ctx:uri.var.ExternalId__c}"/>
-                        <with-param name="system_internal_id" value="-"/>
-                        <with-param name="event_name" value="Ativos"/>
-                        <with-param name="event_description" value="Inclusao de ativos recebido e encaminhado para fila"/>
-                        <with-param name="event_payload" value="{get-property('BODY_INICIAL')}"/>
-                        <with-param name="event_payload_returned" value="{get-property('BODY_ENQUEUED')}"/>
-                        <with-param name="http_status_code" value="200"/>
+                        <with-param name="origin" value="{get-property('origin')}" />
+                        <with-param name="message_id" value="{get-property('message_id')}" />
+                        <with-param name="origin_id" value="{$ctx:uri.var.ExternalId__c}" />
+                        <with-param name="system_internal_id" value="-" />
+                        <with-param name="event_name" value="Ativos" />
+                        <with-param name="event_description" value="Inclusao de ativos recebido e encaminhado para fila" />
+                        <with-param name="event_payload" value="{get-property('BODY_INICIAL')}" />
+                        <with-param name="event_payload_returned" value="{get-property('BODY_ENQUEUED')}" />
+                        <with-param name="http_status_code" value="200" />
                     </call-template>
                 </case>
-                <default/>
+                <default />
             </switch>
             <enrich>
-                <source clone="true" property="BODY_INICIAL" type="property"/>
-                <target type="body"/>
+                <source clone="true" property="BODY_INICIAL" type="property" />
+                <target type="body" />
             </enrich>
-            <sequence key="SVC-AssetSalesforceSequence"/>
+            <sequence key="SVC-AssetSalesforceSequence" />
             <enrich>
-                <source clone="false" property="BODY_ENQUEUED" type="property"/>
-                <target type="body"/>
+                <source clone="false" property="BODY_ENQUEUED" type="property" />
+                <target type="body" />
             </enrich>
-            <respond/>
+            <respond />
         </inSequence>
-        <outSequence/>
+        <outSequence />
         <faultSequence>
             <log level="full">
-                <property name="faultSequence" value="faultSequence"/>
+                <property name="faultSequence" value="faultSequence" />
             </log>
-            <send/>
+            <send />
         </faultSequence>
     </resource>
 </api>

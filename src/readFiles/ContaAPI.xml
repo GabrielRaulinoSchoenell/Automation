@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<api context="/context" name="ContaAPI.xml" version="v1" version-type="url" xmlns="http://ws.apache.org/ns/synapse">
+<api context="/context" name="ContaAPI.xml" xmlns="http://ws.apache.org/ns/synapse">
     <resource methods="GET" uri-template="/account/{externalId}">
         <inSequence>
             <log level="full">
@@ -144,10 +144,7 @@
                                     <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/">
                                         <soapenv:Header/>
                                         <soapenv:Body>
-                                        <log level="custom">
-                                            <property name="teste" value="rteset"/>                            
-                                        </log>
-        $1  
+        $1
                     </soapenv:Body>
                                     </soapenv:Envelope>
                                 </format>
