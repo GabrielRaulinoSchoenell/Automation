@@ -1,5 +1,6 @@
 import fs from 'fs-extra';
 import * as ConsoleLog from './consoleLog'
+import { generalData } from '../types/generalData';
 
 export const defining = (extra: any, generalData: any) => {
   let postmanEndpointsContent = '';
@@ -18,7 +19,7 @@ export const defining = (extra: any, generalData: any) => {
     let context = api.context;
     swaggerTags += aggreagateSwaggerTags(api)
 
-    apiListingContent += `Api ${api.name} tem o contexto ${api.context} e tem recursos que servem para _________\n<br>\n`
+    apiListingContent += api.name;
     api.resources.forEach((resource: any, key: number) => {
       let swaggerParameter = ''
 
@@ -47,7 +48,7 @@ export const defining = (extra: any, generalData: any) => {
   let postmanCollectionContent = generatePostmanCollectionContent(generalData, postmanCollectionFolder)
   let swaggerContent = generateSwaggerContent(generalData, swaggerTags, swaggerUrl)
 
-  extra.defining ? fs.writeFileSync(`./src/media/ExtraResources/defining.md`, definingContent) : null;
+  extra.defining ? fs.writeFileSync(`./src/media/ExtraResources/Readme.md`, definingContent) : null;
   extra.postman ? fs.writeFileSync(`./src/media/ExtraResources/postmanCollection.json`, postmanCollectionContent) : null;
   extra.swagger ? fs.writeFileSync(`./src/media/ExtraResources/${generalData.project}.yaml`, swaggerContent) : null
 }
@@ -69,7 +70,7 @@ export const ExtraResources = (extra: any, generalData: any, envType: number) =>
   fs.mkdirSync('./src/media/ExtraResources');
 
 
-  vars(extra, generalData, envType)
+  vars(extra, generalData, envType);
   defining(extra, generalData);
 
 
@@ -82,7 +83,7 @@ export const ExtraResources = (extra: any, generalData: any, envType: number) =>
   ConsoleLog.success("---------------- Extra Resources have been created -----------------")
 }
 
-function aggregatePostmanContent(isLastIteration: any, generalData: any, api: any, method: any, resource: any, context: any) {
+function aggregatePostmanContent(isLastIteration: any, generalData: generalData, api: any, method: any, resource: any, context: any) {
   return `{
       "name": "${context}${resource.url}",
       "request": {
@@ -104,9 +105,28 @@ function aggregatePostmanContent(isLastIteration: any, generalData: any, api: an
 }
 
 function generateDefining(generalData: any, endpointListingContent: any, sequenceContent: any, apiListingContent: any) {
-  console.log('generateDefinign = ', generalData, endpointListingContent, sequenceContent, apiListingContent)
-  return `# Intelbras ChatBot API
+  let apisHeader = '';
+  generalData.apis?.data[0].resources.forEach((element: any, key: any) => {
+    apisHeader += 
+    `- ${key +1} - ${element.method} ${element.url}
+        - Diagrama de sequência
+    `
+  })
 
+  let apiData = '';
+  generalData.apis.data[0].resources.forEach((el: any, key: any)=>{
+    apiData += 
+    `## ${key +1} - ${el.method.toUpperCase()} ${el.url}
+      Essa operação realiza
+      - A verificação de segurança da mensagem
+      - O envio da requisição para a API da Blip
+      - Salva o log do envio 
+      - Salva o log do retorno
+    ### diagrama de sequencia
+    SEQUENCIA\n`
+  })
+  
+return `# ${apiListingContent}
 - Documento de documentação
     - Integração
     - Interfaces envolvidas
@@ -114,8 +134,7 @@ function generateDefining(generalData: any, endpointListingContent: any, sequenc
     - Classificação processo de negocio
     - Contrato
     - recursos
-        - 1 - POST /chatbot/sendMessage/{namespace}
-            - Diagrama de Sequencia
+        ${apisHeader}
     - Recursos a nivel de aplicação
 
 ## Integração
@@ -142,32 +161,22 @@ Esse documento tem o detalhamento técnico da API chatbot, mantido pelo time de 
 
 
 ## classificação Processo de negócios
-Área de negócio: E-commerce, vendas Solar
+Área de negócio: 
 Capacidade expansão para outras áreas: A verificar
-Nome do serviço: ChatBotAPI
-contexto: /chatbot
+Nome do serviço: ${generalData.apis?.data[0].name}
+contexto: ${generalData.apis?.data[0].context}
 versão: 1.0.0
-Responsável Intelbras: Danilo Rodrigues
+Responsável Intelbras:
 Impacto: Alto impacto interno e externo
-Objetivo da integração: A integração foi criada para manter registro de consumo da API blip pelos setores comerciais, além do reenvio de mensagense e tratativa de erros. 
+Objetivo da integração: A integração foi criada para 
 
 ## Contrato
-BlipSwagger.yaml
+.yaml
 
 ## Recursos
 ---
 
-## 1 - POST /chatbot/sendMessage/{namespace}
-
-Essa operação realiza (Respectivamente) 
-- A verificação de segurança da mensagem
-- O envio da requisição para a API da Blip
-- Salva o log do envio 
-- Salva o log do retorno
-
-### diagrama de sequencia
-SEQUENCIA
-
+${apiData}
 ---
 ---
 
@@ -254,11 +263,7 @@ function generatePostmanEnvContent(generalData: any) {
 }
 
 function generateEndpointListingContent(method: any, context: any, resource: any) {
-  return `\t<tr>
-  <td>${method.toUpperCase()}</td>
-  <td>${context}${resource.url}</td>
-  <td>Esse endpoint faz...........</td>
-</tr>\n`;
+  return ``
 }
 
 function aggreagateSwaggerParameter(param: any) {
@@ -277,8 +282,6 @@ function aggreagateSwaggerTags(api: any) {
 }
 
 function aggreagateSwaggerUrl(context: any, resource: any, api: any, swaggerParameter: any) {
-  console.log("aaaaaaaaaaaaa", resource.url.indexOf('{'))
-  console.log(resource.url.substring(resource.url.indexOf('{') +1, resource.url.indexOf('}')))
   return `
   '${context + (resource.url ? resource.url : '/')}':
     ${resource.method.toLowerCase()}:
